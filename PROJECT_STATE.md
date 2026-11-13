@@ -7,8 +7,8 @@
 > **Canonical for:** identity, stack summary, module states, open problems and next steps.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
-**Last update:** 2026-11-13 — documentation standard adopted and migrated
-(D-26); module 1 awaits owner verification.
+**Last update:** 2026-11-13 — documentation standard adopted, migrated and amended
+(D-26, D-27); module 1 awaits owner verification.
 
 ---
 
