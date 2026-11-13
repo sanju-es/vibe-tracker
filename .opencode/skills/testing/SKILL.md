@@ -16,7 +16,7 @@ description: Test strategy for Project Tracking (Vitest over the domain layer). 
 - **Unit tests with Vitest** cover the domain layer: `src/lib/model`,
   `src/lib/markdown` and the pure helpers used by `src/lib/fs` and
   `src/lib/i18n`. They run without a browser, a DOM or network access.
-- **Fixtures are real project documents** copied into `tests/fixtures`, so the
+- **Fixtures are the real project documents** read from the repository, so the
   extractors are tested against the structure the app actually reads.
 - **Component and end-to-end tests are not part of the agreed scope.** The
   browser-only behaviour (folder picker, permissions) is verified
@@ -37,7 +37,7 @@ Rules:
 
 ```bash
 npm run test
-npm run test -- --run
+npm run test:watch
 ```
 
 - Report the literal result; never assume green.
@@ -49,7 +49,7 @@ Coverage is a signal, not a target. Do not add assertion-free tests to raise it.
 
 ## Test data
 
-- Fixtures live in `tests/fixtures` and are shared by the tests that need them.
+- Fixtures are read from the repository itself; no copy is kept under `tests/`.
 - No personal data, credentials or documents from other projects.
 
 ## Checklist

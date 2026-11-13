@@ -5,7 +5,7 @@
 > **Canonical for:** `FR-NN`, `BR-NN` and `VAL-NN` of this module.
 > **Do not duplicate:** scope (`MODULE.md` §2) and implementation (`TECHNICAL.md`).
 
-**Status:** Implemented
+**Status:** `Implemented` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -234,7 +234,7 @@ The numbers are those of the original document; only the prefix changed, from `V
 | FR-3 | The fixed sidebar shows both blocks, state icon and text, and three levels at most. | Manual browser check | pending (owner) |
 | FR-4 | Documents render from the node tree with no injected HTML. | `tests/pipeline.test.ts` | pending (owner) |
 | FR-5 | Repeated file names in one list show their folder. | Manual browser check | pending (owner) |
-| FR-6 | Tables filter, sort, truncate and open the row detail; each identifier in a cell opens its own target. | `tests/tables.test.ts`, `tests/references.test.ts` | pending (owner) |
+| FR-6 | Tables filter, sort, truncate and open the row detail; each identifier in a cell opens its own target. | `tests/tables.test.ts`, `tests/references.test.ts`, manual browser check | pending (owner) |
 | FR-7 | Document and image links open modals; anchors scroll without one. | Manual browser check | pending (owner) |
 | FR-8 | Content starts after the sidebar, uses the remaining width and has no outline. | Manual browser check | pending (owner) |
 | FR-9 | The interface is light only and offers no theme control. | Manual browser check | pending (owner) |
@@ -243,7 +243,7 @@ The numbers are those of the original document; only the prefix changed, from `V
 | FR-12 | Reload re-scans the current folder without asking again. | Manual browser check | pending (owner) |
 | FR-13 | The keyboard path reaches sidebar, tables and modals; focus returns. | Manual browser check | pending (owner) |
 | FR-14 | Known identifiers open their definition; definitions and code blocks stay plain. | `tests/references.test.ts`, `tests/inline-references.test.ts` | pending (owner) |
-| FR-15 | The modules overview lists folder, name and state. | `tests/selectors.test.ts` | pending (owner) |
+| FR-15 | The modules overview lists folder, name and state. | `tests/selectors.test.ts`, manual browser check | pending (owner) |
 | FR-16 | A module page renders its backlog table with search, filters and sorting. | Manual browser check | pending (owner) |
 | FR-17 | A document header shows the front block, status and last update; the body does not repeat them. | `tests/pipeline.test.ts` | pending (owner) |
 | FR-18 | The standard sits under *Project* and `<br>` renders as a line break. | `tests/build.test.ts`, manual browser check | pending (owner) |

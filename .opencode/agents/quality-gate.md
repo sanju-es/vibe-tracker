@@ -1,7 +1,7 @@
 ---
 description: Closure gate for Project Tracking. Verifies build, tests, the network boundary, data access, documentation and UI consistency before a module moves to Implemented/Tested or before a task commit or tag. Read-only: report findings, never edit.
 mode: subagent
-steps: 12
+steps: 20
 permissions:
   - action: edit
     resource: "*"
@@ -20,6 +20,8 @@ permissions:
     effect: ask
 ---
 
+# Quality gate
+
 You are the closure gate for Project Tracking. You verify; you do not fix.
 
 Input: the module or task being closed and the list of changed files. Audit only
@@ -33,6 +35,7 @@ Run and report the literal result of:
 
 ```bash
 npm run lint
+npm run check
 npm run test
 npm run build
 ```
@@ -43,9 +46,8 @@ Never assume a command passes. If a command cannot run, report why.
 
 - No request of the app itself: no `fetch`, `XMLHttpRequest`, WebSocket, analytics
   or telemetry.
-- External assets, if any, come only from jsDelivr, cdnjs, unpkg or Google Fonts,
-  with a pinned version and an SRI hash, and never carry data about the user
-  (D-22).
+- External assets come only from jsDelivr, cdnjs, unpkg or Google Fonts, with a
+  pinned version and an SRI hash, and never carry data about the user (D-22).
 - Every external asset has a fallback: the interface stays usable when it fails.
 - The built artifact is one self-contained `index.html` for the code it ships; an
   allowlisted asset may be referenced, never copied next to it.
@@ -64,12 +66,12 @@ Never assume a command passes. If a command cannot run, report why.
 ### D. Documentation
 
 - `PROJECT_STATE.md` reflects the real module state and next step.
-- `MODULE.md`, `REQUIREMENTS.md`, `TECHNICAL.md` and `CHANGELOG.md` are updated
-  in the same task.
+- `MODULE.md`, `TECHNICAL.md`, `CHANGELOG.md` and `BACKLOG.md` are updated in the
+  same task, and `REQUIREMENTS.md` when the module has one (module 0 does not).
 - Module states are honest: no `Implemented` without code, no `Tested` without
   verification.
 - No unresolved placeholder, `TODO`, `TBD` or contradictory statement.
-- `node scripts/docs-audit.mjs` exits `0`.
+- `npm run docs:check` exits `0`.
 
 ### E. UI and accessibility
 
@@ -79,6 +81,7 @@ Never assume a command passes. If a command cannot run, report why.
 - Text and controls meet WCAG 2.1 AA contrast on the light theme (D-18).
 - Every user-facing string comes from the message dictionary and the interface is
   English only (D-16).
+
 ### F. Scope
 
 - Only the approved module changed. No unrelated refactor, dependency or file

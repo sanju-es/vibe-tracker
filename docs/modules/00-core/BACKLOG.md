@@ -21,14 +21,16 @@
 | CORE-06 | 2026-11-13 | improvement | Design tokens and shared primitives | D-14 | high | implemented (2026-11-13) |
 | CORE-07 | 2026-11-13 | improvement | Table semantics | D-14 | high | implemented (2026-11-13) |
 | CORE-08 | 2026-11-13 | improvement | Project reference index | D-14 | high | implemented (2026-11-13) |
-| CORE-09 | 2026-11-13 | docs | `02`–`06` `REQUIREMENTS` §8 attributes folder access, scanning, the semantic model and the reference index to module 1, while `MODULE.md` §2 and `01 TECHNICAL` §1 place those layers in Core | Audit 2026-11-13 | medium | new |
-| CORE-10 | 2026-11-13 | docs | `02`–`06` `MODULE` §7 holds loose bullets instead of the `D-NN` index of §7.3; omit the slot or list the decisions | Audit 2026-11-13 | low | new |
-| CORE-11 | 2026-11-13 | docs | `02`–`06` `TECHNICAL` §2 and §7 repeat the same known constraint, so the fact has two homes in one file | Audit 2026-11-13 | low | new |
-| CORE-12 | 2026-11-13 | docs | `README.md` carries a `**Status:**` line that G-12 reserves for module files and the standard | Audit 2026-11-13 | low | new |
-| CORE-13 | 2026-11-13 | docs | The build size is stated twice, in `README` §4 and `ARCHITECTURE` §9, instead of linking to one home | Audit 2026-11-13 | low | new |
-| CORE-14 | 2026-11-13 | docs | `ARCHITECTURE` §8 does not list `.opencode/`, although `AGENTS.md` §3 routes every closure through those agents | Audit 2026-11-13 | low | new |
-| CORE-15 | 2026-11-13 | docs | `D-04` still says `localStorage` keeps UI preferences, a fact `D-16` and `D-18` removed; it needs a dated supersession note | Audit 2026-11-13 | medium | new |
-| CORE-16 | 2026-11-13 | docs | `CHANGELOG` sends the work-item evidence to `MODULE.md` §5, which is *Delivered features*; the evidence lives in `TECHNICAL.md` §8 | Audit 2026-11-13 | low | new |
+| CORE-09 | 2026-11-13 | docs | `02`–`06` `REQUIREMENTS` §8 attributes folder access, scanning, the semantic model and the reference index to module 1, while `MODULE.md` §2 and `01 TECHNICAL` §1 place those layers in Core | Audit 2026-11-13 | medium | implemented (2026-11-13) |
+| CORE-10 | 2026-11-13 | docs | `02`–`06` `MODULE` §7 holds loose bullets instead of the `D-NN` index of §7.3; omit the slot or list the decisions | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-11 | 2026-11-13 | docs | `02`–`06` `TECHNICAL` §2 and §7 repeat the same known constraint, so the fact has two homes in one file | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-12 | 2026-11-13 | docs | `README.md` carries a `**Status:**` line that G-12 reserves for module files and the standard | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-13 | 2026-11-13 | docs | The build size is stated twice, in `README` §4 and `ARCHITECTURE` §9, instead of linking to one home | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-14 | 2026-11-13 | docs | `ARCHITECTURE` §8 does not list `.opencode/`, although `AGENTS.md` §3 routes every closure through those agents | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-15 | 2026-11-13 | docs | `D-04` still says `localStorage` keeps UI preferences, a fact `D-16` and `D-18` removed; it needs a dated supersession note | Audit 2026-11-13 | medium | implemented (2026-11-13) |
+| CORE-16 | 2026-11-13 | docs | `CHANGELOG` sends the work-item evidence to `MODULE.md` §5, which is *Delivered features*; the evidence lives in `TECHNICAL.md` §8 | Audit 2026-11-13 | low | implemented (2026-11-13) |
+| CORE-17 | 2026-11-13 | docs | The agent and skill contracts contradict the standard and the architecture: `frontend` says the app ships no asset (D-23 loads two), allows `{@html}` with parsed content (D-12 and CR-03 forbid it), `testing` names a `tests/fixtures` directory that does not exist, `docs-auditor` accepts `Pending analysis` and says anchors are unchecked (E-04 is active), and `quality-gate` requires `REQUIREMENTS.md` from module 0, which has none | Audit 2026-11-13 | medium | implemented (2026-11-13) |
+| CORE-18 | 2026-11-13 | docs | The linter implements none of E-21 to E-26 and validates 6 of the 10 registered tables, so G-12, G-15, G-16, G-23, §7.2 and R-07 have a rule and no enforcement | Audit 2026-11-13 | medium | new |
 
 ## 2. States
 

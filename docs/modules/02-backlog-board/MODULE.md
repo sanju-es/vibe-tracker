@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -42,9 +42,17 @@ The reader already filters and sorts a table where it appears; this module adds 
 
 ## 7. Decisions
 
-- The board is read-only: it visualises the documented state, it does not replace the document as the source of truth.
-- Which columns and grouping the board offers is `Pending analysis`; nothing is implemented yet.
+| Decision | Gloss |
+|---|---|
+| D-13 | Module 2 is the aggregated backlog board across modules. |
 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
+
+## 10. Module-specific notes
+
+### Open points
+
+- The board is read-only: it shows the documented state and never replaces the document as the source of truth.
+- Columns and grouping: `not recorded`.

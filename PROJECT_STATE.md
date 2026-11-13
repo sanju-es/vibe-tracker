@@ -1,5 +1,3 @@
-<!-- # Proyecto iniciado con plantilla sanju v1 -->
-
 # PROJECT_STATE.md — Project Tracking
 
 > **Purpose:** global index and state of the project.
@@ -26,7 +24,7 @@
   as a single `index.html`. Icons, fonts or libraries may come only from the
   allowlisted CDNs, pinned with SRI and optional (D-22). Chrome and Edge only.
 - **Commercial basis:** Internal only.
-- **Project type:** 3 — Frontend only.
+- **Project type:** Frontend only.
 - **Languages:** Code: English · Docs: English · UI: English
 
 ## 2. Stack and environment
@@ -86,8 +84,8 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 
 | # | Module | State | Open items | Documentation |
 |---|---|---|---|---|
-| 0 | Core | Active (permanent) | `CORE-09`…`CORE-16` | [`00-core`](docs/modules/00-core/MODULE.md) |
-| 1 | Structured Reader | Implemented | `01 B-01`…`01 B-03` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
+| 0 | Core | Active (permanent) | `CORE-18` | [`00-core`](docs/modules/00-core/MODULE.md) |
+| 1 | Structured Reader | Implemented | `01 B-01`, `01 B-04` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
 | 2 | Backlog Board | Pending | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
 | 3 | Requirements | Pending | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
 | 4 | Modules Dashboard | Pending | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |

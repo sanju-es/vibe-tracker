@@ -66,8 +66,8 @@ src/
 ├── app/                 # bootstrap, root component, global setup
 ├── views/               # screens: compose components and page state
 ├── components/          # feature components plus shared primitives
-│   ├── primitives/      # modal, status chip and icon button (CORE-06)
-│   └── nodes/           # one component per semantic node type
+│   ├── primitives/      # modal, status chip, status icon, icon and icon button (CORE-06)
+│   └── nodes/           # node renderer, inline runs, table and image components
 ├── stores/              # Svelte 5 rune modules, re-exported by index.ts
 ├── styles/              # Tailwind entry point and design tokens
 └── lib/
@@ -123,14 +123,8 @@ folder selection → lib/fs scan (text + images)
 - **No database and no migrations.** There is nothing to migrate and no data
   ownership outside the selected folder.
 
-Limitations that come from the platform:
-
-- Chromium browsers only, in a secure context.
-- Access can be revoked by the user at any time; the app must recover with a
-  clear message and a new selection.
-- Images require blob URLs that must be released when the project changes.
-- The documentation lives in memory: editing a file on disk requires selecting the
-  folder again.
+The limitations this layer inherits from the platform are listed once in
+[`01-structured-reader/TECHNICAL.md`](modules/01-structured-reader/TECHNICAL.md) §7.
 
 ## 6. Data model
 
@@ -173,8 +167,9 @@ composition is in
   `backlog-item.ts`). Types in `PascalCase`, functions and variables in
   `camelCase`, constants in `UPPER_SNAKE_CASE`.
 - **Types:** no `any`; public functions declare their return type.
-- **Rendering:** one component per semantic node type; no `{@html}` with document
-  content; unknown nodes produce a visible, translated notice.
+- **Rendering:** one renderer component dispatches every semantic node type; no
+  `{@html}` with document content; unknown nodes produce a visible, translated
+  notice.
 - **i18n:** no hard-coded user-facing string; every message comes from the single
   dictionary and the interface stays English (D-16).
 - **Styling:** Tailwind utilities plus shared tokens in `src/styles`; no one-off
@@ -203,6 +198,7 @@ project-tracking/
 ├── PROJECT_STATE.md
 ├── README.md
 ├── opencode.json
+├── .opencode/         # agent and skill contracts (AGENTS.md §3)
 ├── .gitignore
 ├── package.json
 ├── vite.config.ts
@@ -229,10 +225,10 @@ project-tracking/
 
 ## 9. Environments and operations
 
-- **Development:** native environment with Node 18+ and npm. No Docker, no
-  services to run.
-- **Commands:** `npm run dev` (port 5173), `npm run check`, `npm run build`,
-  `npm run preview`, `npm run test`, `npm run lint`, `npm run docs:check`.
+- **Development:** native environment with Node ^20.19 or ≥22.12, and npm. No
+  Docker, no services to run.
+- **Commands:** listed once in [`PROJECT_STATE.md`](../PROJECT_STATE.md) §2; §10
+  states what each quality gate verifies.
 - **Build:** Vite plus `vite-plugin-singlefile` produce one `index.html` at
   `dist/` (about 185 kB), with the content security policy injected in build mode.
   All code and CSS are inlined; the only remote references are the allowlisted

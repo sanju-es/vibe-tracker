@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -40,10 +40,20 @@ Turn the application into the shareable artifact the project promises: one `inde
 
 ## 7. Decisions
 
-- The deliverable is a static file; there is no server, no installer and no environment configuration.
-- The directory picker from `file://` is settled by D-15: the folder input is used there.
-- Nothing is implemented yet.
+| Decision | Gloss |
+|---|---|
+| D-01 | Vite, Svelte 5 and TypeScript compiled into one self-contained `index.html`. |
+| D-15 | The folder input covers `file://`; both adapters sit behind one interface. |
+| D-22 | Closed CDN allowlist with pinned versions, SRI and fallback. |
+| D-23 | Lucide icons and Inter with local fallbacks. |
 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
+
+## 10. Module-specific notes
+
+### Open points
+
+- The deliverable is a static file: no server, no installer and no environment configuration.
+- The name and version of the distributed artifact: `not recorded`; the open question is recorded in [`DECISIONS.md`](../../DECISIONS.md) §4.

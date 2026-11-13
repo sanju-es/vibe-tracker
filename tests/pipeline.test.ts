@@ -69,9 +69,15 @@ describe("parseDocument", () => {
     const parsed = parseDocument("docs/modules/00-core/BACKLOG.md", backlog);
     expect(parsed.tables).toHaveLength(1);
     expect(parsed.tables[0]?.statusColumn).toBe(6);
-    expect(parsed.tables[0]?.rows).toHaveLength(16);
-    expect(parsed.tables[0]?.rows[0]?.cells[0]?.text).toBe("CORE-01");
-    expect(parsed.tables[0]?.rows[15]?.cells[0]?.text).toBe("CORE-16");
+    const declared = backlog
+      .split("\n")
+      .filter((line) => /^\| CORE-\d{2} \|/.test(line))
+      .map((line) => line.split("|")[1]?.trim() ?? "");
+    // A coarse floor: the fixture is the real backlog, never a truncated copy.
+    expect(declared.length).toBeGreaterThanOrEqual(16);
+    const rows = parsed.tables[0]?.rows ?? [];
+    expect(rows.map((row) => row.cells[0]?.text)).toEqual(declared);
+    expect(rows.every((row) => row.cells.length === 7)).toBe(true);
   });
 
   it("never produces HTML blocks for ordinary Markdown", () => {

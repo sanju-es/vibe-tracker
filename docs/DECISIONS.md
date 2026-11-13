@@ -44,6 +44,8 @@
 
 **D-26 deviations.** Local slot catalogue (`WORKFLOW` 8, `TECHNICAL` 8, `ARCHITECTURE` 10 frontend substitutions, `DECISIONS` slot 3 reserved and omitted); one-time identifier migration (`V-NN` → `VAL-NN`, `FR`/`BR` qualified outside their file, ranges with `…`, the single backlog entry becomes `01 B-01`); `CORE-NN` move to `00-core/BACKLOG.md`; backlog vocabulary `new`/`in progress`/`blocked`/`deferred`/`implemented`/`discarded` with the app status vocabulary updated in the same phase; acceptance table only from `Implemented`, risks table and `RISK-NN` reserved while limitations stay in `TECHNICAL` §7; agent and skill files exempt from the front block; `E-02` and `E-03` disabled until tags and a contract exist.
 
+**Superseded clauses.** `D-04`'s `localStorage` clause and `D-06`'s interface-language clause are superseded by `D-16`; `D-16`'s theme clause by `D-18`; `D-17`'s 75 % content width by `D-19` and `D-20`; `D-19`'s full window width by `D-20`. The dated rows stay as written (T-05).
+
 ## 2. Adopted by default
 
 > Accepted implicitly. **They are not confirmed requirements**; the owner has the

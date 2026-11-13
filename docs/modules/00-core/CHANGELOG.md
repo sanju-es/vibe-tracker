@@ -3,6 +3,13 @@
 > Dated history only.
 **History:** append-only.
 
+## 2026-11-13 — Audit findings applied
+
+- `CORE-09` to `CORE-16` implemented: the module dependencies point at Core, the `02`–`06` decision slots follow §7.3, `TECHNICAL` §1 and §7 no longer repeat one constraint, `README` loses its status marker and its extra rules, the build size and the platform limits keep one home, `.opencode/` joins the repository layout and the superseded clauses are listed in `DECISIONS.md`.
+- The verification evidence of `CORE-01` to `CORE-08` lives in [`TECHNICAL.md`](TECHNICAL.md) §8; the earlier entry that sent it to `MODULE.md` §5 is superseded, not rewritten (T-05).
+- `scripts/docs-audit.mjs` reads the `Status` token before its date, so the acceptance table stays required once the module files carry the date (G-12).
+- `CORE-17` implemented: the four contracts of `.opencode` match the standard and the architecture —the two documented assets, `{@html}` without document content, the real fixtures, anchors checked, the five module files and module 0 without `REQUIREMENTS.md`— and each agent carries one H1 and a step budget that fits its review.
+
 ## 2026-11-13 — Documentation audit
 
 - Work-item state has one home: `00-core/BACKLOG.md` §1. `TECHNICAL.md` §8 keeps the evidence and lost its `State` column (AG-03, standard v1.1).

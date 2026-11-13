@@ -5,7 +5,7 @@
 > **Canonical for:** components, stores, interaction detail, tests and limits of this module.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and shared architecture (`docs/ARCHITECTURE.md`).
 
-**Status:** Implemented
+**Status:** `Implemented` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -190,8 +190,8 @@ click never opens the row by accident. Status chips, text and status filters and
 single-column sorting work as before. Filter chips reflect visibility: pressed
 means the status is visible, struck means it is filtered out, and an empty
 selection shows no rows. A table may declare excluded statuses for its initial
-view; the module page uses that to hide `implemented` and `discarded` until the
-user enables their chips. Reset clears the text, the status selection and the sort,
+view; the module page uses that to hide `implemented`, `discarded` and `deferred`
+until the user enables their chips. Reset clears the text, the status selection and the sort,
 so every row becomes visible again.
 
 **Identifier references.** The index collects table rows (first column) and list

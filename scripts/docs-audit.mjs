@@ -561,8 +561,11 @@ const SLOT_CATALOGUE = [
 function moduleState(rel) {
   const file = path.join(root, path.dirname(rel), "MODULE.md");
   if (!fs.existsSync(file)) return null;
-  const match = /\*\*Status:\*\*\s*(.+)/.exec(fs.readFileSync(file, "utf8"));
-  return match ? match[1].trim() : null;
+  const content = fs.readFileSync(file, "utf8");
+  const token = /\*\*Status:\*\*\s*`([^`\n]+)`/.exec(content);
+  if (token) return token[1].trim();
+  const bare = /\*\*Status:\*\*\s*([^`(\n]+)/.exec(content);
+  return bare ? bare[1].trim() : null;
 }
 
 function checkSlots(rel, content) {

@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -38,10 +38,19 @@ Make large projects navigable: find any document, requirement, backlog item or d
 
 ## 7. Decisions
 
-- Search works on the in-memory model of the scanned folder; nothing is sent outside the browser.
-- Relative links in the documents may point to images or files the app does not read; broken links must be reported, never invented.
-- The search algorithm and ranking are `Pending analysis`; nothing is implemented yet.
+| Decision | Gloss |
+|---|---|
+
+_not recorded._
 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
+
+## 10. Module-specific notes
+
+### Open points
+
+- Search works on the in-memory model of the scanned folder; nothing is sent outside the browser.
+- Relative links may point to images or files the app does not read; a broken link is reported, never invented.
+- The search algorithm and ranking: `not recorded`.

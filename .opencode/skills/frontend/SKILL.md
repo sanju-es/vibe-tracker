@@ -16,8 +16,8 @@ description: Frontend conventions for Project Tracking (Svelte 5 + TypeScript + 
 - Framework: Svelte 5 + TypeScript, built with Vite and `vite-plugin-singlefile`
 - UI: Tailwind CSS 4 + own components
 - State: Svelte 5 runes and stores in `src/stores`
-- Data: Markdown files read from the folder selected with the File System Access
-  API (`src/lib/fs`)
+- Data: Markdown files read from the folder selected with the directory picker or
+  the folder input (`src/lib/fs`)
 
 ## Rules
 
@@ -38,17 +38,17 @@ description: Frontend conventions for Project Tracking (Svelte 5 + TypeScript + 
    English message dictionary (D-16); adding a language is a new decision.
 7. **Styling:** use the shared tokens and Tailwind utilities; no one-off colours
    or magic spacing. The interface is light only (D-18).
-8. **External assets are the exception.** The app ships no asset today. If one is
-   needed, use only jsDelivr, cdnjs, unpkg or Google Fonts, pin the version, add
-   the SRI hash and keep a fallback; never make it essential (D-22).
-9. **Svelte discipline:** `{@html}` accepts only output produced by the Markdown
-   pipeline; use runes (`$state`, `$derived`) instead of legacy reactive stores
-   patterns.
+8. **External assets are the exception.** The app ships two allowlisted assets —
+   the Lucide bundle and two Inter files, both from jsDelivr with SRI (D-23). A new
+   one may use only jsDelivr, cdnjs, unpkg or Google Fonts, with a pinned version,
+   an SRI hash and a fallback; never make it essential (D-22).
+9. **Svelte discipline:** no `{@html}` with document content or with any string
+   that a component did not produce (D-12, CR-03); use runes (`$state`,
+   `$derived`) instead of legacy reactive-store patterns.
 
 ## Forbidden
 
-- `{@html}` with raw user input or strings that did not pass through the parsing
-  pipeline.
+- `{@html}` with document content or with a string a component did not produce.
 - Disabling type checking or lint rules to make a build pass.
 - A new dependency for something the platform or the current stack already
   provides, without the owner's approval.

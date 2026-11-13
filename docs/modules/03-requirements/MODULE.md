@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -23,7 +23,7 @@ The reader shows each document as it is; this module adds the cross-module view.
 - Collect requirements, business rules, flows, validations and edge cases from every module `REQUIREMENTS.md` and `MODULE.md` found in the project.
 - Group them by module and by section type, with text and status filters.
 - Show the identifier of each item and link it to its source document.
-- Show `Pending analysis` modules as such; never hide or fill them.
+- Show a module in `Pending` state as such; never hide or fill it.
 
 ### Out of scope
 
@@ -41,9 +41,16 @@ The reader shows each document as it is; this module adds the cross-module view.
 
 ## 7. Decisions
 
-- The app is read-only; `Pending analysis` entries must be shown as such and never hidden or filled in by the app.
-- The exact grouping and presentation is `Pending analysis`; nothing is implemented yet.
+| Decision | Gloss |
+|---|---|
+| D-13 | Module 3 is the aggregated requirements view across modules. |
 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
+
+## 10. Module-specific notes
+
+### Open points
+
+- Grouping and presentation: `not recorded`.

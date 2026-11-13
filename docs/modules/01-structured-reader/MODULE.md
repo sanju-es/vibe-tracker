@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, delivered capabilities, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Implemented
+**Status:** `Implemented` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---

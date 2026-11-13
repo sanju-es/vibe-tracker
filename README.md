@@ -4,9 +4,9 @@
 > documentation of a project —chapters, tables, statuses and references— and
 > turns it into navigable, interactive content.
 
-**Status:** module 1 — Structured Reader is `Implemented` and awaits the owner's
-verification. The application runs: `npm run dev` for development and
-`npm run build` for the single-file artifact.
+Module 1 — Structured Reader is `Implemented` and awaits the owner's verification.
+The application runs: `npm run dev` for development and `npm run build` for the
+single-file artifact.
 
 Open the built `index.html`, choose the project folder, and read the documentation
 without opening a Markdown editor. The artifact needs no server; its only external
@@ -15,8 +15,6 @@ stays usable without network.
 
 > From `file://` the app uses a folder input; when served (for example with
 > `npm run preview`) it uses the directory picker.
-
----
 
 ## 1. What it is
 
@@ -50,8 +48,6 @@ It is not a Markdown viewer. It reads the documentation semantically:
 The Markdown files are the source of truth. The app derives an in-memory semantic
 model and only renders it.
 
----
-
 ## 2. Languages
 
 | Scope | Language |
@@ -60,29 +56,15 @@ model and only renders it.
 | Documentation | English |
 | User interface | English |
 
----
-
 ## 3. Stack
 
-| Layer | Technology |
-|---|---|
-| UI | Svelte 5 + TypeScript |
-| Build | Vite + `vite-plugin-singlefile` |
-| Styling | Tailwind CSS 4 + own components |
-| Markdown | `marked` 18 + own semantic pipeline |
-| State | Svelte 5 runes stores |
-| Folder access | Directory picker, folder input from `file://` (D-15) |
-| Tests | Vitest |
-| Lint and format | ESLint + Prettier |
-
-Supported browsers: **Chrome and Edge** (desktop).
-
----
+Stack, versions and supported browsers are recorded once in
+[`PROJECT_STATE.md` §2](PROJECT_STATE.md#2-stack-and-environment).
 
 ## 4. Development
 
-Requirements: Node 18+ and npm. The environment is native: there are no services
-to containerise and no Docker setup.
+Requirements: Node ^20.19 or ≥22.12, and npm. The environment is native: there
+are no services to containerise and no Docker setup.
 
 ```bash
 npm install
@@ -95,12 +77,11 @@ npm run build    # check plus the single self-contained index.html
 npm run preview  # serves the production build locally
 ```
 
-The build output is a single `index.html` (about 185 kB) that can be opened
-directly from disk. It carries a content security policy that allows only the
-jsDelivr host used by the icons and the typeface (D-22, D-23), both with SRI and
-with a local fallback.
-
----
+The build output is a single `index.html` that can be opened directly from disk;
+its size is recorded in
+[`docs/ARCHITECTURE.md` §9](docs/ARCHITECTURE.md#9-environments-and-operations). It
+carries a content security policy that allows only the jsDelivr host used by the
+icons and the typeface (D-22, D-23), both with SRI and with a local fallback.
 
 ## 5. Documentation
 
@@ -122,13 +103,8 @@ node scripts/docs-audit.mjs --advisory  # reports without failing
 node scripts/docs-audit.mjs --json      # machine-readable report
 ```
 
----
-
 ## 6. Version control
 
 The project uses Git on a trunk-based workflow: work happens on `main` with short
 task branches, and each closed task is one commit with a Conventional Commits
 message. Only approved work is committed.
-
-The repository was initialized without commits; the first commit is the owner's
-decision.

@@ -5,7 +5,7 @@
 > **Canonical for:** `FR-NN`, `BR-NN` and `VAL-NN` of this module.
 > **Do not duplicate:** scope (`MODULE.md` §2) and implementation (`TECHNICAL.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -16,17 +16,17 @@ Find any document, requirement, backlog item or decision by text and move betwee
 
 ## 2. Functional requirements
 
-_Pending analysis._
+_not recorded._
 
 ## 3. Business rules
 
-_Pending analysis._
+_not recorded._
 
 ## 6. Edge cases
 
-_Pending analysis._
+_not recorded._
 
 ## 8. Dependencies
 
-- **Depends on:** module 1 (Structured Reader), module 2 (Backlog Board) and module 3 (Requirements).
-- **Shared code:** module 0 for the model and the Markdown extractors.
+- **Depends on:** module 1 (Structured Reader) for the reading workspace, module 2 (Backlog Board) and module 3 (Requirements) for their aggregated views.
+- **Shared code:** module 0 for folder access, scanning, the semantic model, the reference index and the Markdown extractors.

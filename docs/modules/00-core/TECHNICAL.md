@@ -5,7 +5,7 @@
 > **Canonical for:** shared files, boot order, data pipeline, implementation design and work-item evidence.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`) and decisions (`docs/DECISIONS.md`).
 
-**Status:** Active (permanent)
+**Status:** `Active (permanent)`
 **Last update:** 2026-11-13
 
 ---
@@ -117,7 +117,9 @@ in the built HTML; every external reference has a pinned version and SRI.
 
 ### 4.2 CORE-02 — Semantic model
 
-`src/lib/model/types.ts` (sketch, names final):
+`src/lib/model/types.ts`. The canonical list of types and their purpose lives in
+[`ARCHITECTURE.md`](../../ARCHITECTURE.md) §6; this sketch shows the implemented
+fields.
 
 ```ts
 type Scope = "project" | "module";
@@ -129,23 +131,27 @@ type CategoryId =
 interface Document {
   id: string;            // relative path, unique in the project
   path: string;
+  fileName: string;
   title: string;
   scope: Scope;
   moduleNumber: number | null;
+  moduleSlug: string | null;
   category: CategoryId;
-  nodes: Node[];
+  nodes: BlockNode[];
   sections: Section[];
   tables: Table[];
+  meta: DocumentMeta;    // front block, status and last update
 }
 
 interface Project {
   name: string;
   documents: Document[];
-  images: ImageAsset[];      // path plus load state, no bytes in the model
-  index: ReferenceIndex;
+  modules: ModuleInfo[];
+  images: ImageAsset[];           // path only; the bytes stay in the blob cache
+  duplicateIdentifiers: string[]; // reported, never resolved
 }
 
-interface Module { number: number; slug: string; name: string; state: string | null; }
+interface ModuleInfo { number: number; slug: string; name: string; state: string | null; }
 
 interface ImageAsset { path: string; alt: string; documentId: string; }
 
@@ -159,9 +165,10 @@ interface Table {
 }
 
 interface Row { id: string; cells: Cell[]; }
-interface Cell { column: number; text: string; inline: Inline[]; ref: RowReference | null; }
+interface Cell { column: number; text: string; runs: InlineRun[]; ref: CellReference | null; }
 interface Status { value: string; key: StatusKey | null; }   // key null = neutral
-interface RowReference { identifier: string; documentId: string; tableId: string; rowId: string; }
+interface CellReference { identifier: string; targets: RefTarget[]; }
+type RefTarget = RowTarget | ItemTarget;
 ```
 
 `Node` is a closed union of heading, paragraph, list, table, code, quote, image,
@@ -179,11 +186,14 @@ Pure helpers in `src/lib/model`:
   other.
 - `moduleInfoFromPath(path)` — parses `docs/modules/NN-slug/…` and returns the
   number and slug, or `null`.
+- `backlogSummary` builds the aggregated `new`/`in progress` table for the overview
+  and keeps a source target per synthetic row.
+
+The project builder lives in `src/lib/project/build.ts`:
+
 - `buildProject` merges the inventory with the modules discovered in the folder:
   an inventory row without a local folder is ignored, and a folder with documents
   appears even when the inventory omits it.
-- `backlogSummary` builds the aggregated `new`/`in progress` table for the overview
-  and keeps a source target per synthetic row.
 
 ### 4.3 CORE-03 — Folder gateway
 

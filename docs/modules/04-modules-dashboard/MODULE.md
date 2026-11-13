@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** Pending
+**Status:** `Pending` (2026-11-13)
 **Last update:** 2026-11-13
 
 ---
@@ -38,10 +38,17 @@ Show the state of the whole project on one surface: which modules exist, in whic
 
 ## 7. Decisions
 
-- The state shown is the documented state; the app does not infer progress from code or from dates.
-- Module 0 (Core) is permanent and must not be counted as a closable module; how it is represented is `Pending analysis`.
-- Nothing is implemented yet.
+| Decision | Gloss |
+|---|---|
+| D-10 | Permanent Core container (module 0) for shared platform work. |
 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
+
+## 10. Module-specific notes
+
+### Open points
+
+- The state shown is the documented state; the app never infers progress from code or from dates.
+- Module 0 (Core) is permanent and is not counted as a closable module; its representation: `not recorded`.
