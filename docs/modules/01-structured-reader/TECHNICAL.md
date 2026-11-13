@@ -219,7 +219,7 @@ filters and sortable headers, and the modal trap; visible focus throughout.
 
 ## 6. Tests and evidence
 
-- Vitest, 87 tests across 11 suites: category mapping and module folders, module
+- Vitest, 88 tests across 11 suites: category mapping and module folders, module
   inventory, module selectors and backlog lookup, status vocabulary and detection,
   table filtering and sorting, reference index, scope resolution and duplicates,
   identifier references inside text and table cells, link resolution, i18n messages,
@@ -261,6 +261,8 @@ filters and sortable headers, and the modal trap; visible focus throughout.
   the folder again.
 - Identifiers are resolved only when the index knows them: a code with no
   definition, or one written inside a code block, stays plain text.
+- Sorting is single-column by design (D-14); multi-column sorting is not
+  implemented and is tracked as `01 B-01`.
 - The folder-input path keeps a snapshot of the files: reload re-parses it but does
   not see later edits on disk.
 - The interface is English only (D-16) and light only (D-18), and it persists no
@@ -272,12 +274,14 @@ filters and sortable headers, and the modal trap; visible focus throughout.
 
 | # | Milestone | State |
 |---|---|---|
-| M1 | CORE-01 | Implemented |
-| M2 | CORE-02 + CORE-03 | Implemented |
-| M3 | CORE-04 + CORE-07 + CORE-08 | Implemented |
-| M4 | CORE-05 + CORE-06 | Implemented |
-| M5 | Reader UI, including revisions D-17 to D-25 | Implemented |
-| M6 | Closure: owner verification against the requirements | Pending |
+| MS-01 | CORE-01 | Implemented |
+| MS-02 | CORE-02 + CORE-03 | Implemented |
+| MS-03 | CORE-04 + CORE-07 + CORE-08 | Implemented |
+| MS-04 | CORE-05 + CORE-06 | Implemented |
+| MS-05 | Reader UI, including revisions D-17 to D-25 | Implemented |
+| MS-06 | Closure: owner verification against the requirements | Pending |
+
+The numbers are those of the original milestones; only the prefix changed (`M1`…`M6` became `MS-01`…`MS-06` when the standard registered the namespace in v1.1).
 
 ## 10. Module-specific notes
 

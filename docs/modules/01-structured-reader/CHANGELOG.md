@@ -1,6 +1,13 @@
 # Module 1 — CHANGELOG
 
 > Dated history only. No state, pending work or duplicated implementation logs.
+**History:** append-only.
+
+## 2026-11-13 — Documentation audit
+
+- Milestones renamed from `M1`…`M6` to `01 MS-01`…`01 MS-06`: the numbering is the original one and only the prefix changed (standard v1.1).
+- Acceptance evidence corrected: four rows named test files that do not exist and now name the suites that cover them (`tests/build.test.ts`, `tests/pipeline.test.ts`, `tests/tables.test.ts`, `tests/references.test.ts`, `tests/inline-references.test.ts`).
+- Validation identifiers recorded as `01 VAL-1`…`01 VAL-11`, numbered as before the `V-` → `VAL-` migration (D-26).
 
 ## 2026-11-13
 

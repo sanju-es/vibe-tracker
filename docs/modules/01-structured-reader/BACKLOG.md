@@ -15,6 +15,8 @@
 |---|---|---|---|---|---|---|
 | B-01 | 2026-11-13 | improvement | Multi-column sorting in tables (for example sort by module and then by status) | Owner | low | new |
 
+`B-01` is the module's only entry: it keeps the position it had when the standard took effect, and no later identifier was renumbered (D-26, R-08).
+
 ## 2. States
 
 - `new` — registered, not approved, not planned.
