@@ -2,7 +2,7 @@
 
 > **Purpose:** surface, data, implementation, tests and limits of the shared platform.
 > **Read when:** changing shared code or checking how a Core item is built.
-> **Canonical for:** shared files, boot order, data pipeline, implementation design and work-item status.
+> **Canonical for:** shared files, boot order, data pipeline, implementation design and work-item evidence.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`) and decisions (`docs/DECISIONS.md`).
 
 **Status:** Active (permanent)
@@ -67,7 +67,7 @@ Files:
 | `svelte.config.js` | Standard Svelte 5 configuration with TypeScript preprocessing |
 | `tsconfig.json` | Strict mode, `noUncheckedIndexedAccess`, bundler resolution |
 | `eslint.config.js` | Flat config with TypeScript and Svelte plugins |
-| `.prettierrc` | Svelte-aware formatting |
+| `.prettierrc.json` | Svelte-aware formatting |
 | `index.html` | Root document; the build closes it into the single-file artifact |
 | `src/app/main.ts` | Mounts the root component |
 | `src/app/App.svelte` | Root component that chooses the empty state or the reading workspace |
@@ -342,9 +342,10 @@ Status vocabulary, mapped to stable keys:
 - Commands: `npm run lint`, `npm run check`, `npm run test` and `npm run build`,
   run on 2026-11-13; all green.
 - Suites: `tests/build.test.ts`, `tests/categories.test.ts`,
-  `tests/links.test.ts`, `tests/pipeline.test.ts`, `tests/i18n.test.ts`,
-  `tests/tables.test.ts`, `tests/status.test.ts`, `tests/references.test.ts` and
-  `tests/inline-references.test.ts`.
+  `tests/inventory.test.ts`, `tests/links.test.ts`, `tests/pipeline.test.ts`,
+  `tests/i18n.test.ts`, `tests/tables.test.ts`, `tests/status.test.ts`,
+  `tests/references.test.ts`, `tests/inline-references.test.ts` and
+  `tests/selectors.test.ts`.
 - The suites parse the real repository documents, so the pipeline faces the
   structures the project actually uses.
 - The browser check for the platform (icons, fonts, modal, statuses and
@@ -365,13 +366,15 @@ Status vocabulary, mapped to stable keys:
 
 ## 8. Implementation status
 
-| ID | Item | State | Evidence |
-|---|---|---|---|
-| CORE-01 | Skeleton and single-file build | Implemented | `lint`, `test` and `build` green; `dist/index.html` is the only artifact and carries the CSP |
-| CORE-02 | Semantic model | Implemented | `tests/build.test.ts`, `tests/categories.test.ts` |
-| CORE-03 | Folder gateway | Implemented | `tests/links.test.ts` covers path resolution; real picker and folder-input permissions remain for the owner's verification |
-| CORE-04 | Markdown pipeline | Implemented | `tests/pipeline.test.ts` and `tests/links.test.ts`, parsing real documents |
-| CORE-05 | Message dictionary | Implemented | `tests/i18n.test.ts`; no preference is stored |
-| CORE-06 | Tokens and primitives | Implemented | `src/styles/theme.css` and `src/components/primitives`; icons and font loaded with SRI in the browser check |
-| CORE-07 | Table semantics | Implemented | `tests/tables.test.ts` and `tests/status.test.ts`; filters and sorting exercised in the browser check |
-| CORE-08 | Identifier index | Implemented | `tests/references.test.ts`, `tests/inline-references.test.ts` and `tests/build.test.ts`; the item modal was exercised in the browser check |
+| ID | Item | Evidence |
+|---|---|---|
+| CORE-01 | Skeleton and single-file build | `lint`, `test` and `build` green; `dist/index.html` is the only artifact and carries the CSP |
+| CORE-02 | Semantic model | `tests/build.test.ts`, `tests/categories.test.ts` |
+| CORE-03 | Folder gateway | `tests/links.test.ts` covers path resolution; real picker and folder-input permissions remain for the owner's verification |
+| CORE-04 | Markdown pipeline | `tests/pipeline.test.ts` and `tests/links.test.ts`, parsing real documents |
+| CORE-05 | Message dictionary | `tests/i18n.test.ts`; no preference is stored |
+| CORE-06 | Tokens and primitives | `src/styles/theme.css` and `src/components/primitives`; icons and font loaded with SRI in the browser check |
+| CORE-07 | Table semantics | `tests/tables.test.ts` and `tests/status.test.ts`; filters and sorting exercised in the browser check |
+| CORE-08 | Identifier index | `tests/references.test.ts`, `tests/inline-references.test.ts` and `tests/build.test.ts`; the item modal was exercised in the browser check |
+
+The state of each work item is not repeated here: `00-core/BACKLOG.md` §1 is its only home.

@@ -3,7 +3,7 @@
 > **Purpose:** own the shared platform layer and the cross-cutting work that belongs to no functional module.
 > **Read when:** changing shared code, adding a dependency or reviewing an invariant.
 > **Canonical for:** the boundary rule, the `CR-NN` invariants and the state of the `CORE-NN` work items.
-> **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and work-item history (`CHANGELOG.md`).
+> **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`), work-item evidence (`TECHNICAL.md` §8) and work-item history (`CHANGELOG.md`).
 
 **Status:** Active (permanent)
 **Last update:** 2026-11-13
