@@ -52,7 +52,7 @@ Module 0 additionally uses `Active (permanent)`, explained in the exception belo
   the initial state of roadmap modules.
 - **Module 0 exception (Core).** Module 0 is a permanent cross-cutting
   container. It is always `Active`, never closes as `Tested` and does not
-  consume the active module slot. Its work items (`CORE-xx`) follow the normal
+  consume the active module slot. Its work items (`CORE-NN`) follow the normal
   cycle and are verified one by one.
 - The state **reflects the reality of the moment**; no `In development` is left
   as a placeholder.
@@ -132,10 +132,9 @@ The project uses Git with a trunk-based workflow:
 
 **Module document set**
 
-- `MODULE.md`: status, purpose and scope, out of scope, dependencies, decisions,
-  limitations and next step.
+- `MODULE.md`: status, purpose and scope, out of scope, decisions and next step.
 - `REQUIREMENTS.md`: functional requirements, business rules, flows,
-  validations and edge cases. No implementation detail.
+  validations, edge cases and dependencies. No implementation detail.
 - `TECHNICAL.md`: design, surface, data, implementation, tests and limits.
 - `CHANGELOG.md`: dated history only. No state, pending work or duplicated
   implementation logs.
@@ -144,7 +143,7 @@ The project uses Git with a trunk-based workflow:
 
 **Module 0 exception:** module 0 uses `MODULE.md`, `TECHNICAL.md`, `BACKLOG.md`
 and `CHANGELOG.md`, but not `REQUIREMENTS.md`. Its cross-cutting invariants live
-in `MODULE.md` as `CR-xx` and link to the architecture and the decisions. Module
+in `MODULE.md` as `CR-NN` and link to the architecture and the decisions. Module
 0 is link-first: it must not duplicate architecture or decision content.
 
 **Golden rule:** `PROJECT_STATE.md` never concentrates detail. It is an index

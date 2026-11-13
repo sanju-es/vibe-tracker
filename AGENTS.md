@@ -52,6 +52,11 @@ review.
 Blocking findings (security, data loss, contract mismatch) stop the task and go
 to the owner. Advisory findings are reported and left to the owner.
 
+**Closure gate.** `npm run docs:check` exits 0 before a commit, a tag or a module
+moving to `Implemented` or `Tested`. The command is blocking by default;
+`--advisory` reports without failing and is a migration aid, never a closure
+state.
+
 ## 4. Project rules
 
 - No new dependency without the owner's approval.
@@ -68,7 +73,8 @@ to the owner. Advisory findings are reported and left to the owner.
 - Workflow: [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
 - Documentation standard: [`docs/DOC-STANDARD.md`](docs/DOC-STANDARD.md)
 - Modules: `docs/modules/<module>/`
-- Documentation linter: `node scripts/docs-audit.mjs` (fails on any `must`; `--advisory` only reports)
+- Documentation linter: `npm run docs:check` runs `node scripts/docs-audit.mjs`
+  and fails on any `must`; `--advisory` only reports.
 
 ## 6. Minimum documentation load
 

@@ -53,8 +53,9 @@ allowlist is optional and must not be required to read the documentation.
   A lower layer never imports a higher one.
 - **Small, approved dependency set.** Every dependency must be justified and
   approved, because it ends up inside the single-file bundle.
-- **Accessibility and i18n are part of done**: WCAG 2.1 AA and both UI languages
-  are verified on every screen.
+- **Accessibility and i18n are part of done**: WCAG 2.1 AA is verified on every
+  screen and every user-facing string comes from the single English dictionary
+  (D-16).
 - **Honest UI states.** Every surface that reads the folder has loading, empty,
   success and error states.
 
@@ -220,6 +221,7 @@ project-tracking/
     ├── WORKFLOW.md
     ├── ARCHITECTURE.md
     ├── DECISIONS.md
+    ├── DOC-STANDARD.md
     └── modules/
         ├── 00-core/
         ├── 01-structured-reader/ … 06-distribution/
@@ -230,7 +232,7 @@ project-tracking/
 - **Development:** native environment with Node 18+ and npm. No Docker, no
   services to run.
 - **Commands:** `npm run dev` (port 5173), `npm run check`, `npm run build`,
-  `npm run preview`, `npm run test`, `npm run lint`.
+  `npm run preview`, `npm run test`, `npm run lint`, `npm run docs:check`.
 - **Build:** Vite plus `vite-plugin-singlefile` produce one `index.html` at
   `dist/` (about 185 kB), with the content security policy injected in build mode.
   All code and CSS are inlined; the only remote references are the allowlisted
@@ -248,6 +250,6 @@ project-tracking/
 - `npm run lint` — ESLint and Prettier, no warnings accepted.
 - `npm run test` — Vitest over the domain logic.
 - `npm run build` — check plus single-file production build.
-- `node scripts/docs-audit.mjs` — documentation must stay clean.
+- `npm run docs:check` — `node scripts/docs-audit.mjs`; documentation must stay clean.
 - The `quality-gate` agent reviews each closure; the `docs-auditor` reviews
   documentation-only changes.

@@ -48,10 +48,10 @@
 
 **Common values**
 
-| Common | Value |
+| Key | Value |
 |---|---|
 | Development commands | `npm run dev`, `npm run check`, `npm run build`, `npm run preview` |
-| Quality commands | `npm run test`, `npm run lint` |
+| Quality commands | `npm run test`, `npm run lint`, `npm run docs:check` |
 | Dev port | 5173 |
 | Environment variables | none |
 | Supported browsers | Chrome and Edge (Chromium) |
@@ -78,6 +78,7 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 - Architecture: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Decisions: [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - Workflow: [`docs/WORKFLOW.md`](docs/WORKFLOW.md)
+- Documentation standard: [`docs/DOC-STANDARD.md`](docs/DOC-STANDARD.md)
 - Modules: [`docs/modules/`](docs/modules/)
 - Agent: [`AGENTS.md`](AGENTS.md)
 
@@ -100,20 +101,17 @@ moves to `Tested` when that verification is recorded.
 
 ## 7. Open problems and pending corrections
 
-- Identifiers are resolved only when the index knows them: a code with no
-  definition, or one written inside a code block, stays plain text.
 - The selected folder is not remembered between sessions; choosing it again is a
-  single action.
-- With the folder-input path, reload rebuilds the model from the snapshot taken
-  when the folder was chosen: later edits on disk are not seen until the folder is
-  chosen again.
-- Multi-column sorting is not implemented; sorting is single-column by design.
-- The interface is English only (D-16) and light only (D-18); adding a language or
-  a theme later is a new decision, not a setting.
-- External assets are allowed only from the four providers of D-22, with pinned
-  version and SRI.
-- Icons and Inter come from jsDelivr (D-23); without network they fall back to
-  glyphs and the system font, so the reader stays usable.
+  single action. Persisting it needs IndexedDB and stays an open question in
+  [`docs/DECISIONS.md`](docs/DECISIONS.md) §4.
+- Documentation limitations belong to the module that owns them and are not
+  repeated here: identifiers resolved only when the index knows them, the
+  folder-input snapshot, single-column sorting, the fixed English and light
+  interface and the CDN fallbacks are listed once in
+  [`01-structured-reader/TECHNICAL.md`](docs/modules/01-structured-reader/TECHNICAL.md)
+  §7.
+- The allowlist and the pinned assets are a decision, not an open problem: see
+  `D-22` and `D-23` in [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
 ## 8. Development credentials and data
 
