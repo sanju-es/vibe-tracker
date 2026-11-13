@@ -728,9 +728,32 @@ function checkTableHeaders(rel, content) {
   }
   if (rel.endsWith("/REQUIREMENTS.md")) {
     const acceptance = sectionTables(rel, content, "Acceptance")[0] ?? null;
+    const state = moduleState(rel);
+    const required = state === "Implemented" || state === "Tested";
     if (acceptance) {
       requireExact(acceptance, ["FR", "Criterion", "Evidence", "Status"], "acceptance");
+    } else if (required) {
+      add("E-08", "must", rel, 1, `acceptance: table not found, required from ${state}`);
     }
+  }
+  if (rel.endsWith("/MODULE.md")) {
+    const index = sectionTables(rel, content, "Decisions")[0] ?? null;
+    requireExact(index, ["Decision", "Gloss"], "decision index");
+  }
+  if (rel.endsWith("/TECHNICAL.md")) {
+    const status = sectionTables(rel, content, "Implementation status")[0] ?? null;
+    if (rel === "docs/modules/00-core/TECHNICAL.md") {
+      requireExact(status, ["ID", "Item", "Evidence"], "core work-item evidence");
+    } else if (status) {
+      requireExact(status, ["#", "Milestone", "State"], "milestones");
+    }
+  }
+  if (rel === "PROJECT_STATE.md") {
+    const keyValue =
+      sectionTables(rel, content, "Stack and environment").find(
+        (table) => table.header[0] === "Key",
+      ) ?? null;
+    requireExact(keyValue, ["Key", "Value"], "key-value facts");
   }
   if (rel === "docs/DOC-STANDARD.md") {
     const history = sectionTables(rel, content, "Change history")[0] ?? null;
@@ -785,6 +808,8 @@ function checkVocabulary(rel, content) {
     );
     if (!table) return;
     const statusColumn = table.header.indexOf("Status");
+    const typeColumn = table.header.indexOf("Type");
+    const priorityColumn = table.header.indexOf("Priority");
     if (statusColumn === -1) return;
     const lines = content.split("\n");
     for (let index = table.line + 1; index < lines.length; index += 1) {
@@ -799,6 +824,21 @@ function checkVocabulary(rel, content) {
       if (status === "" || status === "—") continue;
       if (!BACKLOG_STATUS.test(status)) {
         add("E-09", "must", rel, index + 1, `unknown backlog status "${status}"`);
+      }
+      if (typeColumn !== -1) {
+        const type = cleanCell(cells[typeColumn] ?? "");
+        if (type !== "" && type !== "—") {
+          const parts = type.split("/").map((part) => part.trim());
+          if (parts.length > 2 || parts.some((part) => !BACKLOG_TYPE.test(part))) {
+            add("E-09", "must", rel, index + 1, `unknown backlog type "${type}"`);
+          }
+        }
+      }
+      if (priorityColumn !== -1) {
+        const priority = cleanCell(cells[priorityColumn] ?? "");
+        if (priority !== "" && priority !== "—" && !PRIORITY.test(priority)) {
+          add("E-09", "must", rel, index + 1, `unknown priority "${priority}"`);
+        }
       }
     }
   }
@@ -1150,6 +1190,298 @@ function checkPathSpans(files) {
   }
 }
 
+/* ---------------------------------------------------------------- E-21/25 */
+
+const DOCUMENT_STATES = new Set([
+  "draft",
+  "proposed",
+  "approved",
+  "current",
+  "superseded",
+  "archived",
+]);
+
+const BACKLOG_TYPE = /^(correction|improvement|docs|test|tech-debt|performance)$/;
+const PRIORITY = /^(high|medium|low)$/;
+
+function isModuleDocument(rel) {
+  return /^docs\/modules\/\d{2}-[a-z0-9-]+\/(MODULE|REQUIREMENTS|TECHNICAL)\.md$/.test(
+    rel,
+  );
+}
+
+function checkStatusLine(rel, content) {
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  lines.forEach((line, index) => {
+    if (mask[index]) return;
+    if (/^>\s*\*\*Status:\*\*/.test(line)) {
+      add(
+        "E-21",
+        "must",
+        rel,
+        index + 1,
+        "the Status line is not inside the front-block quote (F-06)",
+      );
+      return;
+    }
+    const match = /^\*\*Status:\*\*\s*(.*)$/.exec(line);
+    if (!match) return;
+    if (!isModuleDocument(rel) && rel !== "docs/DOC-STANDARD.md") {
+      add(
+        "E-21",
+        "must",
+        rel,
+        index + 1,
+        "G-12 keeps the Status line for module files and this standard",
+      );
+      return;
+    }
+    const value = match[1].trim();
+    const shaped = /^`([^`]+)`(?:\s+\((\d{4}-\d{2}-\d{2})\))?$/.exec(value);
+    if (!shaped) {
+      add(
+        "E-21",
+        "must",
+        rel,
+        index + 1,
+        `Status is not a backticked token with an optional date: ${value}`,
+      );
+      return;
+    }
+    const token = shaped[1];
+    const date = shaped[2] ?? null;
+    const vocabulary = rel === "docs/DOC-STANDARD.md" ? DOCUMENT_STATES : MODULE_STATES;
+    if (!vocabulary.has(token)) {
+      add("E-21", "must", rel, index + 1, `unknown Status token "${token}"`);
+    }
+    if (token === "Active (permanent)") {
+      if (date) {
+        add("E-21", "must", rel, index + 1, "Active (permanent) carries no date");
+      }
+    } else if (!date) {
+      add("E-21", "must", rel, index + 1, `Status "${token}" needs its date`);
+    }
+  });
+}
+
+function checkSilence(rel, content) {
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  lines.forEach((line, index) => {
+    if (mask[index]) return;
+    const values = /^\|/.test(line)
+      ? line.replace(/^\||\|$/g, "").split(/(?<!\\)\|/)
+      : [line];
+    for (const value of values) {
+      const cleaned = value.replace(/[`_]/g, "").trim();
+      if (/^(TODO|TBD|FIXME|Pending analysis)\.?$/.test(cleaned)) {
+        add("E-22", "must", rel, index + 1, `undocumented silence value "${cleaned}"`);
+        return;
+      }
+    }
+  });
+}
+
+function checkSeparator(rel, content) {
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  let start = 0;
+  if (/^---\s*$/.test(lines[0] ?? "")) {
+    const close = lines.findIndex((line, index) => index > 0 && /^---\s*$/.test(line));
+    if (close !== -1) start = close + 1;
+  }
+  const separators = [];
+  lines.forEach((line, index) => {
+    if (index < start || mask[index]) return;
+    if (/^---\s*$/.test(line)) separators.push(index);
+  });
+  const firstSlot = lines.findIndex(
+    (line, index) => index >= start && !mask[index] && /^## 1\.\s/.test(line),
+  );
+  const frontBlock = lines.findIndex(
+    (line, index) => index >= start && !mask[index] && /\*\*Purpose:\*\*/.test(line),
+  );
+  const expectsSeparator =
+    frontBlock !== -1 && firstSlot !== -1 && frontBlock < firstSlot;
+  if (expectsSeparator && separators.length !== 1) {
+    add(
+      "E-23",
+      "must",
+      rel,
+      firstSlot + 1,
+      `${separators.length} separators; G-15 requires one between the front block and §1`,
+    );
+    return;
+  }
+  if (!expectsSeparator && separators.length > 0) {
+    add(
+      "E-23",
+      "must",
+      rel,
+      separators[0] + 1,
+      "separator in a file without a front block and a §1 slot",
+    );
+    return;
+  }
+  if (separators.length === 1 && firstSlot !== -1 && separators[0] > firstSlot) {
+    add("E-23", "must", rel, separators[0] + 1, "separator after §1");
+  }
+}
+
+const SECTION_REF = /§(\d+(?:\.\d+)?)/g;
+
+function sectionNumbers(content) {
+  const numbers = new Set();
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  lines.forEach((line, index) => {
+    if (mask[index]) return;
+    const match = /^#{2,3}\s+(\d+(?:\.\d+)?)\.?\s/.exec(line);
+    if (match) numbers.add(match[1]);
+  });
+  return numbers;
+}
+
+function resolveDoc(rel, name) {
+  for (const abs of [
+    path.join(root, path.dirname(rel), name),
+    path.join(root, name),
+    path.join(root, "docs", name),
+  ]) {
+    if (fs.existsSync(abs)) return toRel(abs);
+  }
+  return null;
+}
+
+function inHistory(rel, lines, index) {
+  if (rel.endsWith("/CHANGELOG.md")) return true;
+  if (rel.endsWith("/BACKLOG.md") && /^\|/.test(lines[index] ?? "")) return true;
+  if (rel === "docs/DECISIONS.md") {
+    const approved = lines.findIndex((line) => line.startsWith("## 1."));
+    const adopted = lines.findIndex((line) => line.startsWith("## 2."));
+    if (approved !== -1 && index > approved && (adopted === -1 || index < adopted))
+      return true;
+    const history = lines.findIndex((line) => line.startsWith("## 5."));
+    if (history !== -1 && index > history) return true;
+  }
+  if (rel === "docs/DOC-STANDARD.md") {
+    const from = lines.findIndex((line) => line.startsWith("## 11."));
+    if (from !== -1 && index > from) return true;
+  }
+  return false;
+}
+
+function adjacentDoc(before) {
+  const match = /(?:`([^`]+\.md)`|\]\(([^)\s]+\.md)\))\s*$/.exec(before);
+  return match ? (match[1] ?? match[2]) : null;
+}
+
+function earlierDocs(before) {
+  return [...before.matchAll(/(?:`([^`]+\.md)`|\]\(([^)\s]+\.md)\))/g)].map(
+    (match) => match[1] ?? match[2],
+  );
+}
+
+function sectionsOf(rel, cache) {
+  const content = cache.get(rel) ?? read(rel);
+  cache.set(rel, content);
+  return sectionNumbers(content);
+}
+
+function checkSectionReferences(rel, content, cache) {
+  if (rel.endsWith("/CHANGELOG.md")) return;
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  const own = sectionNumbers(content);
+  lines.forEach((line, index) => {
+    if (mask[index]) return;
+    if (inHistory(rel, lines, index)) return;
+    for (const match of line.matchAll(SECTION_REF)) {
+      const number = match[1];
+      const before = line.slice(0, match.index ?? 0);
+      const direct = adjacentDoc(before);
+      if (direct) {
+        const target = resolveDoc(rel, direct);
+        if (!target) continue;
+        if (!sectionsOf(target, cache).has(number)) {
+          add("E-24", "must", rel, index + 1, `§${number} does not exist in ${target}`);
+        }
+        continue;
+      }
+      if (own.has(number)) continue;
+      const fallback = earlierDocs(before)
+        .map((name) => resolveDoc(rel, name))
+        .filter((file) => file !== null)
+        .find((file) => sectionsOf(file, cache).has(number));
+      if (fallback) continue;
+      add("E-24", "must", rel, index + 1, `§${number} names no section of this file`);
+    }
+  });
+}
+
+function checkAgentH1(rel, content) {
+  const isAgent = /^\.opencode\/agents\/[^/]+\.md$/.test(rel);
+  const isSkill = /^\.opencode\/skills\/[^/]+\/SKILL\.md$/.test(rel);
+  if (!isAgent && !isSkill) return;
+  const lines = content.split("\n");
+  const mask = fenceMask(lines);
+  const h1 = lines.filter((line, index) => !mask[index] && /^# \S/.test(line));
+  if (h1.length !== 1) {
+    add("E-25", "must", rel, 1, `${h1.length} H1 headings; §7.2 requires one`);
+  }
+}
+
+const RANGE_REF = /([A-Z]{1,5})-(\d{1,3})`?\s*…\s*`?([A-Z]{1,5})-(\d{1,3})/g;
+
+function checkRanges(files) {
+  const owners = definitions(files);
+  for (const rel of files) {
+    if (!rel.endsWith(".md")) continue;
+    if (rel === "docs/DOC-STANDARD.md" || rel.endsWith("/CHANGELOG.md")) continue;
+    const lines = read(rel).split("\n");
+    const mask = fenceMask(lines);
+    lines.forEach((line, index) => {
+      if (mask[index]) return;
+      for (const match of line.matchAll(RANGE_REF)) {
+        const [, fromPrefix, fromNumber, toPrefix, toNumber] = match;
+        if (fromPrefix !== toPrefix) {
+          add("E-26", "must", rel, index + 1, "a range mixes two prefixes");
+          continue;
+        }
+        const from = Number(fromNumber);
+        const to = Number(toNumber);
+        if (from > to) {
+          add("E-26", "must", rel, index + 1, "a range is not ascending");
+          continue;
+        }
+        // R-09 keeps a gap legal: only the endpoints must exist.
+        const fromId = `${fromPrefix}-${fromNumber}`;
+        const toId = `${toPrefix}-${toNumber}`;
+        for (const id of [fromId, toId]) {
+          if (!owners.has(id)) {
+            add(
+              "E-26",
+              "must",
+              rel,
+              index + 1,
+              `range reaches ${id}, which no file defines`,
+            );
+            break;
+          }
+        }
+        const moduleOf = (id) => {
+          const file = [...(owners.get(id) ?? [])][0] ?? "";
+          return /^docs\/modules\/(\d{2})-[a-z0-9-]+\//.exec(file)?.[1] ?? null;
+        };
+        if (moduleOf(fromId) !== moduleOf(toId)) {
+          add("E-26", "must", rel, index + 1, "a range crosses two modules");
+        }
+      }
+    });
+  }
+}
+
 /* -------------------------------------------------------------------- main */
 
 function main() {
@@ -1162,6 +1494,7 @@ function main() {
   checkModules();
 
   const slugsCache = new Map();
+  const sectionCache = new Map();
   for (const rel of markdown) {
     const content = read(rel);
     if (content.trim().length < 20)
@@ -1175,12 +1508,18 @@ function main() {
     checkDates(rel, content);
     checkTableCells([rel]);
     checkLastUpdate(rel, content);
+    checkStatusLine(rel, content);
+    checkSilence(rel, content);
+    checkSeparator(rel, content);
+    checkSectionReferences(rel, content, sectionCache);
+    checkAgentH1(rel, content);
   }
 
   checkReferences(files);
   checkRulePrefixes(files);
   checkDuplicatedBlocks(files);
   checkPathSpans(files);
+  checkRanges(files);
   checkLanguage(files);
 
   if (forbidden.length > 0) {

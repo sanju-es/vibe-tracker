@@ -347,8 +347,8 @@ Backend, database and migration tables; contract and error tables; accounts, ser
 | E-05 | H1 matches the file registry | G-10, F-01 | must | active |
 | E-06 | front-block keys present and spelled as in AG-02; a `CHANGELOG` also carries `**History:** append-only` | G-11, AG-02, §7.9 | must | active |
 | E-07 | required slots present and ascending, no renumbering | F-01 | must | active |
-| E-08 | registered table headers match §4.1 | T-01 | must | active; the decision index, milestone, Core evidence and key-value tables not yet validated |
-| E-09 | module state and backlog status come from §5 | V-01, V-02 | must | active; type and priority not validated |
+| E-08 | registered table headers match §4.1 | T-01 | must | active |
+| E-09 | module state, backlog status, backlog type and priority come from §5 | V-01 to V-04 | must | active |
 | E-10 | dates are `YYYY-MM-DD` in `Date` and `Last update` | G-17 | must | active |
 | E-11 | qualified module IDs exist in the owning module, global IDs are never qualified and use two digits | R-01, R-02 | must | active; range expansion moved to E-26 |
 | E-12 | no bare module ID outside the file that owns it | R-02 | must | active |
@@ -360,12 +360,12 @@ Backend, database and migration tables; contract and error tables; accounts, ser
 | E-18 | `--json` yields `{files, links, failures:[{file, line, rule, severity, message, blocking}], summary:{blocking, wouldBlock, must, should, byRule, mode}}` | AG-08 | must | active |
 | E-19 | no prose block is duplicated between a global document and a module, or between the files of one module (`CHANGELOG.md` and `.opencode/**` excluded; two different modules are not compared) | AG-03, T-04 | must | active |
 | E-20 | a code span that names a path under `src/`, `docs/`, `tests/`, `scripts/` or the repository root resolves | R-12 | must | active |
-| E-21 | `**Status:**` carries a vocabulary token in backticks and, when the state can change, its date; `Active (permanent)` carries none | G-12, F-06 | must | reserved until the linter implements it |
-| E-22 | no undocumented silence token: `_Pending analysis._`, a `TODO` or a `TBD` used as a value | G-22, G-23 | must | reserved until the linter implements it |
-| E-23 | one `---` between the front block and §1 | G-15 | must | reserved until the linter implements it |
-| E-24 | an internal reference `§N` or `§N.M` names a section that exists in the target file | R-12 | must | reserved until the linter implements it |
-| E-25 | every `.opencode/agents/*.md` and `.opencode/skills/*/SKILL.md` carries one H1 | §7.2 | must | reserved until the linter implements it |
-| E-26 | a range `A…B` expands to identifiers that exist in one module, one prefix, ascending and inclusive | R-07 | must | reserved until the linter implements it |
+| E-21 | `**Status:**` carries a vocabulary token in backticks and, when the state can change, its date; `Active (permanent)` carries none | G-12, F-06 | must | active |
+| E-22 | no undocumented silence value: `_Pending analysis._`, a `TODO` or a `TBD` used as the whole value | G-22, G-23 | must | active; the other prohibitions of G-22 stay with the reviewer |
+| E-23 | one `---` between the front block and §1, and none in a file without both | G-15 | must | active |
+| E-24 | an internal reference `§N` or `§N.M` names a section that exists in this file or in the file named next to it | R-12 | must | active; a dated record keeps the references it was written with (R-11) |
+| E-25 | every `.opencode/agents/*.md` and `.opencode/skills/*/SKILL.md` carries one H1 | §7.2 | must | active |
+| E-26 | a range `A…B` has one prefix, ascends and starts and ends at identifiers of one module | R-07 | must | active; a gap inside the range stays legal (R-09), and the standard's own examples and the dated records are not expanded |
 
 The rules added for this standard are **blocking by default**: any `must` finding fails the command, and `--advisory` reports without failing. `--blocking-module NN` restricts enforcement to one module; the historical validations stay blocking at all times.
 
@@ -376,7 +376,7 @@ The rules added for this standard are **blocking by default**: any `must` findin
 - **Scope and citation:** G-01 to G-03, G-05 to G-09.
 - **Prose and form:** G-13, G-14 (`###` subsections), G-16 (new changelog entries only), G-18, G-20, G-22 (emoji, "see above"), T-01 (alignment, nesting, blank line), T-02 (trailing period, bold ID), F-02, F-03, F-05, F-08, F-09.
 - **Order and duplication:** T-03, T-04, T-05, F-07, R-08, AG-03.
-- **Vocabulary and references:** G-04 outside `docs/**` (E-17 covers that folder only), V-03 to V-07 and V-08 beyond the status cells, R-03 to R-06, R-09, R-11.
+- **Vocabulary and references:** G-04 outside `docs/**` (E-17 covers that folder only), V-05 to V-07 and V-08 beyond the status, type and priority cells, R-03 to R-06, R-09, R-11.
 - **Agent contract:** AG-01, AG-04, AG-05, AG-07, AG-09, AG-10, AG-11.
 - **Lifecycle and governance:** L-01 to L-06.
 

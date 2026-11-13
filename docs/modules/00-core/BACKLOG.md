@@ -30,7 +30,7 @@
 | CORE-15 | 2026-11-13 | docs | `D-04` still says `localStorage` keeps UI preferences, a fact `D-16` and `D-18` removed; it needs a dated supersession note | Audit 2026-11-13 | medium | implemented (2026-11-13) |
 | CORE-16 | 2026-11-13 | docs | `CHANGELOG` sends the work-item evidence to `MODULE.md` §5, which is *Delivered features*; the evidence lives in `TECHNICAL.md` §8 | Audit 2026-11-13 | low | implemented (2026-11-13) |
 | CORE-17 | 2026-11-13 | docs | The agent and skill contracts contradict the standard and the architecture: `frontend` says the app ships no asset (D-23 loads two), allows `{@html}` with parsed content (D-12 and CR-03 forbid it), `testing` names a `tests/fixtures` directory that does not exist, `docs-auditor` accepts `Pending analysis` and says anchors are unchecked (E-04 is active), and `quality-gate` requires `REQUIREMENTS.md` from module 0, which has none | Audit 2026-11-13 | medium | implemented (2026-11-13) |
-| CORE-18 | 2026-11-13 | docs | The linter implements none of E-21 to E-26 and validates 6 of the 10 registered tables, so G-12, G-15, G-16, G-23, §7.2 and R-07 have a rule and no enforcement | Audit 2026-11-13 | medium | new |
+| CORE-18 | 2026-11-13 | docs | The linter implements none of E-21 to E-26 and validates 6 of the 10 registered tables, so G-12, G-15, G-16, G-23, §7.2 and R-07 have a rule and no enforcement | Audit 2026-11-13 | medium | implemented (2026-11-13) |
 
 ## 2. States
 

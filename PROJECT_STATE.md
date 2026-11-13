@@ -84,7 +84,7 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 
 | # | Module | State | Open items | Documentation |
 |---|---|---|---|---|
-| 0 | Core | Active (permanent) | `CORE-18` | [`00-core`](docs/modules/00-core/MODULE.md) |
+| 0 | Core | Active (permanent) | — | [`00-core`](docs/modules/00-core/MODULE.md) |
 | 1 | Structured Reader | Implemented | `01 B-01`, `01 B-04` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
 | 2 | Backlog Board | Pending | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
 | 3 | Requirements | Pending | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
