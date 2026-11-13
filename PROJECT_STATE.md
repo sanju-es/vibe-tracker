@@ -8,7 +8,7 @@
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
 **Last update:** 2026-11-13 — documentation standard adopted, migrated and amended
-(D-26, D-27); module 1 awaits owner verification.
+(D-26 to D-28); module 1 awaits owner verification.
 
 ---
 
