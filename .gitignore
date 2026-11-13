@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+vendor/
+.venv/
+__pycache__/
+
+# Build output
+dist/
+build/
+coverage/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local runtime data
+data/
+tmp/
+*.local
+
+# Logs
+*.log
+logs/
+
+# Test and tooling artifacts
+*.out
+.tsbuildinfo
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# OpenCode local state
+.opencode/cache/
