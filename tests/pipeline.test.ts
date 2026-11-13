@@ -69,8 +69,9 @@ describe("parseDocument", () => {
     const parsed = parseDocument("docs/modules/00-core/BACKLOG.md", backlog);
     expect(parsed.tables).toHaveLength(1);
     expect(parsed.tables[0]?.statusColumn).toBe(6);
-    expect(parsed.tables[0]?.rows).toHaveLength(8);
+    expect(parsed.tables[0]?.rows).toHaveLength(16);
     expect(parsed.tables[0]?.rows[0]?.cells[0]?.text).toBe("CORE-01");
+    expect(parsed.tables[0]?.rows[15]?.cells[0]?.text).toBe("CORE-16");
   });
 
   it("never produces HTML blocks for ordinary Markdown", () => {

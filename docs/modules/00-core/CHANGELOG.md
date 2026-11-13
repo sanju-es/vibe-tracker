@@ -7,6 +7,7 @@
 
 - Work-item state has one home: `00-core/BACKLOG.md` §1. `TECHNICAL.md` §8 keeps the evidence and lost its `State` column (AG-03, standard v1.1).
 - `.prettierrc` in the tool list corrected to the file that exists, `.prettierrc.json`.
+- Backlog: `CORE-09`…`CORE-16` registered from the post-adoption audit; they describe documentation defects, not behaviour.
 
 ## 2026-11-13
 

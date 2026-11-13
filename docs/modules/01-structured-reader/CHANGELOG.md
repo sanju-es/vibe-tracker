@@ -8,6 +8,7 @@
 - Milestones renamed from `M1`…`M6` to `01 MS-01`…`01 MS-06`: the numbering is the original one and only the prefix changed (standard v1.1).
 - Acceptance evidence corrected: four rows named test files that do not exist and now name the suites that cover them (`tests/build.test.ts`, `tests/pipeline.test.ts`, `tests/tables.test.ts`, `tests/references.test.ts`, `tests/inline-references.test.ts`).
 - Validation identifiers recorded as `01 VAL-1`…`01 VAL-11`, numbered as before the `V-` → `VAL-` migration (D-26).
+- Backlog: `01 B-02` and `01 B-03` registered from the post-adoption audit; they describe documentation defects, not behaviour.
 
 ## 2026-11-13
 
