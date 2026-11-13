@@ -45,10 +45,3 @@ Show the state of the whole project on one surface: which modules exist, in whic
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
-
-## 10. Module-specific notes
-
-### Dependencies
-
-- **Depends on:** module 1 (Structured Reader) for folder access, scanning and the reading workspace.
-- **Shared code:** module 0 for the model and the Markdown extractors.

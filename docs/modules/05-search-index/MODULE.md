@@ -45,10 +45,3 @@ Make large projects navigable: find any document, requirement, backlog item or d
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
-
-## 10. Module-specific notes
-
-### Dependencies
-
-- **Depends on:** module 1 (Structured Reader), module 2 (Backlog Board) and module 3 (Requirements).
-- **Shared code:** module 0 for the model and the Markdown extractors.

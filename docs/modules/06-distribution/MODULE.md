@@ -47,10 +47,3 @@ Turn the application into the shareable artifact the project promises: one `inde
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
-
-## 10. Module-specific notes
-
-### Dependencies
-
-- **Depends on:** module 1 (Structured Reader); the other modules contribute screens to verify.
-- **Shared code:** module 0 for the build configuration, the i18n dictionary and the design tokens.

@@ -48,10 +48,3 @@ The reader already filters and sorts a table where it appears; this module adds 
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
-
-## 10. Module-specific notes
-
-### Dependencies
-
-- **Depends on:** module 1 (Structured Reader) for folder access, scanning, the semantic model and the reference index.
-- **Shared code:** module 0 for the model, the table semantics and the extractors.

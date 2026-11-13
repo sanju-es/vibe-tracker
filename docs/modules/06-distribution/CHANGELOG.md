@@ -1,6 +1,11 @@
 # Module 6 — CHANGELOG
 
 > Dated history only. No state, pending work or duplicated implementation logs.
+**History:** append-only.
+
+## 2026-11-13 — Documentation audit
+
+- The dependency block left `MODULE.md` §10: `REQUIREMENTS.md` §8 is its only home (AG-03, standard v1.1).
 
 ## 2026-11-13
 

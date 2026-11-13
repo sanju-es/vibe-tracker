@@ -47,10 +47,3 @@ The reader shows each document as it is; this module adds the cross-module view.
 ## 9. Next step
 
 Wait for the owner to select the module, then analyse it.
-
-## 10. Module-specific notes
-
-### Dependencies
-
-- **Depends on:** module 1 (Structured Reader) for folder access, scanning, the semantic model and the reference index.
-- **Shared code:** module 0 for the model and the semantic extractors.
