@@ -395,7 +395,12 @@ function checkHeader(rel, content) {
       add("E-05", "must", rel, 1, `H1 does not match the registry: "${first.trim()}"`);
     }
   }
-  if (isExemptFromFrontBlock(rel)) return;
+  if (isExemptFromFrontBlock(rel)) {
+    if (rel.endsWith("CHANGELOG.md") && !content.includes("**History:** append-only")) {
+      add("E-06", "must", rel, 1, "missing front-block key **History:** append-only");
+    }
+    return;
+  }
   const normalized = content.split("\n").map((line) => line.replace(/^\s*>\s?/, ""));
   for (const key of FRONT_KEYS) {
     if (!normalized.some((line) => line.startsWith(key))) {
@@ -825,7 +830,7 @@ function checkDates(rel, content) {
 
 /* ------------------------------------------------------------------ E-11/12 */
 
-const MODULE_PREFIX = /^(FR|BR|VAL|B)-(\d{1,3})$/;
+const MODULE_PREFIX = /^(FR|BR|VAL|MS|B)-(\d{1,3})$/;
 
 function definitions(files) {
   const owners = new Map();
@@ -877,8 +882,28 @@ function checkReferences(files) {
     const mask = fenceMask(lines);
     lines.forEach((line, index) => {
       if (mask[index]) return;
-      const qualified = /(?:^|[^\w-])(\d{2})\s+((?:FR|BR|VAL|B)-\d{1,3})\b/g;
       let match;
+      const globalQualified = /(?:^|[^\w-])\d{2}\s+((?:D|CORE|CR)-\d{1,3})\b/g;
+      while ((match = globalQualified.exec(line)) !== null) {
+        add(
+          "E-11",
+          "must",
+          rel,
+          index + 1,
+          `${match[1]} is global and must never be qualified`,
+        );
+      }
+      const globalShort = /(?:^|[^\w-])((?:D|CORE|CR)-\d)(?![\d])/g;
+      while ((match = globalShort.exec(line)) !== null) {
+        add(
+          "E-11",
+          "must",
+          rel,
+          index + 1,
+          `global identifier ${match[1]} needs two digits`,
+        );
+      }
+      const qualified = /(?:^|[^\w-])(\d{2})\s+((?:FR|BR|VAL|MS|B)-\d{1,3})\b/g;
       while ((match = qualified.exec(line)) !== null) {
         const folder = folders.get(match[1]);
         const id = match[2];
@@ -903,8 +928,8 @@ function checkReferences(files) {
           );
         }
       }
-      const hasQualified = /(?:^|[^\w-])\d{2}\s+(?:FR|BR|VAL|B)-\d{1,3}\b/.test(line);
-      const bare = /(?:^|[^\w-])((?:FR|BR|VAL|B)-\d{1,3})\b/g;
+      const hasQualified = /(?:^|[^\w-])\d{2}\s+(?:FR|BR|VAL|MS|B)-\d{1,3}\b/.test(line);
+      const bare = /(?:^|[^\w-])((?:FR|BR|VAL|MS|B)-\d{1,3})\b/g;
       while ((match = bare.exec(line)) !== null) {
         const id = match[1];
         if (hasQualified) continue;
@@ -921,7 +946,7 @@ function checkReferences(files) {
 
 /* ------------------------------------------------------------------ E-13 */
 
-const LEGACY_ID = /\b(P|DEF|IMP|A|N|I|Q)-\d{1,3}\b/g;
+const LEGACY_ID = /\b(P|DEF|IMP|A|N|I|Q|M)-\d{1,3}\b/g;
 
 function checkRulePrefixes(files) {
   for (const rel of files) {
@@ -1020,6 +1045,108 @@ function checkLanguage(files) {
   }
 }
 
+/* ------------------------------------------------------------------ E-19 */
+
+const DUPLICATE_MIN = 100;
+
+function checkDuplicatedBlocks(files) {
+  const seen = new Map();
+  for (const rel of files) {
+    if (!rel.endsWith(".md")) continue;
+    if (rel.endsWith("/CHANGELOG.md")) continue;
+    if (rel.startsWith(".opencode/")) continue;
+    const lines = read(rel).split("\n");
+    const mask = fenceMask(lines);
+    let block = null;
+    const flush = () => {
+      if (!block) return;
+      const text = block.text.replace(/\s+/g, " ").trim();
+      const line = block.line;
+      block = null;
+      if (text.length < DUPLICATE_MIN) return;
+      if (/^\[/.test(text)) return;
+      if (!seen.has(text)) seen.set(text, []);
+      const folder = /^docs\/modules\/(\d{2})-[a-z0-9-]+\//.exec(rel);
+      seen.get(text).push({ rel, line, scope: folder ? folder[1] : "global" });
+    };
+    lines.forEach((line, index) => {
+      if (mask[index]) {
+        flush();
+        return;
+      }
+      const trimmed = line.trim();
+      if (
+        trimmed === "" ||
+        trimmed === "---" ||
+        /^#/.test(trimmed) ||
+        /^\|/.test(trimmed) ||
+        /^>/.test(trimmed)
+      ) {
+        flush();
+        return;
+      }
+      const content = trimmed.replace(/^(?:[-*]\s+|\d+\.\s+)/, "");
+      const isItem = content !== trimmed;
+      if (isItem || !block) {
+        flush();
+        block = { text: content, line: index + 1 };
+        return;
+      }
+      block.text += ` ${content}`;
+    });
+    flush();
+  }
+
+  for (const occurrences of seen.values()) {
+    if (occurrences.length < 2) continue;
+    const firstByScope = new Map();
+    let firstAny = null;
+    for (const hit of occurrences) {
+      const conflict =
+        hit.scope === "global"
+          ? firstAny
+          : (firstByScope.get(hit.scope) ?? firstByScope.get("global"));
+      if (conflict) {
+        add(
+          "E-19",
+          "must",
+          hit.rel,
+          hit.line,
+          `prose block duplicated from ${conflict.rel}:${conflict.line}`,
+        );
+      }
+      if (!firstByScope.has(hit.scope)) firstByScope.set(hit.scope, hit);
+      firstAny ??= hit;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ E-20 */
+
+const PATH_SPAN = /`([\w.@/-]+\.(?:ts|mjs|js|json|svelte|css|html))`/g;
+
+function checkPathSpans(files) {
+  for (const rel of files) {
+    if (!rel.endsWith(".md")) continue;
+    const lines = read(rel).split("\n");
+    const mask = fenceMask(lines);
+    lines.forEach((line, index) => {
+      if (mask[index]) return;
+      for (const match of line.matchAll(PATH_SPAN)) {
+        const target = match[1];
+        if (!target.includes("/")) continue;
+        if (/[*<>]/.test(target)) continue;
+        if (/^@/.test(target) || target.includes("://")) continue;
+        if (target.startsWith("dist/") || target.startsWith("node_modules/")) continue;
+        const bases = [path.dirname(rel), "", "src", "docs", "tests", "scripts"];
+        const exists = bases.some((base) => fs.existsSync(path.join(root, base, target)));
+        if (exists) continue;
+        add("E-20", "must", rel, index + 1, `code span names a missing path: ${target}`);
+      }
+    });
+  }
+}
+
 /* -------------------------------------------------------------------- main */
 
 function main() {
@@ -1049,6 +1176,8 @@ function main() {
 
   checkReferences(files);
   checkRulePrefixes(files);
+  checkDuplicatedBlocks(files);
+  checkPathSpans(files);
   checkLanguage(files);
 
   if (forbidden.length > 0) {

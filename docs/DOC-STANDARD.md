@@ -1,4 +1,4 @@
-﻿# Documentation standard — v1.0
+﻿# Documentation standard — v1.1
 
 > **Purpose:** single contract for the form of every Markdown file in Project Tracking.
 > **Read when:** writing or reviewing documentation, or when `docs-audit` fails.
@@ -9,6 +9,8 @@
 **Last update:** 2026-11-13
 
 Every document follows one skeleton: front block, a two-sentence summary and numbered slots from a fixed catalogue. Enumerable facts live in declared tables and identifiers are namespaced; rules that cannot be checked are named to a reviewer.
+
+v1.0 was approved with `D-26`; the v1.1 amendments below wait for the owner's approval.
 
 ---
 
@@ -53,7 +55,7 @@ Two sentences, at most 400 characters. No new facts, no identifiers created here
 - **G-11 — Front block.** The four `**Key:**` lines are mandatory on live documents; §7.9 lists the exceptions.
 - **G-12 — Status.** `**Status:**` carries one token of the vocabulary that applies (§5) in backticks and the date in parentheses. It appears only on module files and on this standard.
 - **G-13 — Summary.** At most two sentences and 400 characters, with no identifier created and no state claim beyond the status line.
-- **G-14 — Sections.** `## N. Title`, consecutive from 1 within the catalogue of §7; `### Title` unnumbered; `####` forbidden. A slot may be omitted and keeps its number.
+- **G-14 — Sections.** `## N. Title`, consecutive from 1 within the catalogue of §7; `### Title` unnumbered for content subsections; `### N.M Title` only for the registry subsections of this document (§4.1, §7.1, §8.1 and their siblings); `####` forbidden. A slot may be omitted and keeps its number.
 - **G-15 — Separator.** `---` once, between the front block and §1; further horizontal rules are forbidden. Fenced code blocks are examples and do not count.
 - **G-16 — Dashes.** `—` (U+2014) in every H1 and in `## YYYY-MM-DD — Title`; `-` only inside compound words.
 - **G-17 — Dates.** `YYYY-MM-DD` everywhere, including inside cells; a time only when the hour changes the meaning.
@@ -81,6 +83,8 @@ Descriptive tables that document this standard are not registered; they still fo
 | Backlog entries | `*/BACKLOG.md` | `ID` · `Date` · `Type` · `Description` · `Origin` · `Priority` · `Status` | ID ascending | `B-NN` per module, `CORE-NN` in `00-core`; §5.2, §5.3, §5.4 |
 | Decisions | `DECISIONS.md` §1, §2 | `#` · `Date` · `Decision` · `Context / reason` | ID ascending | `#` = `D-NN` |
 | Core invariants | `00-core/MODULE.md` §4 | `ID` · `Invariant` · `Source of truth` | ID ascending | `CR-NN`; the source is a link |
+| Milestones | `*/TECHNICAL.md` §8 | `#` · `Milestone` · `State` | ID ascending | `MS-NN` per module; §5.1 |
+| Core work-item evidence | `00-core/TECHNICAL.md` §8 | `ID` · `Item` · `Evidence` | ID ascending | `CORE-NN`; the state stays in `00-core/BACKLOG.md` |
 | Module inventory | `PROJECT_STATE.md` §6 | `#` · `Module` · `State` · `Open items` · `Documentation` | module number ascending | §5.1; `Open items` = identifiers only |
 | Key-value facts | `PROJECT_STATE.md` §2 | `Key` · `Value` | semantic, stable | — |
 | Acceptance | `*/REQUIREMENTS.md` §9 | `FR` · `Criterion` · `Evidence` · `Status` | FR ascending | `verified (YYYY-MM-DD)` or `pending (owner)`; required from `Implemented` |
@@ -111,8 +115,8 @@ Defined here, created only when the artifact exists (§8.2): contract history, c
 
 ## 6. Identifiers and references
 
-- **R-01 — Global namespaces.** `D-`, `CORE-` and `CR-` are unique repository-wide and never qualified. Reserved: `SEC-`, `DOC-`, `REL-`, `RISK-`.
-- **R-02 — Module namespaces.** `FR-`, `BR-`, `VAL-` and `B-` are per module. The bare form is allowed only inside the file that owns it; elsewhere it is qualified `NN <ID>`, for example `01 FR-3`.
+- **R-01 — Global namespaces.** `D-`, `CORE-` and `CR-` are unique repository-wide and never qualified; their number always has two digits (`D-07`). Reserved: `SEC-`, `DOC-`, `REL-`, `RISK-`, `DEF-`, `IMP-` and `NFR-`.
+- **R-02 — Module namespaces.** `FR-`, `BR-`, `VAL-`, `MS-` and `B-` are per module. The bare form is allowed only inside the file that owns it; elsewhere it is qualified `NN <ID>`, for example `01 FR-3`. A family that came from the source documents keeps the number it already had (`FR-3`, `VAL-11`); a family created by this standard numbers with two digits (`B-01`, `MS-01`).
 - **R-03 — Global files always qualify.** `PROJECT_STATE.md`, `DECISIONS.md`, `WORKFLOW.md`, `AGENTS.md`, `ARCHITECTURE.md` and this standard qualify every module ID.
 - **R-04 — One meaning per file.** A bare token whose value exists in more than one module is forbidden in that file.
 - **R-05 — No path notation.** `01/REQUIREMENTS.md FR-3` is written `01 FR-3`, optionally followed by a link.
@@ -120,9 +124,24 @@ Defined here, created only when the artifact exists (§8.2): contract history, c
 - **R-07 — Ranges.** `FR-1…FR-14` with U+2026, ascending, inclusive, one module and one prefix. Cross-module ranges are forbidden.
 - **R-08 — Immutability.** An ID is never renumbered or reused. The one-time exception of D-26 renames `V-NN` to `VAL-NN` and the first backlog entry to `B-01` before the standard takes effect.
 - **R-09 — Gaps.** Missing numbers in a sequence are legal and are not a defect.
-- **R-10 — Legacy prefixes.** `V-` as a validation identifier is frozen after the migration: from then on `V-` means a rule of this standard only. `P-`, `DEF-`, `IMP-`, `A-`, `N-`, `I-` and `Q-` are forbidden for new entries.
+- **R-10 — Legacy prefixes.** `V-` as a validation identifier is frozen after the migration: from then on `V-` means a rule of this standard only. `P-`, `DEF-`, `IMP-`, `A-`, `N-`, `I-`, `Q-` and `M-` are forbidden for new entries.
 - **R-11 — History exemption.** `CHANGELOG.md` is append-only: never retro-normalised for R-02, R-05 or G-16; each new entry obeys them.
 - **R-12 — External references resolve.** Paths exist, identifiers exist in their owning file and code spans name real modules, scripts or files.
+
+### 6.1 Identifier lookup
+
+| Prefix | Scope | Owner | Form outside the owner |
+|---|---|---|---|
+| `D-NN` | global | `docs/DECISIONS.md` §1 | never qualified; two digits |
+| `CORE-NN` | global | `docs/modules/00-core/BACKLOG.md` | never qualified; two digits |
+| `CR-NN` | global | `docs/modules/00-core/MODULE.md` §4 | never qualified; two digits |
+| `FR-NN` | module | `REQUIREMENTS.md` §2 | `NN FR-N` |
+| `BR-NN` | module | `REQUIREMENTS.md` §3 | `NN BR-N` |
+| `VAL-NN` | module | `REQUIREMENTS.md` §5 | `NN VAL-N` |
+| `MS-NN` | module | `TECHNICAL.md` §8 | `NN MS-NN` |
+| `B-NN` | module | `BACKLOG.md` §1 | `NN B-NN` |
+| `SEC-NN` · `RISK-NN` · `NFR-NN` · `DOC-NN` · `REL-NN` · `DEF-NN` · `IMP-NN` | reserved | §8.2, after its trigger | — |
+| `G` · `T` · `V` · `R` · `F` · `L` · `AG` · `E` | this standard | this file | cited as rules, never as project references |
 
 ## 7. Canonical skeletons
 
@@ -132,6 +151,7 @@ Defined here, created only when the artifact exists (§8.2): contract history, c
 - **F-04 — Front block.** Mandatory on live documents; the exceptions are listed in §7.9.
 - **F-05 — Empty optional slot.** Omit it; write `_not applicable_` only when the absence is informative.
 - **F-06 — Status line.** `**Status:** `Tested` (2026-11-13)`; the narrative follows as body text, never inside the token.
+- **F-07 — History is not a state.** A `CHANGELOG.md` entry records what changed and when; the current state stays in `MODULE.md` §9 and pending work in `BACKLOG.md`.
 
 ### 7.1 Global files
 
@@ -323,19 +343,21 @@ Backend, database and migration tables; contract and error tables; accounts, ser
 | E-03 | contract header equals its last history row | — | must | reserved until an API |
 | E-04 | anchors resolve: heading slug computed and compared | G-19, AG-06 | must | active |
 | E-05 | H1 matches the file registry | G-10, F-01 | must | active |
-| E-06 | front-block keys present and spelled as in AG-02 | G-11, AG-02 | must | active |
+| E-06 | front-block keys present and spelled as in AG-02; a `CHANGELOG` also carries `**History:** append-only` | G-11, AG-02, §7.9 | must | active |
 | E-07 | required slots present and ascending, no renumbering | F-01 | must | active |
 | E-08 | registered table headers match §4.1 | T-01 | must | active |
 | E-09 | status, type and priority come from §5 | V-08 | must | active |
 | E-10 | dates are `YYYY-MM-DD` in `Date` and `Last update` | G-17 | must | active |
-| E-11 | qualified IDs exist in the owning file; ranges expand | R-02, R-07 | must | active |
+| E-11 | qualified module IDs exist in the owning module, global IDs are never qualified and use two digits, ranges expand | R-01, R-02, R-07 | must | active |
 | E-12 | no bare ID with two owners in one file | R-04 | must | active |
-| E-13 | legacy identifier prefixes `P-`, `DEF-`, `IMP-`, `A-`, `N-`, `I-` and `Q-` appear nowhere | R-10 | must | active; `V-NN` is a rule id after the migration |
+| E-13 | legacy identifier prefixes `P-`, `DEF-`, `IMP-`, `A-`, `N-`, `I-`, `Q-` and `M-` appear nowhere | R-10 | must | active; `V-NN` is a rule id after the migration |
 | E-14 | no empty cell and no unescaped `\|` | T-02 | must | active |
 | E-15 | cell length within G-21 | G-21 | should | active |
 | E-16 | `Last update` not older than the newest `CHANGELOG` date | G-11 | should | active |
 | E-17 | no Spanish stopwords in `docs/**` | G-04 | should | active |
 | E-18 | `--json` yields `{files, links, failures:[{file, line, rule, severity, message}], summary}` | AG-08 | must | active |
+| E-19 | no prose block is duplicated between a global document and a module, or between the files of one module (`CHANGELOG.md` and `.opencode/**` excluded; two different modules are not compared) | AG-03, T-04 | must | active |
+| E-20 | a code span that names a path under `src/`, `docs/`, `tests/`, `scripts/` or the repository root resolves | R-12 | must | active |
 
 The rules added for this standard are **blocking by default**: any `must` finding fails the command, and `--advisory` reports without failing. `--blocking-module NN` restricts enforcement to one module; the historical validations stay blocking at all times.
 
@@ -365,6 +387,8 @@ The rules added for this standard are **blocking by default**: any `must` findin
 
 **Phase 6 checkpoint (2026-11-13):** the linter is blocking by default; `--advisory` only reports and `--blocking-module NN` restricts enforcement during a migration. The full audit reports **0 findings** over 45 files and 81 links, exits 0, and the migration is complete. Adoption of the standard is closed.
 
+**Post-adoption audit (2026-11-13):** a second pass over every artifact against this standard found what the migration could not see from inside itself: `F-07` was cited by §7.6 and never defined; `G-14` forbade the `### N.M` headings this document already used; the padding that separates `B-01` from `FR-3` was undefined; `M1`…`M6` was an unregistered namespace; four acceptance rows named test files that do not exist; five modules declared their dependencies in two places; `PROJECT_STATE.md` §7 carried a limitation copied from the reader; the Core work-item state had two homes; and `WORKFLOW.md` §7 still listed dependencies and limitations under `MODULE.md`. Fixed in v1.1 and in the artifacts, without renaming any identifier except the `M-` prefix: `MS-NN` registered, evidence corrected against the real suites, the dependency block left `MODULE.md`, the limitation kept one home, the Core state kept only in `00-core/BACKLOG.md`, E-19 and E-20 added and E-11 extended to the global namespaces. The audit reports **0 findings** over 45 files and 85 links. v1.0 is the approved text (`D-26`); the v1.1 amendments are applied and wait for the owner's approval, and the first commit of the repository is still the owner's decision.
+
 ## 12. Governance
 
 - **L-03 — Change of the standard.** A new or amended rule is a row in §13 plus a `DECISIONS.md` entry when it is architectural; the owner approves.
@@ -377,3 +401,4 @@ The rules added for this standard are **blocking by default**: any `must` findin
 | Date | Version | Change |
 |---|---|---|
 | 2026-11-13 | v1.0 | First adapted version: local skeletons and table registry, active and reserved vocabularies, namespace rules with the `V-` → `VAL-` migration, reserved artifacts, active and reserved checks, baseline and phases. Approved with D-26. |
+| 2026-11-13 | v1.1 | Audit of the adopted standard against the artifacts: F-07 defined (it was cited by §7.6 and missing from §7), G-14 accepts the `### N.M` registry headings the document already used, R-01 and R-02 state the two-digit rule for globals and the unpadded rule for module IDs, `MS-NN` registered as a module namespace with its milestone table, `M-` added to the forbidden legacy prefixes, and two checks added: E-19 for a prose block that a module copies from a global document or from its sibling file, and E-20 for a code span that names a missing path. No identifier was renumbered. |
