@@ -9,6 +9,8 @@ experiencia de lectura navegable e interactiva: capítulos, tablas, estados y
 referencias cruzadas. Es un único archivo HTML autocontenido, funciona sin conexión
 y nunca escribe en los documentos que lee.
 
+**Descargo de responsabilidad:** Esta plantilla es una herramienta de referencia y aceleración del desarrollo. Los resultados generados mediante IA deben ser revisados, validados y probados antes de su utilización o despliegue en entornos reales. La responsabilidad sobre las decisiones técnicas, la seguridad, el cumplimiento normativo y la puesta en producción corresponde a quien desarrolla y despliega el proyecto.
+
 ## Qué puedes hacer
 
 - **Leer** capítulos y secciones con una barra lateral fija y encabezados anclados.
