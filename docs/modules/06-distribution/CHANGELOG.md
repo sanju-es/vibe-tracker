@@ -3,6 +3,17 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-16 — README reduced to the project welcome
+
+- `README.md` now contains the project description, a real screenshot and links to
+  the documentation; development commands, distribution details, linter examples
+  and version control moved to `PROJECT_STATE.md`, `docs/ARCHITECTURE.md`,
+  `AGENTS.md`, `docs/WORKFLOW.md` and `docs/DOC-STANDARD.md`.
+- `06 FR-9` now records that the welcome points to the distribution documentation;
+  no application behaviour changed and the module stays `Tested`.
+- Added `docs/assets/project-tracking.png`, captured from the built reader with the
+  project documents loaded.
+
 ## 2026-11-16 — Closed as Tested
 
 - The owner closed the module on 2026-11-16; every acceptance row is verified.

@@ -1,143 +1,43 @@
 # Project Tracking
 
-> A portable, install-free and offline web app that interprets the Markdown
-> documentation of a project —chapters, tables, statuses and references— and
-> turns it into navigable, interactive content.
+> A portable, install-free and offline reader for a project's Markdown documentation.
 
-Modules 1 to 6 are closed as `Tested`. The application runs: `npm run dev` for
-development and `npm run build` for the single-file artifact.
+![Project Tracking dashboard](docs/assets/project-tracking.png)
 
-Open the built `index.html`, choose the project folder, and read the documentation
-without opening a Markdown editor. The artifact needs no server; its only external
-assets are the allowlisted, SRI-pinned icons and typeface (D-22, D-23), and it
-stays usable without network.
+Project Tracking turns the Markdown documentation of a project into a navigable,
+interactive reading experience: chapters, tables, statuses and cross-references.
+It is one self-contained HTML file, works offline and never writes to the
+documents it reads.
 
-> From `file://` the app uses a folder input; when served (for example with
-> `npm run preview`) it uses the directory picker.
+## What you can do
 
-## 1. What it is
+- **Read** chapters and sections with a stable sidebar and anchored headings.
+- **Work with tables**: recognise statuses, filter, sort and open a full row in a
+  modal.
+- **Follow references** between documents and from any known identifier to the
+  item that defines it.
+- **See the project at a glance** through the modules dashboard, backlog board,
+  requirements catalogue and a filterable changelog timeline.
+- **Search everything** with `Ctrl+K` or the banner magnifier, with excerpts and
+  jumps to the source section.
+- **Read offline**; icons and the typeface are optional and fall back to glyphs
+  and the system font.
 
-Project Tracking is an internal tool meant to travel with a project. It is built
-as a static web app compiled into **one self-contained `index.html`**: all
-JavaScript, CSS and dependencies are inlined, so the file can be copied, shared
-and opened offline.
+## Start
 
-It is not a Markdown viewer. It reads the documentation semantically:
+Open `dist/index.html` in Chrome or Edge and choose the project folder. No server,
+installation or build step is needed to read a project.
 
-- **Chapters and sections** keep stable anchors; the fixed sidebar lists documents
-  by file name.
-- **Tables** become real tables: one line per row, recognised statuses, text and
-  status filters, sorting by column, and the full row in a modal on click.
-- **References** between documents open the detail of the referenced row in a
-  modal, and every known identifier in the text opens the item that defines it.
-- **Read-only.** The app never writes to the Markdown files.
-- **Documentation scope.** Reads Markdown at the project root and under `docs/**`;
-  hidden, tooling, dependency and build folders are ignored (D-30).
-- **Local by default.** No telemetry and no request of the app itself. Icons and the
-  typeface come from the allowlisted CDNs, pinned with SRI; without network they
-  degrade to glyphs and the system font.
-- **Portable.** No installation and no build step for the end user: a single HTML
-  file.
-- **Focused reading.** A fixed sidebar keeps navigation reachable while the
-  document scrolls, and the content starts after it.
-- **Reload.** Re-scans the current folder without choosing it again.
-- **Modules overview.** Selecting *Modules* in the sidebar shows a table with the
-  module folder, its name and its state; selecting a module opens its backlog table
-  with search, status filters and sorting.
-- **Backlog board.** The top banner opens a full cross-module backlog board with
-  text and status filters, grouping by module or status, row detail and a jump to
-  the source row; *Home* returns to the project state.
-- **Requirements catalogue.** The top banner also opens every module's functional
-  requirements, business rules, flows, validations and edge cases, filtered by
-  module state and grouped by module or section, with a jump to the source.
-- **Dashboard.** A project-health view with documented module states, the `Tested`
-  progress bar, the active module and a filterable timeline of module changelogs.
-- **Search and index.** `Ctrl+K` or the banner magnifier opens a document index and
-  a global exact-phrase search across every Markdown file, with excerpts and jumps
-  to the source section.
-- **Light only.** One appearance, no theme switch (D-18).
+## Documentation
 
-The Markdown files are the source of truth. The app derives an in-memory semantic
-model and only renders it.
+- [PROJECT_STATE.md](PROJECT_STATE.md) — project index, modules and next steps.
+- [docs/WORKFLOW.md](docs/WORKFLOW.md) — module cycle, states and definition of done.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — code organisation and operations.
+- [docs/DECISIONS.md](docs/DECISIONS.md) — approved decisions and open questions.
+- [AGENTS.md](AGENTS.md) — onboarding rules for AI agents.
 
-## 2. Languages
-
-| Scope | Language |
-|---|---|
-| Code, identifiers and comments | English |
-| Documentation | English |
-| User interface | English |
-
-## 3. Stack
-
-Stack, versions and supported browsers are recorded once in
+Architecture, operations and commands live in
+[`docs/ARCHITECTURE.md` §9](docs/ARCHITECTURE.md#9-environments-and-operations) and
 [`PROJECT_STATE.md` §2](PROJECT_STATE.md#2-stack-and-environment).
 
-## 4. Development
-
-Requirements: Node ^20.19 or ≥22.12, and npm. The environment is native: there
-are no services to containerise and no Docker setup.
-
-```bash
-npm install
-npm run dev      # development server on http://localhost:5173
-npm run check    # svelte-check over TypeScript and Svelte sources
-npm run test     # Vitest
-npm run lint     # ESLint + Prettier check
-npm run docs:check  # documentation audit (blocking)
-npm run build    # check, single-file build and artifact audit
-npm run dist:check  # audit the existing dist/index.html
-npm run preview  # serves the production build locally
-```
-
-The build output is a single `index.html` that can be opened directly from disk;
-its size is recorded in
-[`docs/ARCHITECTURE.md` §9](docs/ARCHITECTURE.md#9-environments-and-operations). It
-carries a content security policy that allows only the jsDelivr host used by the
-icons and the typeface (D-22, D-23), both with SRI and with a local fallback.
-
-## 5. Distribution
-
-`npm run build` ends with `npm run dist:check`. The audit verifies that `dist/`
-contains only `index.html`, that its JavaScript and CSS are inline, that the
-content security policy keeps the approved hosts, and that every external asset
-is allowlisted, version-pinned and carries SRI. It also checks the
-`project-tracking-version` meta tag against `package.json` (currently `0.1.0`).
-A failed audit fails the build; `npm run dist:check` audits an existing artifact
-on its own.
-
-To share the tool, copy `dist/index.html` and open it in Chrome or Edge. Choose
-the project folder; no server or installation is needed. The HTML is the reader,
-not a bundle of the project: each person reads their own copy of the documents.
-With the network disabled, the icons fall back to glyphs and the typeface to the
-system font.
-
-The file name stays `index.html`; the version identifies the artifact. No release
-tag is created in this module. A future release uses `v<package version>` after a
-commit and a green quality gate.
-
-## 6. Documentation
-
-| Document | Content |
-|---|---|
-| [`PROJECT_STATE.md`](PROJECT_STATE.md) | Index and global state: modules, states, next steps |
-| [`docs/WORKFLOW.md`](docs/WORKFLOW.md) | Module cycle, states, change management, definition of done |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Architecture, layers, data model, conventions |
-| [`docs/DECISIONS.md`](docs/DECISIONS.md) | Decision log: approved, adopted by default and open questions |
-| [`docs/DOC-STANDARD.md`](docs/DOC-STANDARD.md) | Documentation standard: form, identifiers, vocabularies and checks |
-| [`AGENTS.md`](AGENTS.md) | Onboarding rules and quality routing for AI agents |
-| `docs/modules/` | One folder per module with its requirements, technical design, changelog and backlog (module 0 has no requirements document) |
-
-Documentation linter:
-
-```bash
-node scripts/docs-audit.mjs             # fails on any must
-node scripts/docs-audit.mjs --advisory  # reports without failing
-node scripts/docs-audit.mjs --json      # machine-readable report
-```
-
-## 7. Version control
-
-The project uses Git on a trunk-based workflow: work happens on `main` with short
-task branches, and each closed task is one commit with a Conventional Commits
-message. Only approved work is committed.
+> The reader is English-only, light-only and read-only.

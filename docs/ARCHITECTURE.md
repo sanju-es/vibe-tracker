@@ -215,12 +215,14 @@ project-tracking/
 ├── tests/             # unit tests; fixtures are real project documents
 ├── dist/              # build output (generated, not versioned)
 ├── scripts/
-│   └── docs-audit.mjs # documentation linter
+│   ├── docs-audit.mjs  # documentation linter
+│   └── dist-audit.mjs  # single-file artifact audit
 └── docs/
     ├── WORKFLOW.md
     ├── ARCHITECTURE.md
     ├── DECISIONS.md
     ├── DOC-STANDARD.md
+    ├── assets/         # README screenshot
     └── modules/
         ├── 00-core/
         ├── 01-structured-reader/ … 06-distribution/
@@ -241,9 +243,11 @@ project-tracking/
   runtime, the CSP, the external references and the version before the build is
   accepted (D-35).
 - **Distribution:** the built file is copied and opened by the user; its name
-  stays `index.html`, and the version meta identifies it. From `file://` the
-  folder input is used; on a served origin the directory picker is available
-  (D-15).
+  stays `index.html`, and the version meta identifies it. The HTML is the reader,
+  not a bundle of the project, so each person reads their own copy. With the
+  network disabled, icons fall back to glyphs and the typeface to the system font.
+  From `file://` the folder input is used; on a served origin the directory
+  picker is available (D-15).
 - **Environments:** there is no staging or production deployment. Each user runs
   the same artifact against their own local project folder.
 - **No configuration variables** are required by the app.

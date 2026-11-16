@@ -76,11 +76,11 @@ source data stay as written. The interface remains English only (D-16).
 
 ### FR-9 — Sharing and release policy
 
-`README.md` explains how to build, copy `dist/index.html`, open it in Chrome or
-Edge, choose a project folder and use it offline, including the version meta and
-the fact that the project documents are not embedded. No release tag is created
-in this module; the future tag format is `v<package version>` after a commit and
-a green quality gate.
+`README.md` is the project welcome and points to the distribution instructions;
+the detailed build, copy, offline and version rules live in
+[`docs/ARCHITECTURE.md`](../../ARCHITECTURE.md) §9 and this module's
+[`TECHNICAL.md`](TECHNICAL.md). No release tag is created in this module; the
+future tag format is `v<package version>` after a commit and a green quality gate.
 
 ## 3. Business rules
 
@@ -175,4 +175,4 @@ a green quality gate.
 | FR-6 | The artifact reads a folder and renders documents with the network disabled. | Owner closure, manual check | verified (2026-11-16) |
 | FR-7 | The keyboard, focus, contrast and zoom pass has no unresolved critical finding. | Owner closure, manual checklist | verified (2026-11-16) |
 | FR-8 | No interface string is missing from the dictionary or hardcoded outside it. | Manual review, `npm run test` | verified (2026-11-16) |
-| FR-9 | The README explains sharing and the release policy; no tag is created. | `README.md` review | verified (2026-11-16) |
+| FR-9 | The README is a welcome that points to the distribution docs; no tag is created. | `README.md`, architecture review | verified (2026-11-16) |

@@ -5,8 +5,9 @@
 > **Canonical for:** identity, stack summary, module states, open problems and next steps.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
-**Last update:** 2026-11-16 — modules 1 to 6 closed as `Tested`; no active
-module remains.
+**Last update:** 2026-11-16 — modules 1 to 6 closed as `Tested`; `README.md`
+reduced to the project welcome and development details moved to their canonical
+documents.
 
 ---
 
@@ -32,6 +33,7 @@ module remains.
 | Layer | Technology |
 |---|---|
 | App shell | Browser; one self-contained `index.html` |
+| Runtime | Node ^20.19 or ≥22.12; npm |
 | UI framework | Svelte 5 + TypeScript |
 | Build and bundling | Vite 8 + `vite-plugin-singlefile` |
 | Styling | Tailwind CSS 4 + own components |
@@ -48,6 +50,7 @@ module remains.
 
 | Key | Value |
 |---|---|
+| Install | `npm install` |
 | Development commands | `npm run dev`, `npm run check`, `npm run build`, `npm run preview` |
 | Quality commands | `npm run test`, `npm run lint`, `npm run docs:check`, `npm run dist:check` |
 | Dev port | 5173 |

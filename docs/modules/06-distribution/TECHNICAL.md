@@ -35,7 +35,7 @@ No endpoints: the project has no own API. The module adds or touches:
 | dist-audit.test.ts (under `tests/`) | Fixtures proving each audit rule fails when it should |
 | `vite.config.ts` | Build plugin that injects the version meta tag from `package.json` |
 | `package.json` | `dist:check` script and the build chain |
-| `README.md` | Distribution and offline-use instructions |
+| `README.md` | Project welcome and documentation entry point; no development instructions |
 | `docs/ARCHITECTURE.md` | Build command and artifact identity |
 | `PROJECT_STATE.md` | Quality command and module state |
 
@@ -120,10 +120,10 @@ missing CSP, widened CSP, disallowed host, unpinned URL, missing SRI, local asse
 reference, version mismatch and a valid artifact with zero external assets. The
 real build is covered by `npm run build` and the offline check.
 
-**Documentation.** `README.md` gains a distribution section with the build
-command, the copy step, browser support, folder selection, offline behaviour, the
-version meta and the fact that the project documents are not embedded.
-`docs/ARCHITECTURE.md` §9 and `PROJECT_STATE.md` §2 record the new command and the
+**Documentation.** `README.md` is a welcome with a screenshot and links to the
+project documentation; it carries no development, distribution, linter or version
+control instructions. The distribution details live in `docs/ARCHITECTURE.md` §9
+and in this technical document; `PROJECT_STATE.md` §2 records the commands and the
 identity rule.
 
 **Accessibility and dictionary.** No UI change is planned. The full pass may fix
