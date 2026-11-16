@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Project Tracking
 
 > A portable, install-free and offline web app that interprets the Markdown
@@ -118,3 +119,7 @@ node scripts/docs-audit.mjs --json      # machine-readable report
 The project uses Git on a trunk-based workflow: work happens on `main` with short
 task branches, and each closed task is one commit with a Conventional Commits
 message. Only approved work is committed.
+=======
+# vibe-tracker
+Visor cero-instalación en HTML puro (solo lectura, directo en el navegador) — lee los archivos .md de mi plantilla para mostrar de un vistazo el proyecto completo.
+>>>>>>> 6bbc63757c81e5f4716cfe6afec28d3c86dd070a
