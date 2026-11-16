@@ -233,12 +233,17 @@ project-tracking/
 - **Commands:** listed once in [`PROJECT_STATE.md`](../PROJECT_STATE.md) §2; §10
   states what each quality gate verifies.
 - **Build:** Vite plus `vite-plugin-singlefile` produce one `index.html` at
-  `dist/` (about 185 kB), with the content security policy injected in build mode.
-  All code and CSS are inlined; the only remote references are the allowlisted
-  Lucide bundle and Inter files, both with SRI (D-22, D-23).
-- **Distribution:** the built file is copied and opened by the user. From
-  `file://` the folder input is used; on a served origin the directory picker is
-  available (D-15).
+  `dist/` (about 218 KiB), with the content security policy and the
+  `project-tracking-version` meta tag injected in build mode. All code and CSS
+  are inlined; the only remote references are the allowlisted Lucide bundle and
+  Inter files, both with SRI (D-22, D-23).
+- **Artifact audit:** `npm run dist:check` verifies the single file, the inline
+  runtime, the CSP, the external references and the version before the build is
+  accepted (D-35).
+- **Distribution:** the built file is copied and opened by the user; its name
+  stays `index.html`, and the version meta identifies it. From `file://` the
+  folder input is used; on a served origin the directory picker is available
+  (D-15).
 - **Environments:** there is no staging or production deployment. Each user runs
   the same artifact against their own local project folder.
 - **No configuration variables** are required by the app.
@@ -248,7 +253,9 @@ project-tracking/
 - `npm run check` — `svelte-check` over the TypeScript and Svelte sources.
 - `npm run lint` — ESLint and Prettier, no warnings accepted.
 - `npm run test` — Vitest over the domain logic.
-- `npm run build` — check plus single-file production build.
+- `npm run build` — check, single-file production build and artifact audit.
+- `npm run dist:check` — `node scripts/dist-audit.mjs`; the existing artifact must
+  keep the distribution rules (D-35).
 - `npm run docs:check` — `node scripts/docs-audit.mjs`; documentation must stay clean.
 - The `quality-gate` agent reviews each closure; the `docs-auditor` reviews
   documentation-only changes.

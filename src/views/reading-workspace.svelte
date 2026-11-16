@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Project } from "../lib/model/types";
-  import { projectStore, navigation, tables } from "../stores/index";
+  import { projectStore, navigation, reader, search, tables } from "../stores/index";
   import { messages as m } from "../lib/i18n";
   import ProjectNavigation from "../components/project-navigation.svelte";
   import DocumentBody from "../components/document-body.svelte";
@@ -10,6 +10,7 @@
   import BacklogBoard from "./backlog-board.svelte";
   import RequirementsCatalog from "./requirements-catalog.svelte";
   import ModulesDashboard from "./modules-dashboard.svelte";
+  import SearchView from "./search-view.svelte";
   import Icon from "../components/primitives/icon.svelte";
 
   let { project }: { project: Project } = $props();
@@ -19,6 +20,12 @@
   );
 
   let previousDocumentId: string | null = null;
+  let previousProject: Project | null = null;
+
+  $effect(() => {
+    if (previousProject !== null && previousProject !== project) search.clear();
+    previousProject = project;
+  });
 
   $effect(() => {
     const current = navigation.activeDocumentId;
@@ -26,6 +33,31 @@
       tables.resetDocument(previousDocumentId);
     }
     previousDocumentId = current;
+  });
+
+  $effect(() => {
+    const anchor = navigation.pendingAnchor;
+    const rowId = navigation.pendingRowId;
+    if (anchor === null && rowId === null) return;
+    requestAnimationFrame(() => {
+      if (anchor) {
+        document.getElementById(anchor)?.scrollIntoView({ block: "center" });
+      }
+      if (rowId) reader.highlight(rowId);
+      navigation.clearPendingTarget();
+    });
+  });
+
+  $effect(() => {
+    const onKeydown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        navigation.openSearch();
+        search.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
   });
 </script>
 
@@ -54,13 +86,15 @@
             ? m["requirements.title"]
             : navigation.activeView === "dashboard"
               ? m["dashboard.title"]
-              : navigation.activeView === "modules"
-                ? m["modules.title"]
-                : navigation.activeView === "module"
-                  ? (project.modules.find(
-                      (entry) => entry.number === navigation.activeModuleNumber,
-                    )?.name ?? m["modules.title"])
-                  : (activeDocument?.title ?? "")}
+              : navigation.activeView === "search"
+                ? m["search.title"]
+                : navigation.activeView === "modules"
+                  ? m["modules.title"]
+                  : navigation.activeView === "module"
+                    ? (project.modules.find(
+                        (entry) => entry.number === navigation.activeModuleNumber,
+                      )?.name ?? m["modules.title"])
+                    : (activeDocument?.title ?? "")}
       </p>
     </div>
     <button
@@ -82,7 +116,7 @@
       onclick={() => navigation.openBacklog()}
     >
       <Icon name="ListTodo" size={14} />
-      <span>{m["backlog.entry"]}</span>
+      <span class="hidden sm:inline">{m["backlog.entry"]}</span>
     </button>
     <button
       type="button"
@@ -94,7 +128,7 @@
       onclick={() => navigation.openRequirements()}
     >
       <Icon name="ListChecks" size={14} />
-      <span>{m["requirements.entry"]}</span>
+      <span class="hidden sm:inline">{m["requirements.entry"]}</span>
     </button>
     <button
       type="button"
@@ -106,7 +140,21 @@
       onclick={() => navigation.openDashboard()}
     >
       <Icon name="LayoutDashboard" size={14} />
-      <span>{m["dashboard.entry"]}</span>
+      <span class="hidden sm:inline">{m["dashboard.entry"]}</span>
+    </button>
+    <button
+      type="button"
+      class="pt-button"
+      class:text-[var(--pt-accent-strong)]={navigation.activeView === "search"}
+      title={m["search.entry"]}
+      aria-label={m["search.entry"]}
+      aria-current={navigation.activeView === "search" ? "page" : undefined}
+      onclick={() => {
+        navigation.openSearch();
+        search.focus();
+      }}
+    >
+      <Icon name="Search" size={14} />
     </button>
     <button
       type="button"
@@ -120,10 +168,12 @@
     <button
       type="button"
       class="pt-button"
+      title={m["empty.action"]}
+      aria-label={m["empty.action"]}
       onclick={() => void projectStore.openFolder()}
     >
       <Icon name="FolderOpen" size={14} />
-      <span>{m["empty.action"]}</span>
+      <span class="hidden sm:inline">{m["empty.action"]}</span>
     </button>
   </header>
 
@@ -148,6 +198,8 @@
         <RequirementsCatalog {project} />
       {:else if navigation.activeView === "dashboard"}
         <ModulesDashboard {project} />
+      {:else if navigation.activeView === "search"}
+        <SearchView {project} />
       {:else if navigation.activeView === "modules"}
         <ModulesOverview
           {project}

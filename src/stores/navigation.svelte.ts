@@ -1,19 +1,32 @@
 import type { Project } from "../lib/model/types";
 
 export type ActiveView =
-  "document" | "modules" | "module" | "backlog" | "requirements" | "dashboard";
+  "document" | "modules" | "module" | "backlog" | "requirements" | "dashboard" | "search";
 
 class NavigationStore {
   activeView = $state<ActiveView>("document");
   activeDocumentId = $state<string | null>(null);
   activeModuleNumber = $state<number | null>(null);
+  pendingAnchor = $state<string | null>(null);
+  pendingRowId = $state<string | null>(null);
   modulesExpanded = $state(true);
   otherExpanded = $state(false);
   expandedModules = $state<Record<number, boolean>>({});
 
-  select(documentId: string): void {
+  select(
+    documentId: string,
+    anchor: string | null = null,
+    rowId: string | null = null,
+  ): void {
     this.activeView = "document";
     this.activeDocumentId = documentId;
+    this.pendingAnchor = anchor;
+    this.pendingRowId = rowId;
+  }
+
+  clearPendingTarget(): void {
+    this.pendingAnchor = null;
+    this.pendingRowId = null;
   }
 
   openModules(): void {
@@ -39,6 +52,11 @@ class NavigationStore {
 
   openDashboard(): void {
     this.activeView = "dashboard";
+    this.activeModuleNumber = null;
+  }
+
+  openSearch(): void {
+    this.activeView = "search";
     this.activeModuleNumber = null;
   }
 
@@ -70,6 +88,8 @@ class NavigationStore {
     this.activeView = "document";
     this.activeDocumentId = preferred?.id ?? null;
     this.activeModuleNumber = null;
+    this.pendingAnchor = null;
+    this.pendingRowId = null;
     this.modulesExpanded = true;
     this.otherExpanded = false;
     this.expandedModules = {};

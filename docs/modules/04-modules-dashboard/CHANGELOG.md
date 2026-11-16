@@ -3,6 +3,11 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-16 — Closure as Tested
+
+- The owner verified the dashboard in Edge and the module moves from `Implemented` to `Tested`; every acceptance row in `REQUIREMENTS.md` §9 is `verified (2026-11-16)`.
+- Delivered: top-banner Dashboard, documented roadmap cards, Core separate, `Tested` progress bar, module table with active marker and filterable changelog timeline. No code changed in this entry.
+
 ## 2026-11-16 — Dashboard implemented
 
 - The top banner gains *Dashboard*; the view shows the Core card, roadmap counts, the `Tested` progress bar, the module table with the active marker and the filterable changelog timeline.

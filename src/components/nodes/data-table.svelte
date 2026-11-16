@@ -187,7 +187,7 @@
       />
       <input
         id={`filter-${table.id}`}
-        class="h-8 w-full rounded-lg border border-[var(--pt-border)] bg-[var(--pt-surface)] pl-7 pr-2 text-[0.8125rem] shadow-[var(--pt-shadow-sm)]"
+        class="h-8 w-full rounded-lg border border-[var(--pt-border-control)] bg-[var(--pt-surface)] pl-7 pr-2 text-[0.8125rem] shadow-[var(--pt-shadow-sm)]"
         type="search"
         placeholder={m["table.filter.text"]}
         value={view.text}

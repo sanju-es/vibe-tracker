@@ -5,8 +5,8 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** `Pending` (2026-11-13)
-**Last update:** 2026-11-13
+**Status:** `Tested` (2026-11-16)
+**Last update:** 2026-11-16
 
 ---
 
@@ -46,14 +46,22 @@ Turn the application into the shareable artifact the project promises: one `inde
 | D-15 | The folder input covers `file://`; both adapters sit behind one interface. |
 | D-22 | Closed CDN allowlist with pinned versions, SRI and fallback. |
 | D-23 | Lucide icons and Inter with local fallbacks. |
+| D-35 | Blocking `dist:check`; `index.html` plus a version meta tag; no release tag; manual accessibility and dictionary evidence. |
 
 ## 9. Next step
 
-Wait for the owner to select the module, then analyse it.
+Closed as `Tested` on 2026-11-16 by the owner's decision; every acceptance row is
+verified and no open items remain.
 
 ## 10. Module-specific notes
 
 ### Open points
 
 - The deliverable is a static file: no server, no installer and no environment configuration.
-- The name and version of the distributed artifact: `not recorded`; the open question is recorded in [`DECISIONS.md`](../../DECISIONS.md) §4.
+- Artifact identity: `index.html` plus a `project-tracking-version` meta tag read
+  from `package.json`; the name does not change (D-35).
+- Verification: a dependency-free `npm run dist:check` wired after the build,
+  with manual offline evidence (D-35).
+- Release: no tag and no `RELEASES.md`; only the future `v<version>` policy is
+  recorded. `E-02` stays disabled until tags exist.
+- The owner closed the module on 2026-11-16; the acceptance table is verified.

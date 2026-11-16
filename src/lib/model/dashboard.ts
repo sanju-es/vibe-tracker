@@ -19,6 +19,7 @@ export interface DashboardCounts {
   inProgress: number;
   pending: number;
   blocked: number;
+  implemented: number;
   other: number;
 }
 
@@ -142,6 +143,7 @@ export function dashboardSummary(project: Project): DashboardSummary {
     inProgress: 0,
     pending: 0,
     blocked: 0,
+    implemented: 0,
     other: 0,
   };
 
@@ -151,6 +153,7 @@ export function dashboardSummary(project: Project): DashboardSummary {
       counts.inProgress += 1;
     } else if (module.stateKey === "pending") counts.pending += 1;
     else if (module.stateKey === "blocked") counts.blocked += 1;
+    else if (module.stateKey === "implemented") counts.implemented += 1;
     else counts.other += 1;
   }
 

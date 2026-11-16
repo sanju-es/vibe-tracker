@@ -5,7 +5,7 @@
 > **Canonical for:** `FR-NN`, `BR-NN` and `VAL-NN` of this module.
 > **Do not duplicate:** scope (`MODULE.md` §2) and implementation (`TECHNICAL.md`).
 
-**Status:** `Implemented` (2026-11-16)
+**Status:** `Tested` (2026-11-16)
 **Last update:** 2026-11-16
 
 ---
@@ -22,7 +22,7 @@ The top banner offers *Dashboard* next to *Requirements*, *Backlog* and *Home*. 
 
 ### FR-2 — Roadmap summary
 
-The dashboard reads the module inventory and states documented in `PROJECT_STATE.md` and shows a summary card for total closable modules, `Tested`, in progress and `Pending`, plus a count for `Blocked` when it is not zero. Core is shown separately as `Active (permanent)` and is not part of the closable total.
+The dashboard reads the module inventory and states documented in `PROJECT_STATE.md` and shows a summary card for total closable modules, `Tested`, in progress and `Pending`, plus counts for `Implemented`, `Blocked` and other states when they are not zero. Core is shown separately as `Active (permanent)` and is not part of the closable total.
 
 ### FR-3 — Documented progress
 
@@ -30,7 +30,7 @@ A counter and a progress bar show how many closable modules are `Tested` against
 
 ### FR-4 — Module table
 
-A compact table lists every module with its folder, name, state, last update and whether it is the active module. Rows are ordered by module number. Core keeps its permanent row outside the progress counter.
+A compact table lists every module with its folder, name, state, last update and whether it is the active module. Rows are ordered by module number. Core keeps its permanent entry outside the progress counter.
 
 ### FR-5 — Changelog timeline
 
@@ -83,9 +83,9 @@ When the project has no modules the dashboard shows an explicit empty state. Whe
 
 | FR | Criterion | Evidence | Status |
 |---|---|---|---|
-| FR-1 | *Dashboard* opens the view and *Home* returns to `PROJECT_STATE.md`. | Manual browser check | pending (owner) |
-| FR-2 | The summary counts documented states and shows Core separately. | `tests/dashboard.test.ts`, manual browser check | pending (owner) |
-| FR-3 | The progress counter and bar use only documented module states. | `tests/dashboard.test.ts` | pending (owner) |
-| FR-4 | The module table lists folder, name, state, last update and the active module. | `tests/dashboard.test.ts`, manual browser check | pending (owner) |
-| FR-5 | The timeline lists dated entries newest first, filters by module and reaches the source. | `tests/dashboard.test.ts`, manual browser check | pending (owner) |
-| FR-6 | Empty project, empty timeline and unknown states are explicit. | `tests/dashboard.test.ts`, manual browser check | pending (owner) |
+| FR-1 | *Dashboard* opens the view and *Home* returns to `PROJECT_STATE.md`. | Manual browser check | verified (2026-11-16) |
+| FR-2 | The summary counts documented states and shows Core separately. | `tests/dashboard.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-3 | The progress counter and bar use only documented module states. | `tests/dashboard.test.ts` | verified (2026-11-16) |
+| FR-4 | The module table lists folder, name, state, last update and the active module. | `tests/dashboard.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-5 | The timeline lists dated entries newest first, filters by module and reaches the source. | `tests/dashboard.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-6 | Empty project, empty timeline and unknown states are explicit. | `tests/dashboard.test.ts`, manual browser check | verified (2026-11-16) |

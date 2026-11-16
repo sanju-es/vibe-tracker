@@ -3,6 +3,11 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-16 — Additive support for module 5
+
+- The top banner gains the magnifier action and the workspace gains the search branch, anchor scroll and row highlight; the reader's document views are unchanged.
+- Verification: the full suite reports 141 tests across 15 suites; `check`, `lint`, `build` and `docs:check` green.
+
 ## 2026-11-16 — Additive support for module 4
 
 - The top banner gains the *Dashboard* action and the workspace renders the module 4 dashboard; the reader's own views are unchanged.

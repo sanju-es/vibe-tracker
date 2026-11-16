@@ -25,6 +25,11 @@
     const first = items[0];
     const last = items[items.length - 1];
     const active = document.activeElement;
+    if (!root.contains(active)) {
+      event.preventDefault();
+      (event.shiftKey ? last : first)?.focus();
+      return;
+    }
     if (!event.shiftKey && active === last) {
       event.preventDefault();
       first?.focus();

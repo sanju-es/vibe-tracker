@@ -74,12 +74,43 @@ describe("dashboard summary", () => {
       inProgress: 1,
       pending: 1,
       blocked: 0,
+      implemented: 0,
       other: 0,
     });
   });
 
   it("derives progress only from the Tested count", () => {
     expect(summary.progress).toEqual({ tested: 1, total: 3, percent: 33 });
+  });
+
+  it("counts Implemented separately from open work", () => {
+    const implemented = buildProject({
+      name: "implemented",
+      files: [
+        {
+          path: "PROJECT_STATE.md",
+          text: `# PROJECT_STATE.md — Implemented
+
+## 6. Module inventory and state
+
+| # | Module | State | Documentation |
+|---|---|---|---|
+| 1 | One | Implemented | \`01-one\` |
+`,
+        },
+        { path: "docs/modules/01-one/MODULE.md", text: moduleDoc(1, "2026-11-16") },
+      ],
+    });
+    const result = dashboardSummary(implemented);
+    expect(result.counts).toMatchObject({
+      total: 1,
+      tested: 0,
+      inProgress: 0,
+      pending: 0,
+      implemented: 1,
+      other: 0,
+    });
+    expect(result.progress).toEqual({ tested: 0, total: 1, percent: 0 });
   });
 
   it("marks the active module and reads the last update", () => {

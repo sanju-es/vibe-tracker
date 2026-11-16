@@ -2,7 +2,7 @@
   import type { Document, Project } from "../lib/model/types";
   import { CATEGORY_ORDER, moduleFolderName } from "../lib/model/categories";
   import { mapStatus } from "../lib/semantics/status";
-  import { categoryLabelKey, statusLabelKey, messages } from "../lib/i18n";
+  import { categoryLabelKey, statusLabelKey, messages, t } from "../lib/i18n";
   import { navigation } from "../stores/index";
   import ModuleStatusIcon from "./primitives/module-status-icon.svelte";
   import Icon from "./primitives/icon.svelte";
@@ -148,14 +148,19 @@
     {#if navigation.modulesExpanded}
       <ul class="mt-0.5 space-y-0.5">
         {#each modules as group (group.module.number)}
+          {@const folder = folderName(
+            group.module.number,
+            group.module.slug,
+            group.module.name,
+          )}
           <li>
             <div class="flex items-center gap-0.5">
               <button
                 type="button"
                 class="rounded p-1 text-[var(--pt-muted)] hover:bg-[var(--pt-surface-2)]"
                 aria-expanded={navigation.isModuleExpanded(group.module.number)}
-                aria-label={m["nav.toggleModules"]}
-                title={m["nav.toggleModules"]}
+                aria-label={t("nav.toggleModule", { folder })}
+                title={t("nav.toggleModule", { folder })}
                 onclick={() => navigation.toggleModule(group.module.number)}
               >
                 <Icon
@@ -177,9 +182,7 @@
                 onclick={() => onopenmodule(group.module.number)}
               >
                 <Icon name="Folder" size={13} class="shrink-0 text-[var(--pt-muted)]" />
-                <span class="min-w-0 flex-1 truncate">
-                  {folderName(group.module.number, group.module.slug, group.module.name)}
-                </span>
+                <span class="min-w-0 flex-1 truncate">{folder}</span>
                 {#if group.status && group.statusLabel}
                   <span
                     class="flex shrink-0 items-center gap-1 text-[0.6875rem]"

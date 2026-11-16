@@ -37,7 +37,7 @@
       <label class="flex flex-col gap-1 text-xs text-[var(--pt-muted)]">
         <span>{m["requirements.group"]}</span>
         <select
-          class="h-8 rounded-lg border border-[var(--pt-border)] bg-[var(--pt-surface)] px-2 text-[0.8125rem] text-[var(--pt-text)] shadow-[var(--pt-shadow-sm)]"
+          class="h-8 rounded-lg border border-[var(--pt-border-control)] bg-[var(--pt-surface)] px-2 text-[0.8125rem] text-[var(--pt-text)] shadow-[var(--pt-shadow-sm)]"
           value={grouping}
           onchange={(event) => {
             grouping = event.currentTarget.value as Grouping;

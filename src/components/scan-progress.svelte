@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { messages as m } from "../lib/i18n";
+  import { messages as m, t } from "../lib/i18n";
   import Icon from "./primitives/icon.svelte";
 
   let {
@@ -26,21 +26,30 @@
   </p>
 
   {#if opening}
-    <div class="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--pt-surface-3)]">
+    <div
+      class="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--pt-surface-3)]"
+      role="progressbar"
+      aria-label={m["scan.opening"]}
+    >
       <div class="pt-indeterminate h-full w-2/5 rounded-full bg-[var(--pt-accent)]"></div>
     </div>
     <p class="text-sm text-[var(--pt-muted)]">{m["scan.openingDetail"]}</p>
   {:else}
-    <div class="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--pt-surface-3)]">
+    <div
+      class="mb-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--pt-surface-3)]"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={percent}
+      aria-label={m["scan.title"]}
+    >
       <div
         class="h-full rounded-full bg-[var(--pt-accent)] transition-all"
         style:width={`${percent}%`}
       ></div>
     </div>
     <p class="mb-3 text-sm text-[var(--pt-muted)]">
-      {m["scan.progress"]
-        .replace("{done}", String(done))
-        .replace("{total}", String(total))}
+      {t("scan.progress", { done, total })}
     </p>
     {#if warning}
       <p class="mb-3 text-sm text-[var(--pt-muted)]">{m["scan.warning"]}</p>

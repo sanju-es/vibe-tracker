@@ -370,13 +370,13 @@ Status vocabulary, mapped to stable keys:
 
 - Commands: `npm run lint`, `npm run check`, `npm run test` and `npm run build`,
   run on 2026-11-16; all green.
-- Vitest, 132 tests across 14 suites: `tests/build.test.ts`,
+- Vitest, 141 tests across 15 suites: `tests/build.test.ts`,
   `tests/categories.test.ts`, `tests/inventory.test.ts`, `tests/links.test.ts`,
   `tests/pipeline.test.ts`, `tests/i18n.test.ts`, `tests/tables.test.ts`,
   `tests/status.test.ts`, `tests/references.test.ts`,
   `tests/inline-references.test.ts`, `tests/selectors.test.ts`,
-  `tests/scope.test.ts`, `tests/requirements.test.ts` and
-  `tests/dashboard.test.ts`.
+  `tests/scope.test.ts`, `tests/requirements.test.ts`,
+  `tests/dashboard.test.ts` and `tests/search.test.ts`.
 - The suites parse the real repository documents, so the pipeline faces the
   structures the project actually uses.
 - The browser check for the platform (icons, fonts, modal, statuses and

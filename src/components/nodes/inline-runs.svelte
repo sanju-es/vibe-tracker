@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CellReference, InlineRun } from "../../lib/model/types";
-  import { t } from "../../lib/i18n";
+  import { messages as m, t } from "../../lib/i18n";
   import ImageNode from "./image.svelte";
 
   let {
@@ -63,7 +63,7 @@
       {:else}
         <span
           class="text-[var(--pt-muted)] underline decoration-dotted"
-          title={run.linkKind === "broken" ? "broken link" : run.href}
+          title={run.linkKind === "broken" ? m["document.brokenLink"] : run.href}
         >
           {@render renderRuns(run.children ?? [{ kind: "text", text: run.text }])}
         </span>

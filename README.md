@@ -1,13 +1,11 @@
-<<<<<<< HEAD
 # Project Tracking
 
 > A portable, install-free and offline web app that interprets the Markdown
 > documentation of a project —chapters, tables, statuses and references— and
 > turns it into navigable, interactive content.
 
-Module 1 — Structured Reader is `Implemented` and awaits the owner's verification.
-The application runs: `npm run dev` for development and `npm run build` for the
-single-file artifact.
+Modules 1 to 6 are closed as `Tested`. The application runs: `npm run dev` for
+development and `npm run build` for the single-file artifact.
 
 Open the built `index.html`, choose the project folder, and read the documentation
 without opening a Markdown editor. The artifact needs no server; its only external
@@ -54,6 +52,9 @@ It is not a Markdown viewer. It reads the documentation semantically:
   module state and grouped by module or section, with a jump to the source.
 - **Dashboard.** A project-health view with documented module states, the `Tested`
   progress bar, the active module and a filterable timeline of module changelogs.
+- **Search and index.** `Ctrl+K` or the banner magnifier opens a document index and
+  a global exact-phrase search across every Markdown file, with excerpts and jumps
+  to the source section.
 - **Light only.** One appearance, no theme switch (D-18).
 
 The Markdown files are the source of truth. The app derives an in-memory semantic
@@ -84,7 +85,8 @@ npm run check    # svelte-check over TypeScript and Svelte sources
 npm run test     # Vitest
 npm run lint     # ESLint + Prettier check
 npm run docs:check  # documentation audit (blocking)
-npm run build    # check plus the single self-contained index.html
+npm run build    # check, single-file build and artifact audit
+npm run dist:check  # audit the existing dist/index.html
 npm run preview  # serves the production build locally
 ```
 
@@ -94,7 +96,27 @@ its size is recorded in
 carries a content security policy that allows only the jsDelivr host used by the
 icons and the typeface (D-22, D-23), both with SRI and with a local fallback.
 
-## 5. Documentation
+## 5. Distribution
+
+`npm run build` ends with `npm run dist:check`. The audit verifies that `dist/`
+contains only `index.html`, that its JavaScript and CSS are inline, that the
+content security policy keeps the approved hosts, and that every external asset
+is allowlisted, version-pinned and carries SRI. It also checks the
+`project-tracking-version` meta tag against `package.json` (currently `0.1.0`).
+A failed audit fails the build; `npm run dist:check` audits an existing artifact
+on its own.
+
+To share the tool, copy `dist/index.html` and open it in Chrome or Edge. Choose
+the project folder; no server or installation is needed. The HTML is the reader,
+not a bundle of the project: each person reads their own copy of the documents.
+With the network disabled, the icons fall back to glyphs and the typeface to the
+system font.
+
+The file name stays `index.html`; the version identifies the artifact. No release
+tag is created in this module. A future release uses `v<package version>` after a
+commit and a green quality gate.
+
+## 6. Documentation
 
 | Document | Content |
 |---|---|
@@ -114,12 +136,8 @@ node scripts/docs-audit.mjs --advisory  # reports without failing
 node scripts/docs-audit.mjs --json      # machine-readable report
 ```
 
-## 6. Version control
+## 7. Version control
 
 The project uses Git on a trunk-based workflow: work happens on `main` with short
 task branches, and each closed task is one commit with a Conventional Commits
 message. Only approved work is committed.
-=======
-# vibe-tracker
-Visor cero-instalación en HTML puro (solo lectura, directo en el navegador) — lee los archivos .md de mi plantilla para mostrar de un vistazo el proyecto completo.
->>>>>>> 6bbc63757c81e5f4716cfe6afec28d3c86dd070a

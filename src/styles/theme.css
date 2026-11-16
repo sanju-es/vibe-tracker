@@ -10,6 +10,7 @@
   --pt-muted: #5b6876;
   --pt-border: #dfe5ee;
   --pt-border-strong: #c7d1e0;
+  --pt-border-control: #7c8798;
   --pt-accent: #2563eb;
   --pt-accent-strong: #1d4ed8;
   --pt-accent-soft: #e8efff;
@@ -23,20 +24,20 @@
   --pt-status-in-analysis: #1d4ed8;
   --pt-status-implementation-proposal: #6d28d9;
   --pt-status-in-development: #0f766e;
-  --pt-status-implemented: #15803d;
+  --pt-status-implemented: #116c34;
   --pt-status-tested: #0369a1;
   --pt-status-blocked: #b91c1c;
-  --pt-status-active: #b45309;
+  --pt-status-active: #a34a08;
   --pt-status-new: #1d4ed8;
-  --pt-status-in-progress: #b45309;
-  --pt-status-deferred: #6b7280;
-  --pt-status-discarded: #78716c;
+  --pt-status-in-progress: #a34a08;
+  --pt-status-deferred: #5f6673;
+  --pt-status-discarded: #6b625d;
   --pt-status-moved: #6d28d9;
-  --pt-status-draft: #6b7280;
+  --pt-status-draft: #5f6673;
   --pt-status-proposed: #1d4ed8;
-  --pt-status-approved: #15803d;
+  --pt-status-approved: #116c34;
   --pt-status-current: #0f766e;
-  --pt-status-superseded: #78716c;
+  --pt-status-superseded: #6b625d;
   --pt-status-archived: #5b6876;
   --pt-status-neutral: #475569;
 
@@ -70,6 +71,11 @@ body {
 ::selection {
   background: var(--pt-accent-soft);
   color: var(--pt-text);
+}
+
+::placeholder {
+  color: var(--pt-muted);
+  opacity: 1;
 }
 
 * {
@@ -112,7 +118,7 @@ body {
     gap: 0.4rem;
     height: 2rem;
     border-radius: 8px;
-    border: 1px solid var(--pt-border);
+    border: 1px solid var(--pt-border-control);
     background: var(--pt-surface);
     color: var(--pt-text);
     padding: 0 0.65rem;
@@ -129,7 +135,7 @@ body {
 
   .pt-button:hover {
     background: var(--pt-surface-2);
-    border-color: var(--pt-border-strong);
+    border-color: var(--pt-text);
   }
 
   .pt-button:active {
@@ -167,7 +173,7 @@ body {
 
   .pt-icon-button:hover {
     background: var(--pt-accent-soft);
-    border-color: var(--pt-border);
+    border-color: var(--pt-border-control);
   }
 
   .pt-chip {
@@ -344,6 +350,13 @@ body {
 
   .pt-ref:hover {
     border-color: var(--pt-accent);
+  }
+
+  .pt-search-mark {
+    border-radius: 2px;
+    background: var(--pt-accent-soft);
+    color: inherit;
+    padding: 0 1px;
   }
 
   .pt-section-title {
@@ -558,6 +571,17 @@ body {
 
   .pt-table tbody tr:last-child td {
     border-bottom: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-spin svg,
+  .pt-indeterminate {
+    animation: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
   }
 }
 

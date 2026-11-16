@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { viteSingleFile } from "vite-plugin-singlefile";
@@ -35,8 +37,38 @@ function injectContentSecurityPolicy(): Plugin {
   };
 }
 
+/**
+ * The distributed file keeps its `index.html` name; the version is metadata for
+ * support and release identification. It comes from `package.json` and carries
+ * no build date, so the same inputs produce the same artifact.
+ */
+function injectArtifactMetadata(): Plugin {
+  return {
+    name: "project-tracking:artifact-metadata",
+    apply: "build",
+    transformIndexHtml(html) {
+      if (html.includes('name="project-tracking-version"')) return html;
+      const pkg = JSON.parse(
+        readFileSync(fileURLToPath(new URL("./package.json", import.meta.url)), "utf8"),
+      ) as { version?: string };
+      const version = String(pkg.version ?? "");
+      if (!version) throw new Error("package.json has no version");
+      return html.replace(
+        "<head>",
+        `<head>\n    <meta name="project-tracking-version" content="${version}" />`,
+      );
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [svelte(), tailwindcss(), viteSingleFile(), injectContentSecurityPolicy()],
+  plugins: [
+    svelte(),
+    tailwindcss(),
+    viteSingleFile(),
+    injectContentSecurityPolicy(),
+    injectArtifactMetadata(),
+  ],
   build: {
     target: "es2022",
     cssCodeSplit: false,

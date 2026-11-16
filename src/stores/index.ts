@@ -4,3 +4,4 @@ export { navigation } from "./navigation.svelte.ts";
 export { reader } from "./reader.svelte.ts";
 export type { ReaderModal } from "./reader.svelte.ts";
 export { tables } from "./tables.svelte.ts";
+export { search } from "./search.svelte.ts";

@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run check && vite build",
+    "build": "npm run check && vite build && npm run dist:check",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dist:check": "node scripts/dist-audit.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "docs:check": "node scripts/docs-audit.mjs",

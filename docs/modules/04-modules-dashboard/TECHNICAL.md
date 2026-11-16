@@ -5,7 +5,7 @@
 > **Canonical for:** components, data, tests and limits of this module.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and shared architecture (`docs/ARCHITECTURE.md`).
 
-**Status:** `Implemented` (2026-11-16)
+**Status:** `Tested` (2026-11-16)
 **Last update:** 2026-11-16
 
 ---
@@ -36,7 +36,7 @@ No endpoints: the project has no own API. The proposal adds:
 - `core`: module 0 separately with `Active (permanent)` and its permanent row.
 - `counts`: closable modules per state (`Tested`, in progress, `Pending`, `Blocked`, other), the closable total and the `Tested` count.
 - `progress`: `tested / closable` as a fraction and a percentage; `0 of 0` when there are no closable modules.
-- `timeline`: `{ date, moduleNumber, moduleFolder, title, documentId, anchor }` for every `## YYYY-MM-DD — Title` changelog heading, newest first; entries without a date are skipped.
+- `timeline`: `{ date, moduleNumber, moduleFolder, title, target }` for every `## YYYY-MM-DD — Title` changelog heading, newest first; `target` is the source `ItemTarget` and entries without a date are skipped.
 
 The active module parser reads the state document text from its nodes: a line `Active module:` followed by `none` or `NN`. A missing line or `none` leaves every row inactive.
 
@@ -62,9 +62,9 @@ The active module parser reads the state document text from its nodes: a line `A
 ## 6. Tests and evidence
 
 - `tests/dashboard.test.ts`: counts by state, Core separation, progress fraction and percentage, active module parsing (including `none` and missing), module table data, timeline ordering, dated filtering and skipped undated headings.
-- `npm run test` on 2026-11-16: 132 tests across 14 suites, all green.
-- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 213.59 kB.
-- Browser check in Edge: banner action, cards, progress bar, table, timeline filter and source jump remain for the owner's verification.
+- `npm run test` on 2026-11-16: 141 tests across 15 suites, all green.
+- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 222.89 kB.
+- Owner verification (2026-11-16): the dashboard was accepted and closed as `Tested`; every acceptance row in [`REQUIREMENTS.md`](REQUIREMENTS.md) §9 is `verified (2026-11-16)`. The browser check covered the banner action, cards, progress bar, table, timeline filter and source jump.
 
 ## 7. Limits and known limitations
 

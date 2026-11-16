@@ -1,6 +1,6 @@
 <script lang="ts">
   import { projectStore } from "../../stores/index";
-  import { messages as m } from "../../lib/i18n";
+  import { messages as m, t } from "../../lib/i18n";
 
   let { path, alt, onclick }: { path: string; alt: string; onclick?: () => void } =
     $props();
@@ -29,6 +29,7 @@
     <button
       type="button"
       class="block w-full cursor-zoom-in border-0 bg-transparent p-0"
+      aria-label={alt || path}
       {onclick}
     >
       <img src={url} {alt} loading="lazy" />
@@ -38,7 +39,7 @@
   {/if}
 {:else if failed}
   <span class="text-sm text-[var(--pt-muted)]">
-    {alt || m["document.imageAlt"].replace("{name}", path)} · {m["modal.missingImage"]}
+    {alt || t("document.imageAlt", { name: path })} · {m["modal.missingImage"]}
   </span>
 {:else}
   <span class="text-sm text-[var(--pt-muted)]" aria-busy="true">{alt || path}</span>

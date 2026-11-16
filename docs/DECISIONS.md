@@ -46,6 +46,8 @@
 | D-31 | 2026-11-16 | Module 02: **The backlog board opens from the top banner.** The board gathers every `BACKLOG.md`, including `00-core`, shows all statuses with optional text and status filters, groups by `None`, `Module` or `Status`, sorts inside each group and reuses the row detail with *Go to document*. A home action returns to `PROJECT_STATE.md`; the Modules overview keeps its compact `01 FR-22` summary and global search stays in module 5. | Owner request and approval of the module 2 proposal: the full view needs a single, visible entry; all statuses avoid a hidden default; the summary and the board serve different scopes. The table and banner changes are additive and keep module 1's behaviour unchanged. |
 | D-32 | 2026-11-16 | Module 03: **The requirements catalogue opens from the top banner.** It collects `FR`, `BR`, `VAL`, flows and edge cases from every `REQUIREMENTS.md`, filters by module state, groups by `None`, `Module` or `Section`, reuses the row detail and *Go to document*, and shows an explicit `No requirements recorded` row for a module without items. Acceptance evidence and global search stay out. | Owner chose the catalogue shape after clarifying that module 3 was not a dashboard or a search: the project needs one place to review the agreed behaviour across modules, with the source document as the only truth. The status column uses the module state because a requirement has no separate state. |
 | D-33 | 2026-11-16 | Module 04: **The project dashboard opens from the top banner.** It shows documented module counts, a `Tested` progress bar over closable modules, Core as a separate permanent row, a module table with the active marker and last update, and a filterable timeline of dated changelog headings with source jump. Progress is never inferred from code, dates or backlog rows. | Owner chose the project-health view after the Modules overview became the document-level index: the roadmap and the project history need a separate surface. Counts and the bar use only documented states, and Core stays outside the closable denominator. |
+| D-34 | 2026-11-16 | Module 05: **Search and index share one view.** A banner magnifier and `Ctrl+K` open it; an empty query shows every document grouped by kind, and a non-empty exact phrase returns one result per matching block, grouped by document, with a typed excerpt and a jump to the source section. Matching ignores case and diacritics, table results highlight the row, and no text leaves the browser. | Owner chose the document index as the empty state and one result per block after reviewing the planned search: it keeps the module useful before typing and sends the reader to the exact section instead of a document list. Fuzzy search and external services stay out. |
+| D-35 | 2026-11-16 | Module 06: **Distribution is a blocking artifact gate.** `dist/index.html` keeps its name and gains a `project-tracking-version` meta tag from `package.json`; `npm run build` runs a dependency-free `dist:check` that verifies one file, inline JavaScript and CSS, the approved CSP, allowlisted/pinned/SRI assets and the version; the accessibility and dictionary passes are manual evidence. No release tag or `RELEASES.md` is created. | Owner approved the module proposal: the single-file promise needs a repeatable check, but the artifact name stays stable for sharing and the project has no committed release to tag yet. The audit catches regressions without adding a dependency; offline and assistive-technology checks stay manual. |
 
 **D-26 deviations.** Local slot catalogue (`WORKFLOW` 8, `TECHNICAL` 8, `ARCHITECTURE` 10 frontend substitutions, `DECISIONS` slot 3 reserved and omitted); one-time identifier migration (`V-NN` → `VAL-NN`, `FR`/`BR` qualified outside their file, ranges with `…`, the single backlog entry becomes `01 B-01`); `CORE-NN` move to `00-core/BACKLOG.md`; backlog vocabulary `new`/`in progress`/`blocked`/`deferred`/`implemented`/`discarded` with the app status vocabulary updated in the same phase; acceptance table only from `Implemented`, risks table and `RISK-NN` reserved while limitations stay in `TECHNICAL` §7; agent and skill files exempt from the front block; `E-02` and `E-03` disabled until tags and a contract exist.
 
@@ -71,8 +73,6 @@
 - **Last-folder memory.** Remembering the chosen folder across sessions needs
   IndexedDB. Decide whether it is worth it now that the access mechanism is
   settled (D-15).
-- **Artifact identity.** Naming and versioning of the distributed HTML file
-  (module 6).
 
 ## 5. Decision history
 
@@ -142,3 +142,14 @@
   Dashboard, documented roadmap counts, `Tested` progress bar, Core separate,
   module table with active marker and filterable changelog timeline. 132 tests
   across 14 suites; the owner's Edge verification is pending.
+- **2026-11-16** — Module 5 proposal approved and implemented (D-34): banner
+  magnifier and `Ctrl+K`, document index, exact-phrase global search, grouped
+  results with excerpt and source jump. 141 tests across 15 suites; the owner's
+  Edge verification is pending.
+- **2026-11-16** — Module 5 closed as `Tested` after the owner's Edge verification;
+  every acceptance row is verified. Module 6 (Distribution) selected and moved to
+  `In analysis`; artifact identity remains an open question in §4.
+- **2026-11-16** — Module 6 proposal approved (D-35): a blocking `dist:check`,
+  `index.html` plus a version meta tag from `package.json`, no release tag, and a
+  full manual accessibility and dictionary pass. Implementation completed and the
+  module closed as `Tested` by the owner's decision on 2026-11-16.

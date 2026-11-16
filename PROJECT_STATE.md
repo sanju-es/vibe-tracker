@@ -5,8 +5,8 @@
 > **Canonical for:** identity, stack summary, module states, open problems and next steps.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
-**Last update:** 2026-11-16 — modules 1 to 3 closed as `Tested`; module 4
-project-health dashboard implemented and awaiting verification.
+**Last update:** 2026-11-16 — modules 1 to 6 closed as `Tested`; no active
+module remains.
 
 ---
 
@@ -49,7 +49,7 @@ project-health dashboard implemented and awaiting verification.
 | Key | Value |
 |---|---|
 | Development commands | `npm run dev`, `npm run check`, `npm run build`, `npm run preview` |
-| Quality commands | `npm run test`, `npm run lint`, `npm run docs:check` |
+| Quality commands | `npm run test`, `npm run lint`, `npm run docs:check`, `npm run dist:check` |
 | Dev port | 5173 |
 | Environment variables | none |
 | Supported browsers | Chrome and Edge (Chromium) |
@@ -88,14 +88,13 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 | 1 | Structured Reader | Tested | `01 B-01` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
 | 2 | Backlog Board | Tested | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
 | 3 | Requirements | Tested | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
-| 4 | Modules Dashboard | Implemented | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |
-| 5 | Search and Index | Pending | — | [`05-search-index`](docs/modules/05-search-index/MODULE.md) |
-| 6 | Distribution | Pending | — | [`06-distribution`](docs/modules/06-distribution/MODULE.md) |
+| 4 | Modules Dashboard | Tested | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |
+| 5 | Search and Index | Tested | — | [`05-search-index`](docs/modules/05-search-index/MODULE.md) |
+| 6 | Distribution | Tested | — | [`06-distribution`](docs/modules/06-distribution/MODULE.md) |
 
-**Active module:** 4 — Modules Dashboard (`docs/modules/04-modules-dashboard/`),
-state `Implemented`.
-**Next step:** the owner verifies the dashboard in Edge; the module moves to
-`Tested` when the verification is recorded.
+**Active module:** none; modules 1 to 6 are closed as `Tested`.
+**Next step:** the owner decides whether to close the project, reopen a module or
+start a new one; `01 B-01` remains the only registered backlog item.
 
 ## 7. Open problems and pending corrections
 
@@ -110,6 +109,8 @@ state `Implemented`.
   §7.
 - The allowlist and the pinned assets are a decision, not an open problem: see
   `D-22` and `D-23` in [`docs/DECISIONS.md`](docs/DECISIONS.md).
+- The artifact's identity is settled in `D-35`: `index.html` plus a version meta
+  tag from `package.json`; distribution is a blocking build check.
 
 ## 8. Development credentials and data
 
@@ -120,9 +121,10 @@ _None._
 
 ## 9. Next steps
 
-1. Modules 1 to 3 are closed as `Tested` with every acceptance row verified on
+1. Modules 1 to 6 are closed as `Tested` with every acceptance row verified on
    2026-11-16; `01 B-01` tracks the remaining reader item.
-2. Verify module 4 in Edge: Dashboard action, cards, progress bar, module table,
-   active marker, timeline filter and source jump.
-3. Record the verification in `docs/modules/04-modules-dashboard/TECHNICAL.md` §6
-   and move the module to `Tested`; then choose module 5.
+2. No active module remains; module 6 is closed with the artifact audit, version
+   metadata, distribution instructions and accessibility/dictionary evidence in
+   place.
+3. The owner decides the next step: close the project, reopen a module or start a
+   new one.

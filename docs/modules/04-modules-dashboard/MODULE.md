@@ -5,7 +5,7 @@
 > **Canonical for:** its scope, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** `Implemented` (2026-11-16)
+**Status:** `Tested` (2026-11-16)
 **Last update:** 2026-11-16
 
 ---
@@ -72,8 +72,8 @@ entry.
 
 ## 9. Next step
 
-The dashboard is implemented; the owner verifies it in Edge and records the result
-before the module moves to `Tested`.
+Closed as `Tested` on 2026-11-16 after the owner's verification. Module 5 — Search
+and Index is the active module.
 
 ## 10. Module-specific notes
 

@@ -2,7 +2,7 @@
   import type { Project } from "../lib/model/types";
   import { dashboardSummary } from "../lib/model/dashboard";
   import { mapStatus } from "../lib/semantics/status";
-  import { messages as m } from "../lib/i18n";
+  import { messages as m, t } from "../lib/i18n";
   import { reader } from "../stores/index";
   import StatusChip from "../components/primitives/status-chip.svelte";
 
@@ -22,9 +22,10 @@
       : summary.timeline.filter((entry) => entry.moduleNumber === timelineFilter),
   );
   const progressLabel = $derived(
-    m["dashboard.progress"]
-      .replace("{tested}", String(summary.progress.tested))
-      .replace("{total}", String(summary.progress.total)),
+    t("dashboard.progress", {
+      tested: summary.progress.tested,
+      total: summary.progress.total,
+    }),
   );
 </script>
 
@@ -52,10 +53,22 @@
         <p class="text-xs text-[var(--pt-muted)]">{m["dashboard.pending"]}</p>
         <p class="text-2xl font-semibold tabular-nums">{summary.counts.pending}</p>
       </div>
+      {#if summary.counts.implemented > 0}
+        <div class="pt-panel p-3">
+          <p class="text-xs text-[var(--pt-muted)]">{m["dashboard.implemented"]}</p>
+          <p class="text-2xl font-semibold tabular-nums">{summary.counts.implemented}</p>
+        </div>
+      {/if}
       {#if summary.counts.blocked > 0}
         <div class="pt-panel p-3">
           <p class="text-xs text-[var(--pt-muted)]">{m["dashboard.blocked"]}</p>
           <p class="text-2xl font-semibold tabular-nums">{summary.counts.blocked}</p>
+        </div>
+      {/if}
+      {#if summary.counts.other > 0}
+        <div class="pt-panel p-3">
+          <p class="text-xs text-[var(--pt-muted)]">{m["dashboard.other"]}</p>
+          <p class="text-2xl font-semibold tabular-nums">{summary.counts.other}</p>
         </div>
       {/if}
     </section>
@@ -118,9 +131,11 @@
                 <td>
                   <StatusChip status={mapStatus(module.state)} label={module.state} />
                 </td>
-                <td class="whitespace-nowrap">{module.lastUpdate ?? "—"}</td>
+                <td class="whitespace-nowrap"
+                  >{module.lastUpdate ?? m["dashboard.none"]}</td
+                >
                 <td class="whitespace-nowrap">
-                  {module.active ? m["dashboard.active"] : "—"}
+                  {module.active ? m["dashboard.active"] : m["dashboard.none"]}
                 </td>
               </tr>
             {/each}
@@ -135,7 +150,7 @@
         <label class="flex flex-col gap-1 text-xs text-[var(--pt-muted)]">
           <span>{m["dashboard.timelineFilter"]}</span>
           <select
-            class="h-8 rounded-lg border border-[var(--pt-border)] bg-[var(--pt-surface)] px-2 text-[0.8125rem] text-[var(--pt-text)] shadow-[var(--pt-shadow-sm)]"
+            class="h-8 rounded-lg border border-[var(--pt-border-control)] bg-[var(--pt-surface)] px-2 text-[0.8125rem] text-[var(--pt-text)] shadow-[var(--pt-shadow-sm)]"
             value={String(timelineFilter)}
             onchange={(event) => {
               const value = event.currentTarget.value;
