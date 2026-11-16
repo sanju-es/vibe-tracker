@@ -5,8 +5,8 @@
 > **Canonical for:** its scope, delivered capabilities, decisions and next step.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`), implementation (`TECHNICAL.md`) and history (`CHANGELOG.md`).
 
-**Status:** `Implemented` (2026-11-13)
-**Last update:** 2026-11-13
+**Status:** `Tested` (2026-11-16)
+**Last update:** 2026-11-16
 
 ---
 
@@ -131,9 +131,9 @@ The reader works on an in-memory model built from the selected folder:
 | D-23 | Lucide icons and Inter with local fallbacks. |
 | D-24 | Modules overview page. |
 | D-25 | Module page with its backlog table. |
+| D-29 | A heading that starts with an identifier is a definition. |
+| D-30 | The scan reads root and `docs/**` Markdown and ignores tooling, dependency and build folders. |
 
 ## 9. Next step
 
-The owner verifies the behaviour against [`REQUIREMENTS.md`](REQUIREMENTS.md) §9 in
-Chrome or Edge, with a real project folder and with the built `index.html`. The
-module moves to `Tested` when that verification is recorded.
+Closed as `Tested` on 2026-11-16 after the owner's verification.

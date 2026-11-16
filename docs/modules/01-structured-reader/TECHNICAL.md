@@ -5,8 +5,8 @@
 > **Canonical for:** components, stores, interaction detail, tests and limits of this module.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and shared architecture (`docs/ARCHITECTURE.md`).
 
-**Status:** `Implemented` (2026-11-13)
-**Last update:** 2026-11-13
+**Status:** `Tested` (2026-11-16)
+**Last update:** 2026-11-16
 
 ---
 
@@ -65,7 +65,7 @@ live in `src/components/primitives` and belong to CORE-06.
 | `components/document-header.svelte` | `document`, link/image/reference handlers | none (renders `document.meta`) |
 | `components/nodes/node.svelte` | `node`, `table`, `documentId`, `documentTitle` | `onopenlink(run)`, `onopenimage(run)` |
 | `components/nodes/inline-runs.svelte` | `runs` | `onopenlink(run)`, `onopenimage(run)` |
-| `components/nodes/data-table.svelte` | `table`, `documentId`, `documentTitle`, `excludeStatuses`, `rowTarget` | table actions go through the `tables` store |
+| `components/nodes/data-table.svelte` | `table`, `documentId`, `documentTitle`, `excludeStatuses`, `rowTarget` (any `RefTarget`), `groupBy` | table actions go through the `tables` store |
 | `components/nodes/image.svelte` | `path`, `alt`, `onclick` | `onclick` |
 | `components/detail-modal.svelte` | none (reads stores) | none |
 | `components/modules-overview.svelte` | `project`, `onopenmodule` | `onopenmodule(moduleNumber)` (table of folder, name, backlog counts per status and state) |
@@ -82,7 +82,7 @@ live in `src/components/primitives` and belong to CORE-06.
 
 | Store | State |
 |---|---|
-| `stores/project.svelte.ts` | `status: idle · scanning · ready · error`, `project`, `progress`, `error`, `warning`, image blob cache |
+| `stores/project.svelte.ts` | `status: idle · opening · scanning · ready · error`, `project`, `progress`, `error`, `warning`, image blob cache |
 | `stores/navigation.svelte.ts` | `activeView: document · modules · module`, `activeDocumentId`, `activeModuleNumber`, block and module expansion |
 | `stores/reader.svelte.ts` | `modal` (row detail, document or image), `highlightedRowId` |
 | `stores/tables.svelte.ts` | per-table `text`, `statuses` and `sort`, reset per document |
@@ -95,6 +95,9 @@ preferences store: nothing is persisted (D-18).
 - No database and no migrations.
 - Input: the folder source from CORE-03 (directory handles on a served origin,
   folder input from `file://`).
+- Document scope: Markdown at the root and under `docs/**`; hidden, dependency,
+  tooling and build folders are ignored, and images referenced by the documents are
+  indexed from any non-ignored folder (D-30).
 - Model: `Project` with documents, sections, tables and the reference index, all
   from CORE-02/04/08; the builder is `src/lib/project/build.ts`.
 - Persistence: none. The appearance is fixed and the folder is chosen per session.
@@ -121,6 +124,12 @@ Core owns the shared packages (`src/lib/fs`, `src/lib/markdown`,
 scroll; it never moves with the document and is always visible. There is no
 toggle, no hover opening and no closed state to restore from.
 
+**Scan feedback.** Granting folder access switches to an `opening` state with an
+indeterminate bar while the adapter enumerates the tree. The store then moves to
+`scanning` and reports one unit per Markdown file, with cancellation. The first
+open reuses the listing returned by the picker; only reload asks the adapter to
+walk again, so the tree is not enumerated twice.
+
 **Navigation.** Three levels at most: block, module and document. *Project* is a
 fixed block: it has no chevron and always shows the main project documents,
 indented under the block with a guide line, exactly like a module's documents.
@@ -139,9 +148,11 @@ category and starts collapsed.
 **Modules overview (D-24).** The *Modules* title is a destination: it switches the
 main area to a table with the module folder, a wide module name, one backlog count
 column per status used by any module backlog, and the state at the far right, shown
-with icon, chip and colour; it marks the sidebar entry as current. All goes first
-with the text colour; the status columns follow the status vocabulary order and
-each uses its own status colour. `All` counts every entry, including unknown
+with icon, chip and colour; it marks the sidebar entry as current. The state
+column is wide enough for the longest vocabulary token, so long states are shown
+in full rather than clipped (`01 B-05`). All goes first with the text colour; the
+status columns follow the status vocabulary order and each uses its own status
+colour. `All` counts every entry, including unknown
 statuses; a status column counts the entries with that status and shows `0` when the
 module has none, so the columns are the same for every row. `backlogStatusKeys`
 collects them once from every backlog table. Expansion moved to the chevron next to
@@ -152,6 +163,10 @@ synthetic table with the backlog rows of every module whose status is `new` or
 `in progress`, adding a Module column. `backlogSummary` clones each source cell and
 keeps a target per row, so the row modal shows the real item and its document. The
 table uses the normal text, status and sort controls.
+
+**Backlog board (module 2).** The full board reuses `DataTable` with the optional
+`groupBy` prop; the reader's tables keep the default single-table path and their
+behaviour is unchanged.
 
 **Module page (D-25).** A module title is also a destination: the main area shows
 the module folder and name, its state icon and chip, and the tables of its
@@ -194,21 +209,24 @@ view; the module page uses that to hide `implemented`, `discarded` and `deferred
 until the user enables their chips. Reset clears the text, the status selection and the sort,
 so every row becomes visible again.
 
-**Identifier references.** The index collects table rows (first column), list
-items and headings that start with an identifier. After parsing, a pass splits
-every text, code and table run in headings, paragraphs, quotes, list items and
-cells, turning each visible identifier into a `reference` run rendered as a
-code-style button. The identifier that defines a heading, a list item or a
-first-cell row is skipped at offset zero, and code blocks are never touched.
+**Identifier references.** The index collects only the definitions of the owning
+file and slot of each namespace: `DECISIONS.md` §1 for `D-NN`, `00-core` §1 and §4
+for `CORE-NN` and `CR-NN`, `REQUIREMENTS.md` §2, §3 and §5 for `FR-NN`, `BR-NN`
+and `VAL-NN`, `TECHNICAL.md` §8 for `MS-NN`, and `BACKLOG.md` §1 for `B-NN` or
+`CORE-NN`. An acceptance row, a decision index or a changelog bullet is a mention,
+not a definition; rule identifiers of the standard stay plain text. After parsing,
+a pass splits every text, code and table run in headings, paragraphs, quotes, list
+items and cells, turning each visible identifier into a `reference` run rendered
+as a code-style button. The defining cell, heading or list item is skipped at
+offset zero, and code blocks are never touched.
 
-Resolution follows the document scope: a project document sees only project-level
-definitions; a module document sees its own module first and the project level as a
-fallback; `D-`, `CORE-` and `CR-` resolve from anywhere; an explicit `NN` prefix
-narrows the search to that module, so `01 B-01` resolves the first backlog item of
-module 1 from any document. Each reference keeps one canonical target: a global
-identifier resolves to the project definition, and a heading or list-item
-definition wins over a secondary table row such as an acceptance criterion.
-Duplicates that remain inside that choice keep listing their candidates.
+Resolution follows the document scope: a module identifier resolves inside the
+module that defines it and requires the `NN` qualifier (`01 FR-3`) in any other
+document; a project document resolves only global namespaces. `D-`, `CORE-` and
+`CR-` resolve from anywhere, and an explicit `NN` prefix narrows the search to that
+module, so `01 B-01` resolves the first backlog item of module 1 from any document.
+Only the owning definition enters the index, so the modal has one canonical target;
+a duplicate exists only when an owner file defines the same identifier twice.
 
 **Modals.** Row detail, document preview and image preview; focus trapped, closed
 with `Esc` or the close action, focus returned to the opener. *Go to document*
@@ -219,12 +237,13 @@ filters and sortable headers, and the modal trap; visible focus throughout.
 
 ## 6. Tests and evidence
 
-- Vitest, 92 tests across 11 suites: category mapping and module folders, module
-  inventory, module selectors and backlog lookup, status vocabulary and detection,
-  table filtering and sorting, reference index, scope resolution and duplicates,
-  heading definitions (including the real requirements document), identifier
-  references inside text and table cells, link resolution, i18n messages, parser and
-  project builder, front-block metadata and `<br>` handling.
+- Vitest, 125 tests across 13 suites: documentation scope and folder policy,
+  category mapping and module folders, module inventory, module selectors and
+  backlog lookup, status vocabulary and detection, table filtering and sorting,
+  reference index, scope resolution and duplicates, heading definitions (including
+  the real requirements document), identifier references inside text and table
+  cells, link resolution, i18n messages, parser and project builder, front-block
+  metadata and `<br>` handling.
 - Fixtures: the suites parse the real repository documents
   (`PROJECT_STATE.md`, `docs/DECISIONS.md`,
   `docs/modules/00-core/BACKLOG.md`), so the parser faces the real structure.
@@ -239,6 +258,9 @@ filters and sortable headers, and the modal trap; visible focus throughout.
   the definition itself stays unlinked and unknown codes stay plain), and a clean
   console. Real folder
   permissions and the built artifact remain for the owner's verification.
+- Owner verification (2026-11-16): the module was accepted and closed as `Tested`;
+  every acceptance row in [`REQUIREMENTS.md`](REQUIREMENTS.md) §9 is
+  `verified (2026-11-16)`.
 - Visual pass (D-23): every navigation block, module, document, toolbar, modal and
   empty state shows its Lucide icon next to the text; 22 icons render as SVG in the
   development build, Inter is active, the built artifact loads both with SRI under
@@ -266,6 +288,8 @@ filters and sortable headers, and the modal trap; visible focus throughout.
   implemented and is tracked as `01 B-01`.
 - The folder-input path keeps a snapshot of the files: reload re-parses it but does
   not see later edits on disk.
+- The selected folder is the project root. Selecting `docs/` itself leaves
+  `modules/**` outside the documentation policy and the inventory cannot be read.
 - The interface is English only (D-16) and light only (D-18), and it persists no
   preferences.
 - Without network, the icon bundle and Inter are unavailable: icons fall back to

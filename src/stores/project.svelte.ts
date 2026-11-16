@@ -2,7 +2,7 @@ import { pickFolder, type FolderSource } from "../lib/fs/source";
 import { buildProject } from "../lib/project/build";
 import type { Project } from "../lib/model/types";
 
-export type ScanStatus = "idle" | "scanning" | "ready" | "error";
+export type ScanStatus = "idle" | "opening" | "scanning" | "ready" | "error";
 
 export interface ProjectError {
   key: string;
@@ -32,18 +32,20 @@ class ProjectStore {
 
     let source: FolderSource | null = null;
     try {
-      source = await pickFolder();
+      source = await pickFolder(() => {
+        this.status = "opening";
+      });
     } catch {
       this.#fail({ key: "error.unsupportedBrowser" });
       return;
     }
     if (!source) {
-      if (this.project === null) this.status = "idle";
+      this.status = this.project === null ? "idle" : "ready";
       return;
     }
 
     this.#source = source;
-    await this.#load(source);
+    await this.#load(source, false);
   }
 
   /** Re-reads the current folder without asking for it again. */
@@ -55,12 +57,13 @@ class ProjectStore {
     }
     this.#cancel();
     this.error = null;
-    await this.#load(source);
+    await this.#load(source, true);
   }
 
-  async #load(source: FolderSource): Promise<void> {
+  async #load(source: FolderSource, refreshEntries: boolean): Promise<void> {
     let entries = source.entries;
-    if (source.refresh) {
+    if (refreshEntries && source.refresh) {
+      this.status = "opening";
       try {
         entries = await source.refresh();
       } catch {
@@ -107,6 +110,7 @@ class ProjectStore {
   }
 
   cancelScan(): void {
+    if (this.status === "opening") return;
     this.#cancel();
     if (this.project === null) this.status = "idle";
     else this.status = "ready";

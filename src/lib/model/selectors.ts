@@ -90,7 +90,7 @@ export interface BacklogSummary {
   targets: Map<string, RowTarget>;
 }
 
-const SUMMARY_HEADERS = [
+const BACKLOG_HEADERS = [
   "Module",
   "ID",
   "Date",
@@ -102,17 +102,18 @@ const SUMMARY_HEADERS = [
 ];
 
 /**
- * One filterable table with the backlog items of every module whose status is in
- * `statuses`. Each synthetic row keeps a target back to its source row.
+ * One synthetic table with the backlog items of every module. `statuses` limits
+ * the rows for the compact summary; `null` keeps every status for the full board.
+ * Each synthetic row keeps a target back to its source row.
  */
-export function backlogSummary(
+function buildBacklogTable(
   project: Project,
-  statuses: readonly StatusKey[] = ["new", "in-progress"],
+  statuses: readonly StatusKey[] | null,
+  tableId: string,
 ): BacklogSummary {
-  const tableId = "backlog-summary#table-1";
   const targets = new Map<string, RowTarget>();
   const rows: Row[] = [];
-  const accepted = new Set<StatusKey>(statuses);
+  const accepted = statuses === null ? null : new Set<StatusKey>(statuses);
 
   for (const module of project.modules) {
     const backlog = moduleBacklog(project, module.number);
@@ -137,7 +138,7 @@ export function backlogSummary(
 
       for (const sourceRow of source.rows) {
         const key = mapStatus(sourceRow.cells[statusIndex]?.text ?? "").key;
-        if (key === null || !accepted.has(key)) continue;
+        if (accepted !== null && (key === null || !accepted.has(key))) continue;
 
         const rowId = `${tableId}-r${rows.length + 1}`;
         const pick = (index: number): Cell => {
@@ -178,10 +179,26 @@ export function backlogSummary(
   return {
     table: {
       id: tableId,
-      headers: SUMMARY_HEADERS,
+      headers: BACKLOG_HEADERS,
       rows,
-      statusColumn: SUMMARY_HEADERS.indexOf("Status"),
+      statusColumn: BACKLOG_HEADERS.indexOf("Status"),
     },
     targets,
   };
+}
+
+/**
+ * Compact overview: only `new` and `in progress`, used by module 1 below the
+ * module inventory.
+ */
+export function backlogSummary(
+  project: Project,
+  statuses: readonly StatusKey[] = ["new", "in-progress"],
+): BacklogSummary {
+  return buildBacklogTable(project, statuses, "backlog-summary#table-1");
+}
+
+/** Full board: every backlog row and every status, including `00-core`. */
+export function backlogBoard(project: Project): BacklogSummary {
+  return buildBacklogTable(project, null, "backlog-board#table-1");
 }

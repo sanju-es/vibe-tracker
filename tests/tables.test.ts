@@ -3,6 +3,7 @@ import type { Cell, Row, Table } from "../src/lib/model/types";
 import {
   applyView,
   filterRows,
+  groupRows,
   statusesExcluding,
   statusOptions,
   toggleSort,
@@ -98,6 +99,79 @@ describe("table sorting", () => {
     expect(first.sort).toEqual({ column: 1, direction: "asc" });
     expect(toggleSort(first, 1).sort).toEqual({ column: 1, direction: "desc" });
     expect(toggleSort(first, 2).sort).toEqual({ column: 2, direction: "asc" });
+  });
+});
+
+describe("table grouping", () => {
+  const board: Table = {
+    id: "board#table-1",
+    headers: ["Module", "ID", "Status"],
+    statusColumn: 2,
+    rows: [
+      row("b1", ["01-reader", "B-02", "blocked"]),
+      row("b2", ["02-board", "B-01", "discarded"]),
+      row("b3", ["01-reader", "B-01", "new"]),
+      row("b4", ["02-board", "B-02", "new"]),
+    ],
+  };
+
+  it("groups by module and keeps the group order", () => {
+    const groups = groupRows(board, EMPTY_TABLE_VIEW, 0);
+    expect(groups.map((group) => group.key)).toEqual(["01-reader", "02-board"]);
+    expect(groups[0]?.rows.map((entry) => entry.id)).toEqual(["b1", "b3"]);
+    expect(groups[1]?.rows.map((entry) => entry.id)).toEqual(["b2", "b4"]);
+  });
+
+  it("orders status groups by the vocabulary", () => {
+    const groups = groupRows(board, EMPTY_TABLE_VIEW, 2);
+    expect(groups.map((group) => group.key)).toEqual(["blocked", "new", "discarded"]);
+  });
+
+  it("follows an explicit group order and keeps unknown keys last", () => {
+    const groups = groupRows(board, EMPTY_TABLE_VIEW, 0, ["02-board", "01-reader"]);
+    expect(groups.map((group) => group.key)).toEqual(["02-board", "01-reader"]);
+    const partial = groupRows(board, EMPTY_TABLE_VIEW, 0, ["02-board"]);
+    expect(partial.map((group) => group.key)).toEqual(["02-board", "01-reader"]);
+  });
+
+  it("groups dated status literals under their status key", () => {
+    const dated: Table = {
+      ...board,
+      rows: [
+        row("d1", ["01-reader", "B-01", "implemented (2026-11-12)"]),
+        row("d2", ["01-reader", "B-02", "implemented (2026-11-13)"]),
+      ],
+    };
+    const groups = groupRows(dated, EMPTY_TABLE_VIEW, 2);
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.key).toBe("implemented");
+    expect(groups[0]?.rows).toHaveLength(2);
+  });
+
+  it("filters before grouping", () => {
+    const groups = groupRows(board, { ...EMPTY_TABLE_VIEW, text: "new" }, 0);
+    expect(groups.map((group) => group.key)).toEqual(["01-reader", "02-board"]);
+    expect(groups[0]?.rows.map((entry) => entry.id)).toEqual(["b3"]);
+    expect(groups[1]?.rows.map((entry) => entry.id)).toEqual(["b4"]);
+  });
+
+  it("sorts inside each group", () => {
+    const groups = groupRows(
+      board,
+      { ...EMPTY_TABLE_VIEW, sort: { column: 1, direction: "asc" } },
+      0,
+    );
+    expect(groups[0]?.rows.map((entry) => entry.id)).toEqual(["b3", "b1"]);
+    expect(groups[1]?.rows.map((entry) => entry.id)).toEqual(["b2", "b4"]);
+  });
+
+  it("returns no groups when the filters exclude every row", () => {
+    expect(groupRows(board, { ...EMPTY_TABLE_VIEW, text: "missing" }, 0)).toEqual([]);
+  });
+
+  it("does not mutate the source rows", () => {
+    groupRows(board, { ...EMPTY_TABLE_VIEW, sort: { column: 1, direction: "desc" } }, 0);
+    expect(board.rows.map((entry) => entry.id)).toEqual(["b1", "b2", "b3", "b4"]);
   });
 });
 

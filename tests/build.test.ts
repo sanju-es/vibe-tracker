@@ -17,6 +17,8 @@ const STATE = `# PROJECT_STATE.md — Demo
 
 const DECISIONS = `# DECISIONS.md — Demo
 
+## 1. Approved decisions
+
 | # | Date | Decision |
 |---|---|---|
 | D-01 | 2026-11-13 | First decision |
@@ -78,7 +80,7 @@ describe("buildProject", () => {
     expect(decisions?.title).toContain("DECISIONS.md");
   });
 
-  it("categorises the documentation standard and resolves its rule references", () => {
+  it("categorises the documentation standard and keeps rule ids as text", () => {
     const standard = readFileSync("docs/DOC-STANDARD.md", "utf8");
     const project = buildProject({
       name: "demo",
@@ -101,8 +103,9 @@ describe("buildProject", () => {
       if (node.type === "quote") visit(node.runs);
       if (node.type === "list") node.items.forEach(visit);
     }
-    expect(references).toContain("E-04");
-    expect(references).toContain("AG-03");
+    expect(references).not.toContain("E-04");
+    expect(references).not.toContain("AG-03");
+    expect(references).toEqual([]);
   });
 
   it("resolves links inside the front block", () => {

@@ -88,6 +88,54 @@ export function applyView(table: Table, view: TableView): Row[] {
   return sortRows(table, filterRows(table, table.rows, view), view.sort);
 }
 
+export interface RowGroup {
+  key: string;
+  rows: Row[];
+}
+
+/**
+ * Rows grouped by one column after the text and status filters. Groups follow an
+ * explicit order when one is supplied, then the status vocabulary for the status
+ * column and the natural order otherwise; the selected sort applies inside each
+ * group. The source rows are never mutated.
+ */
+export function groupRows(
+  table: Table,
+  view: TableView,
+  column: number,
+  order: readonly string[] = [],
+): RowGroup[] {
+  const buckets = new Map<string, Row[]>();
+  for (const row of filterRows(table, table.rows, view)) {
+    const raw = cellText(row, column);
+    const status = column === table.statusColumn ? mapStatus(raw) : null;
+    const key = status ? (status.key ?? status.value) : raw;
+    const bucket = buckets.get(key);
+    if (bucket) bucket.push(row);
+    else buckets.set(key, [row]);
+  }
+
+  const keys = [...buckets.keys()].sort((a, b) => {
+    const left = order.indexOf(a);
+    const right = order.indexOf(b);
+    if (left !== -1 || right !== -1) {
+      return (left === -1 ? order.length : left) - (right === -1 ? order.length : right);
+    }
+    if (column === table.statusColumn) {
+      return statusRank(mapStatus(a)) - statusRank(mapStatus(b));
+    }
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
+  });
+
+  return keys.map((key) => {
+    const rows = buckets.get(key) ?? [];
+    return {
+      key,
+      rows: view.sort ? sortRows(table, rows, view.sort) : [...rows],
+    };
+  });
+}
+
 export interface StatusOption {
   key: StatusKey | null;
   label: string;

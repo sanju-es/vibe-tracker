@@ -18,9 +18,10 @@
 
 {#if projectStore.status === "ready" && projectStore.project}
   <ReadingWorkspace project={projectStore.project} />
-{:else if projectStore.status === "scanning"}
+{:else if projectStore.status === "opening" || projectStore.status === "scanning"}
   <main class="flex min-h-screen items-center justify-center p-6">
     <ScanProgress
+      opening={projectStore.status === "opening"}
       done={projectStore.progress.done}
       total={projectStore.progress.total}
       warning={projectStore.warning}

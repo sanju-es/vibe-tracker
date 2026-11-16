@@ -5,8 +5,8 @@
 > **Canonical for:** `FR-NN`, `BR-NN` and `VAL-NN` of this module.
 > **Do not duplicate:** scope (`MODULE.md` §2) and implementation (`TECHNICAL.md`).
 
-**Status:** `Implemented` (2026-11-13)
-**Last update:** 2026-11-13
+**Status:** `Tested` (2026-11-16)
+**Last update:** 2026-11-16
 
 ---
 
@@ -25,8 +25,9 @@ fixed by D-15 and must work from the distributed `index.html`.
 
 ### FR-2 — Scan and index
 
-The app walks the folder recursively, collects `.md` documents and indexes the
-image files they reference.
+The app walks the folder recursively, reads the `.md` documents at the root and
+under `docs/**`, ignores hidden, tooling, dependency and build folders, and indexes
+the image files those documents reference (D-30).
 
 ### FR-3 — Navigate with a fixed sidebar
 
@@ -83,8 +84,9 @@ The app keeps nothing between sessions.
 
 ### FR-11 — Scan states
 
-Empty, loading (with progress and cancellation), success and error states exist
-for folder selection and scanning.
+Empty, opening (folder enumeration, with visible feedback), loading (file reads
+with progress and cancellation), success and error states exist for folder
+selection and scanning.
 
 ### FR-12 — Reload
 
@@ -136,14 +138,14 @@ and is never shown literally.
 
 ### FR-19 — Reference scope
 
-A project document resolves only project-level definitions. A module document
-resolves its own module first and falls back to the project level when the
-module has no definition. Global namespaces (`D-`, `CORE-`, `CR-`) resolve from
-any document. An explicit `NN` prefix narrows the search to that module:
-`01 B-01` is the first backlog item of module 1 from any document. Each
-reference resolves to one canonical item: a global identifier uses the project
-definition, and a heading or list-item definition wins over a secondary table
-row such as an acceptance criterion.
+A module identifier resolves inside the module that defines it and requires the
+`NN` qualifier (`01 FR-3`) in any other document. A project document therefore
+resolves module identifiers only when they carry `NN`. Global namespaces (`D-`,
+`CORE-`, `CR-`) resolve from any document. An explicit `NN` prefix narrows the
+search to that module: `01 B-01` is the first backlog item of module 1 from any
+document. Each reference resolves to one canonical item: only the owning file and
+slot defines an identifier, so an acceptance row, a decision index or a changelog
+bullet is a mention, not a definition.
 
 ### FR-20 — Module overview and backlog defaults
 
@@ -290,25 +292,25 @@ The numbers are those of the original document; only the prefix changed, from `V
 
 | FR | Criterion | Evidence | Status |
 |---|---|---|---|
-| FR-1 | A chosen folder loads its documents with either adapter. | Manual browser check | pending (owner) |
-| FR-2 | The scan lists `.md` files and referenced images with progress. | `tests/build.test.ts`, manual browser check | pending (owner) |
-| FR-3 | The fixed sidebar shows both blocks, state icon and text, and three levels at most. | Manual browser check | pending (owner) |
-| FR-4 | Documents render from the node tree with no injected HTML. | `tests/pipeline.test.ts` | pending (owner) |
-| FR-5 | Repeated file names in one list show their folder. | Manual browser check | pending (owner) |
-| FR-6 | Tables filter, sort, truncate and open the row detail; each identifier in a cell opens its own target. | `tests/tables.test.ts`, `tests/references.test.ts`, manual browser check | pending (owner) |
-| FR-7 | Document and image links open modals; anchors scroll without one. | Manual browser check | pending (owner) |
-| FR-8 | Content starts after the sidebar, uses the remaining width and has no outline. | Manual browser check | pending (owner) |
-| FR-9 | The interface is light only and offers no theme control. | Manual browser check | pending (owner) |
-| FR-10 | Nothing is persisted between sessions. | Manual browser check | pending (owner) |
-| FR-11 | Empty, loading, cancellation, success and error states exist. | Manual browser check | pending (owner) |
-| FR-12 | Reload re-scans the current folder without asking again. | Manual browser check | pending (owner) |
-| FR-13 | The keyboard path reaches sidebar, tables and modals; focus returns. | Manual browser check | pending (owner) |
-| FR-14 | Known identifiers open their definition; definitions and code blocks stay plain. | `tests/references.test.ts`, `tests/inline-references.test.ts` | pending (owner) |
-| FR-15 | The modules overview lists folder, name and state. | `tests/selectors.test.ts`, manual browser check | pending (owner) |
-| FR-16 | A module page renders its backlog table with search, filters and sorting. | Manual browser check | pending (owner) |
-| FR-17 | A document header shows the front block, status and last update; the body does not repeat them. | `tests/pipeline.test.ts` | pending (owner) |
-| FR-18 | The standard sits under *Project* and `<br>` renders as a line break. | `tests/build.test.ts`, manual browser check | pending (owner) |
-| FR-19 | Same-module resolution wins, project is the fallback, globals resolve anywhere and `NN` narrows the search (for example `01 B-01`). | `tests/references.test.ts` | pending (owner) |
-| FR-20 | The overview shows a wide module column, one count column per backlog status found in the project plus **All**, coloured by status and `0` when a module has none, state at the right with icon and colour, and a backlog hides `implemented`, `discarded` and `deferred` by default. | `tests/selectors.test.ts`, manual browser check | pending (owner) |
-| FR-21 | Only modules with a local folder and at least one Markdown document appear in the sidebar and the overview. | `tests/build.test.ts` | pending (owner) |
-| FR-22 | The overview lists a filterable table of `new` and `in progress` backlog items with their source rows. | `tests/selectors.test.ts`, manual browser check | pending (owner) |
+| FR-1 | A chosen folder loads its documents with either adapter. | Manual browser check | verified (2026-11-16) |
+| FR-2 | The scan reads root and `docs/**` Markdown, ignores tooling folders and lists referenced images with progress. | `tests/scope.test.ts`, `tests/build.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-3 | The fixed sidebar shows both blocks, state icon and text, and three levels at most. | Manual browser check | verified (2026-11-16) |
+| FR-4 | Documents render from the node tree with no injected HTML. | `tests/pipeline.test.ts` | verified (2026-11-16) |
+| FR-5 | Repeated file names in one list show their folder. | Manual browser check | verified (2026-11-16) |
+| FR-6 | Tables filter, sort, truncate and open the row detail; each identifier in a cell opens its own target. | `tests/tables.test.ts`, `tests/references.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-7 | Document and image links open modals; anchors scroll without one. | Manual browser check | verified (2026-11-16) |
+| FR-8 | Content starts after the sidebar, uses the remaining width and has no outline. | Manual browser check | verified (2026-11-16) |
+| FR-9 | The interface is light only and offers no theme control. | Manual browser check | verified (2026-11-16) |
+| FR-10 | Nothing is persisted between sessions. | Manual browser check | verified (2026-11-16) |
+| FR-11 | Empty, opening, loading, cancellation, success and error states exist. | Manual browser check | verified (2026-11-16) |
+| FR-12 | Reload re-scans the current folder without asking again. | Manual browser check | verified (2026-11-16) |
+| FR-13 | The keyboard path reaches sidebar, tables and modals; focus returns. | Manual browser check | verified (2026-11-16) |
+| FR-14 | Known identifiers open their definition; definitions and code blocks stay plain. | `tests/references.test.ts`, `tests/inline-references.test.ts` | verified (2026-11-16) |
+| FR-15 | The modules overview lists folder, name and state. | `tests/selectors.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-16 | A module page renders its backlog table with search, filters and sorting. | Manual browser check | verified (2026-11-16) |
+| FR-17 | A document header shows the front block, status and last update; the body does not repeat them. | `tests/pipeline.test.ts` | verified (2026-11-16) |
+| FR-18 | The standard sits under *Project* and `<br>` renders as a line break. | `tests/build.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-19 | A module identifier resolves in its own module or through `NN`; globals resolve anywhere and only owner definitions count. | `tests/references.test.ts` | verified (2026-11-16) |
+| FR-20 | The overview shows a wide module column, one count column per backlog status found in the project plus **All**, coloured by status and `0` when a module has none, state at the right with icon and colour, and a backlog hides `implemented`, `discarded` and `deferred` by default. | `tests/selectors.test.ts`, manual browser check | verified (2026-11-16) |
+| FR-21 | Only modules with a local folder and at least one Markdown document appear in the sidebar and the overview. | `tests/build.test.ts` | verified (2026-11-16) |
+| FR-22 | The overview lists a filterable table of `new` and `in progress` backlog items with their source rows. | `tests/selectors.test.ts`, manual browser check | verified (2026-11-16) |

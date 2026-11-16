@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildProject } from "../src/lib/project/build";
 import {
+  backlogBoard,
   backlogStatusKeys,
   backlogSummary,
   moduleBacklog,
@@ -126,5 +127,56 @@ describe("module selectors", () => {
     expect(summary.table.rows[1]?.cells[7]?.text).toBe("in progress");
     const target = summary.targets.get(summary.table.rows[0]?.id ?? "");
     expect(target?.documentId).toBe("docs/modules/01-demo-reader/BACKLOG.md");
+  });
+
+  it("builds the full board with every status and source target", () => {
+    const board = backlogBoard(project);
+    expect(board.table.rows).toHaveLength(6);
+    expect(board.table.statusColumn).toBe(7);
+    expect(board.table.rows.map((row) => row.cells[7]?.text)).toEqual(
+      expect.arrayContaining([
+        "new",
+        "in progress",
+        "implemented (2026-11-12)",
+        "discarded",
+        "blocked",
+        "on hold",
+      ]),
+    );
+    const target = board.targets.get(board.table.rows[2]?.id ?? "");
+    expect(target?.documentId).toBe("docs/modules/03-mixed-module/BACKLOG.md");
+  });
+
+  it("includes the Core backlog in the full board", () => {
+    const withCore = buildProject({
+      name: "core",
+      files: [
+        {
+          path: "PROJECT_STATE.md",
+          text: `# PROJECT_STATE.md — Core
+
+## 6. Module inventory and state
+
+| # | Module | State | Open items | Documentation |
+|---|---|---|---|---|
+| 0 | Core | Active (permanent) | — | \`00-core\` |
+`,
+        },
+        { path: "docs/modules/00-core/MODULE.md", text: "# Module 0 — Core\n" },
+        {
+          path: "docs/modules/00-core/BACKLOG.md",
+          text: `# Module 0 — BACKLOG
+
+| ID | Date | Type | Description | Origin | Priority | Status |
+|---|---|---|---|---|---|---|
+| CORE-01 | 2026-11-13 | improvement | Skeleton | D-14 | high | implemented (2026-11-13) |
+`,
+        },
+      ],
+    });
+    const board = backlogBoard(withCore);
+    expect(board.table.rows).toHaveLength(1);
+    expect(board.table.rows[0]?.cells[0]?.text).toBe("00-core");
+    expect(board.table.rows[0]?.cells[1]?.text).toBe("CORE-01");
   });
 });

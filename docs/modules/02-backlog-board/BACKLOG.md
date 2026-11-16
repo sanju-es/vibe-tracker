@@ -5,7 +5,7 @@
 > **Canonical for:** `B-NN` entries of this module.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and history (`CHANGELOG.md`).
 
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 

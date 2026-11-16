@@ -3,6 +3,27 @@
 > Dated history only.
 **History:** append-only.
 
+## 2026-11-16 — Requirements catalogue support
+
+- `CORE-07`: `groupRows` accepts an explicit group order; module 3 uses it to keep functional requirements, business rules, flows, validations and edge cases in source order.
+- Verification: `check`, `lint`, `test` (125 tests across 13 suites), `build` and `docs:check` green.
+
+## 2026-11-16 — Backlog board grouping
+
+- `CORE-07`: `groupRows` groups the filtered table by one column, orders groups by status vocabulary or natural order and sorts inside each group; the source rows are unchanged. Module 2 consumes it through the shared table.
+- Verification: `check`, `lint`, `test` (119 tests across 12 suites), `build` and `docs:check` green.
+
+## 2026-11-16 — Folder-opening feedback
+
+- `CORE-03`: `pickFolder(onStart)` notifies the caller after folder access is granted and before the walk, so the reader can show an opening state during enumeration. The listing returned by the first walk is reused by the initial load; reload asks for a new walk.
+- Verification: `check`, `lint`, `test` (110 tests across 12 suites), `build` and `docs:check` green; the Edge check of the opening feedback remains for the owner's verification.
+
+## 2026-11-16 — Documentation scope and reference owners
+
+- `CORE-03`: both folder adapters apply the documentation policy of `src/lib/fs/scope.ts`. Markdown is read only at the selected root and under `docs/**`, hidden, tooling, dependency and build folders are ignored, and images stay indexed from any non-ignored folder (D-30). The folder-input adapter now filters too.
+- `CORE-08`: the index uses the owning file and slot of each namespace from `DOC-STANDARD` §6.1, keeps rule identifiers plain, resolves module identifiers inside their module or through `NN`, and reports duplicates per module.
+- Verification: `check`, `lint`, `test` (110 tests across 12 suites), `build` and `docs:check` green.
+
 ## 2026-11-13 — Audit findings applied
 
 - `CORE-09` to `CORE-16` implemented: the module dependencies point at Core, the `02`–`06` decision slots follow §7.3, `TECHNICAL` §1 and §7 no longer repeat one constraint, `README` loses its status marker and its extra rules, the build size and the platform limits keep one home, `.opencode/` joins the repository layout and the superseded clauses are listed in `DECISIONS.md`.

@@ -5,7 +5,7 @@
 > **Canonical for:** the `D-NN` decisions, their dates and their reasons.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and architecture detail (`ARCHITECTURE.md`).
 
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 
@@ -42,6 +42,10 @@
 | D-27 | 2026-11-13 | Cross-cutting: **Documentation standard v1.1 approved**: the cited-and-missing rule is defined, the registry headings the document already used are accepted, the identifier padding is stated, `MS-NN` is registered with its lookup table, and two checks join the enforcement table, without renumbering any identifier. | The post-adoption audit showed the adopted standard contradicting itself and the artifacts in four places, and two classes of defect — a block copied into a second home and a code span naming a path that does not exist — with no check behind them. The owner approved the amendments as the closing act of the normalisation. |
 | D-28 | 2026-11-13 | Cross-cutting: **Documentation standard v1.2 approved**: F-07 names the status line, the decisions table belongs to §1, §5.1–§5.4 become V-01–V-04, the `## 7. Decisions` index is registered, descriptive tables claim no order, T-05 covers the three history homes, G-12 dates a changeable state, AG-02 matches the quoted front block, §7.4 accepts the sibling paths of the front block, AG-09 follows `AGENTS.md`, a documentation defect gets a home, E-08, E-11, E-12 and E-18 state their real coverage, E-21 to E-26 are declared and the rules without a check name `docs-auditor`. | The adopted standard contradicted itself in twelve places: a rule pointed at the wrong slot, a registry entry named a table that does not exist, four vocabulary references pointed at sections never written, two rules had no defined scope and four checks promised more than the linter does. No identifier was renumbered and no dated entry was rewritten; the artifacts, the agent contracts and the new checks follow in separate approved steps. |
 | D-29 | 2026-11-13 | Module 01: **A heading that starts with an identifier is a definition.** The index collects a heading such as `### FR-3 — …` as well as list items, so a requirement is reachable from any mention, the modal shows the requirement itself instead of its acceptance row, and the defining heading is not linked to itself. The 22 requirements of `01` become `### FR-NN — Title` as §7.4 requires, closing `01 B-04`. | The owner chose the headings over amending the rule: §7.4 already required them and a heading gives every requirement an anchor, while the index ignored headings, so `FR-6` resolved to the acceptance criterion. A correction of documented behaviour in a module that awaits verification, with no new requirement. |
+| D-30 | 2026-11-16 | Module 01: **The documentation scan reads the root and `docs/**`.** Markdown elsewhere —`.opencode`, source READMEs, sibling projects— is outside the policy, and hidden, dependency, tooling and build folders are ignored in both folder adapters. Referenced images stay indexed from any non-ignored folder. | Owner request after seeing tooling and foreign Markdown in the reader: a broad scan turns navigation into a file browser and makes the project boundary depend on where the folder was picked. G-01 places the documentation at the root and `docs/**`; the app follows that location and adds the tooling and build exclusions it needs, instead of maintaining a closed ignore list. |
+| D-31 | 2026-11-16 | Module 02: **The backlog board opens from the top banner.** The board gathers every `BACKLOG.md`, including `00-core`, shows all statuses with optional text and status filters, groups by `None`, `Module` or `Status`, sorts inside each group and reuses the row detail with *Go to document*. A home action returns to `PROJECT_STATE.md`; the Modules overview keeps its compact `01 FR-22` summary and global search stays in module 5. | Owner request and approval of the module 2 proposal: the full view needs a single, visible entry; all statuses avoid a hidden default; the summary and the board serve different scopes. The table and banner changes are additive and keep module 1's behaviour unchanged. |
+| D-32 | 2026-11-16 | Module 03: **The requirements catalogue opens from the top banner.** It collects `FR`, `BR`, `VAL`, flows and edge cases from every `REQUIREMENTS.md`, filters by module state, groups by `None`, `Module` or `Section`, reuses the row detail and *Go to document*, and shows an explicit `No requirements recorded` row for a module without items. Acceptance evidence and global search stay out. | Owner chose the catalogue shape after clarifying that module 3 was not a dashboard or a search: the project needs one place to review the agreed behaviour across modules, with the source document as the only truth. The status column uses the module state because a requirement has no separate state. |
+| D-33 | 2026-11-16 | Module 04: **The project dashboard opens from the top banner.** It shows documented module counts, a `Tested` progress bar over closable modules, Core as a separate permanent row, a module table with the active marker and last update, and a filterable timeline of dated changelog headings with source jump. Progress is never inferred from code, dates or backlog rows. | Owner chose the project-health view after the Modules overview became the document-level index: the roadmap and the project history need a separate surface. Counts and the bar use only documented states, and Core stays outside the closable denominator. |
 
 **D-26 deviations.** Local slot catalogue (`WORKFLOW` 8, `TECHNICAL` 8, `ARCHITECTURE` 10 frontend substitutions, `DECISIONS` slot 3 reserved and omitted); one-time identifier migration (`V-NN` → `VAL-NN`, `FR`/`BR` qualified outside their file, ranges with `…`, the single backlog entry becomes `01 B-01`); `CORE-NN` move to `00-core/BACKLOG.md`; backlog vocabulary `new`/`in progress`/`blocked`/`deferred`/`implemented`/`discarded` with the app status vocabulary updated in the same phase; acceptance table only from `Implemented`, risks table and `RISK-NN` reserved while limitations stay in `TECHNICAL` §7; agent and skill files exempt from the front block; `E-02` and `E-03` disabled until tags and a contract exist.
 
@@ -119,3 +123,22 @@
 - **2026-11-13** — Heading definitions join the reference index (D-29) and the `01`
   requirements become `### FR-NN — Title`, closing `01 B-04`; the module stays
   `Implemented` and the owner's verification is still pending.
+- **2026-11-16** — Documentation scope fixed (D-30): the scan reads root and `docs/**`
+  Markdown and ignores tooling, dependency and build folders in both adapters. The
+  reference index also moves to the owning file and slot of each namespace, keeping
+  rule identifiers plain. Applied with 110 tests across 12 suites; the module stays
+  `Implemented` and the owner's verification is still pending.
+- **2026-11-16** — Module 1 closed as `Tested` after the owner's verification; all
+  twenty-two acceptance rows are `verified (2026-11-16)`.
+- **2026-11-16** — Module 2 proposal approved and implemented (D-31): top-banner
+  Backlog/Home, full board from every `BACKLOG.md`, all statuses, filters,
+  `None`/`Module`/`Status` grouping and source jump. 119 tests across 12 suites;
+  the owner's Edge verification is pending.
+- **2026-11-16** — Module 3 proposal approved and implemented (D-32): top-banner
+  Requirements, catalogue of `FR`/`BR`/`VAL`/flows/edge cases, module-state filter,
+  `None`/`Module`/`Section` grouping and source jump. 125 tests across 13 suites;
+  the owner's Edge verification is pending.
+- **2026-11-16** — Module 4 proposal approved and implemented (D-33): top-banner
+  Dashboard, documented roadmap counts, `Tested` progress bar, Core separate,
+  module table with active marker and filterable changelog timeline. 132 tests
+  across 14 suites; the owner's Edge verification is pending.

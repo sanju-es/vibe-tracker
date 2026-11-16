@@ -5,7 +5,7 @@
 > **Canonical for:** `B-NN` entries of this module.
 > **Do not duplicate:** requirements (`REQUIREMENTS.md`) and history (`CHANGELOG.md`).
 
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 
@@ -17,6 +17,7 @@
 | B-02 | 2026-11-13 | docs | The module page hides two backlog statuses in `TECHNICAL` §5 and three in §7 and `01 FR-20`; confirm which list is correct and align them | Audit 2026-11-13 | medium | implemented (2026-11-13) |
 | B-03 | 2026-11-13 | docs | Acceptance evidence for `01 FR-2`, `01 FR-6`, `01 FR-15` and `01 FR-20` cites a unit suite for behaviour only the browser check covers; mark the manual part | Audit 2026-11-13 | medium | implemented (2026-11-13) |
 | B-04 | 2026-11-13 | docs | `REQUIREMENTS` §2 lists the requirements as bullets while §7.4 mandates `### FR-NN — Title`; converting them removes the FR from the reference index, because the app indexes rows and list items and not headings, so the rule and the indexing must be reconciled | Audit 2026-11-13 | medium | implemented (2026-11-13) |
+| B-05 | 2026-11-16 | correction | The module state column in the modules overview clips long states such as `Implementation proposal`; the full state text must be visible | Owner | medium | implemented (2026-11-16) |
 
 `B-01` keeps the position it had when the standard took effect; `B-02` to `B-04` were registered by the later audit. No identifier was renumbered (D-26, R-08).
 

@@ -5,7 +5,12 @@
  * Nothing else in the app talks to these browser APIs.
  */
 
-export type EntryKind = "markdown" | "image" | "other";
+import {
+  isDocumentationEntry,
+  isIgnoredDirectory,
+  kindOf,
+  type EntryKind,
+} from "./scope";
 
 export interface FolderEntry {
   path: string;
@@ -19,14 +24,6 @@ export interface FolderSource {
   readBlob(path: string): Promise<Blob>;
   /** Re-reads the folder listing. Absent when the source is a fixed snapshot. */
   refresh?: () => Promise<FolderEntry[]>;
-}
-
-const IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|svg|avif)$/i;
-
-export function kindOf(path: string): EntryKind {
-  if (/\.md$/i.test(path)) return "markdown";
-  if (IMAGE_EXTENSIONS.test(path)) return "image";
-  return "other";
 }
 
 interface PickerFileHandle {
@@ -66,25 +63,26 @@ async function walk(
   for await (const child of handle.values()) {
     const path = joinPath(prefix, child.name);
     if (child.kind === "directory") {
-      if (
-        child.name === "node_modules" ||
-        child.name === ".git" ||
-        child.name === "dist"
-      ) {
-        continue;
-      }
+      if (isIgnoredDirectory(child.name)) continue;
       await walk(child, path, files, entries);
       continue;
     }
+    if (!isDocumentationEntry(path)) continue;
     const kind = kindOf(path);
     entries.push({ path, kind });
-    if (kind !== "other") files.set(path, child);
+    files.set(path, child);
   }
 }
 
-async function sourceFromHandle(handle: PickerDirectoryHandle): Promise<FolderSource> {
+async function sourceFromHandle(
+  handle: PickerDirectoryHandle,
+  onStart: () => void,
+): Promise<FolderSource> {
   const files = new Map<string, PickerFileHandle>();
   const entries: FolderEntry[] = [];
+
+  onStart();
+  await walk(handle, "", files, entries);
 
   const refresh = async (): Promise<FolderEntry[]> => {
     files.clear();
@@ -112,7 +110,7 @@ async function sourceFromHandle(handle: PickerDirectoryHandle): Promise<FolderSo
   };
 }
 
-function pickWithInput(): Promise<FolderSource | null> {
+function pickWithInput(onStart: () => void): Promise<FolderSource | null> {
   return new Promise((resolve) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -134,30 +132,36 @@ function pickWithInput(): Promise<FolderSource | null> {
         finish(null);
         return;
       }
-      const byPath = new Map<string, File>();
-      const entries: FolderEntry[] = [];
-      const root = files[0]?.webkitRelativePath.split("/")[0] ?? "project";
-      for (const file of files) {
-        const relative = file.webkitRelativePath || file.name;
-        const path = relative.split("/").slice(1).join("/") || file.name;
-        const kind = kindOf(path);
-        entries.push({ path, kind });
-        if (kind !== "other") byPath.set(path, file);
-      }
-      finish({
-        name: root,
-        entries,
-        async readText(path) {
-          const file = byPath.get(path);
-          if (!file) throw new Error(`Missing file: ${path}`);
-          return file.text();
-        },
-        async readBlob(path) {
-          const file = byPath.get(path);
-          if (!file) throw new Error(`Missing file: ${path}`);
-          return file;
-        },
-      });
+      onStart();
+      void (async () => {
+        // Let the opening state paint before the synchronous file enumeration.
+        await new Promise((nextFrame) => setTimeout(nextFrame, 0));
+        const byPath = new Map<string, File>();
+        const entries: FolderEntry[] = [];
+        const root = files[0]?.webkitRelativePath.split("/")[0] ?? "project";
+        for (const file of files) {
+          const relative = file.webkitRelativePath || file.name;
+          const path = relative.split("/").slice(1).join("/") || file.name;
+          if (!isDocumentationEntry(path)) continue;
+          const kind = kindOf(path);
+          entries.push({ path, kind });
+          byPath.set(path, file);
+        }
+        finish({
+          name: root,
+          entries,
+          async readText(path) {
+            const file = byPath.get(path);
+            if (!file) throw new Error(`Missing file: ${path}`);
+            return file.text();
+          },
+          async readBlob(path) {
+            const file = byPath.get(path);
+            if (!file) throw new Error(`Missing file: ${path}`);
+            return file;
+          },
+        });
+      })();
     });
 
     input.addEventListener("cancel", () => finish(null));
@@ -167,18 +171,20 @@ function pickWithInput(): Promise<FolderSource | null> {
   });
 }
 
-export async function pickFolder(): Promise<FolderSource | null> {
+export async function pickFolder(
+  onStart: () => void = () => {},
+): Promise<FolderSource | null> {
   if (canUseDirectoryPicker()) {
     try {
       const picker = (window as unknown as PickerWindow).showDirectoryPicker;
       if (picker) {
         const handle = await picker({ mode: "read" });
-        return await sourceFromHandle(handle);
+        return await sourceFromHandle(handle, onStart);
       }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return null;
       // Any other failure falls back to the folder input.
     }
   }
-  return pickWithInput();
+  return pickWithInput(onStart);
 }

@@ -49,7 +49,7 @@
                 {statusLabel(key)}
               </th>
             {/each}
-            <th scope="col" class="w-36 whitespace-nowrap text-right"
+            <th scope="col" class="w-56 whitespace-nowrap text-right"
               >{m["modules.state"]}</th
             >
           </tr>
@@ -82,7 +82,7 @@
                   {counts.byStatus[key] ?? 0}
                 </td>
               {/each}
-              <td class="w-36 whitespace-nowrap text-right">
+              <td class="w-56 whitespace-nowrap text-right">
                 {#if status}
                   <span class="inline-flex items-center justify-end gap-1.5">
                     <ModuleStatusIcon

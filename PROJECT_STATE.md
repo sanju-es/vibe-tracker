@@ -5,9 +5,8 @@
 > **Canonical for:** identity, stack summary, module states, open problems and next steps.
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
-**Last update:** 2026-11-13 — documentation standard adopted, migrated and amended
-(D-26 to D-28); the reader indexes heading definitions (D-29) and module 1 awaits
-owner verification.
+**Last update:** 2026-11-16 — modules 1 to 3 closed as `Tested`; module 4
+project-health dashboard implemented and awaiting verification.
 
 ---
 
@@ -16,9 +15,9 @@ owner verification.
 - **What it is:** A portable, install-free and offline web app that interprets
   the Markdown documentation of a project —chapters, tables, statuses and
   references— and presents it as navigable, interactive content.
-- **Goal:** Show all project files and folders at a glance and present what is
-  inside them structurally: recognisable states, tables that can be filtered and
-  sorted, and references that open the detail of the referenced item.
+- **Goal:** Show the project documentation at a glance and present what is inside
+  it structurally: recognisable states, tables that can be filtered and sorted,
+  and references that open the detail of the referenced item (D-30).
 - **Audience and constraints:** Internal use. Shipped as a bundled tool with the
   project; anyone with the project can open it and each person sees their own
   local files. Works offline, needs no installation permissions and is distributed
@@ -86,17 +85,17 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 | # | Module | State | Open items | Documentation |
 |---|---|---|---|---|
 | 0 | Core | Active (permanent) | — | [`00-core`](docs/modules/00-core/MODULE.md) |
-| 1 | Structured Reader | Implemented | `01 B-01` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
-| 2 | Backlog Board | Pending | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
-| 3 | Requirements | Pending | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
-| 4 | Modules Dashboard | Pending | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |
+| 1 | Structured Reader | Tested | `01 B-01` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
+| 2 | Backlog Board | Tested | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
+| 3 | Requirements | Tested | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
+| 4 | Modules Dashboard | Implemented | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |
 | 5 | Search and Index | Pending | — | [`05-search-index`](docs/modules/05-search-index/MODULE.md) |
 | 6 | Distribution | Pending | — | [`06-distribution`](docs/modules/06-distribution/MODULE.md) |
 
-**Active module:** 1 — Structured Reader (`docs/modules/01-structured-reader/`),
+**Active module:** 4 — Modules Dashboard (`docs/modules/04-modules-dashboard/`),
 state `Implemented`.
-**Next step:** the owner verifies the reader against its requirements; the module
-moves to `Tested` when that verification is recorded.
+**Next step:** the owner verifies the dashboard in Edge; the module moves to
+`Tested` when the verification is recorded.
 
 ## 7. Open problems and pending corrections
 
@@ -121,10 +120,9 @@ _None._
 
 ## 9. Next steps
 
-1. Verify the revised reader in Chrome or Edge with a real project folder and the
-   built `index.html`: fixed sidebar and its own scroll, content after it, reload
-   action, compact typography, module state text, nested project entries,
-   three-level menu, one-line tables with row detail.
-2. Record the verification in `docs/modules/01-structured-reader/TECHNICAL.md` §5
-   and move the module to `Tested`.
-3. Choose the next module (2 — Backlog Board is the recommended next step).
+1. Modules 1 to 3 are closed as `Tested` with every acceptance row verified on
+   2026-11-16; `01 B-01` tracks the remaining reader item.
+2. Verify module 4 in Edge: Dashboard action, cards, progress bar, module table,
+   active marker, timeline filter and source jump.
+3. Record the verification in `docs/modules/04-modules-dashboard/TECHNICAL.md` §6
+   and move the module to `Tested`; then choose module 5.

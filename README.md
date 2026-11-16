@@ -32,6 +32,8 @@ It is not a Markdown viewer. It reads the documentation semantically:
 - **References** between documents open the detail of the referenced row in a
   modal, and every known identifier in the text opens the item that defines it.
 - **Read-only.** The app never writes to the Markdown files.
+- **Documentation scope.** Reads Markdown at the project root and under `docs/**`;
+  hidden, tooling, dependency and build folders are ignored (D-30).
 - **Local by default.** No telemetry and no request of the app itself. Icons and the
   typeface come from the allowlisted CDNs, pinned with SRI; without network they
   degrade to glyphs and the system font.
@@ -43,6 +45,12 @@ It is not a Markdown viewer. It reads the documentation semantically:
 - **Modules overview.** Selecting *Modules* in the sidebar shows a table with the
   module folder, its name and its state; selecting a module opens its backlog table
   with search, status filters and sorting.
+- **Backlog board.** The top banner opens a full cross-module backlog board with
+  text and status filters, grouping by module or status, row detail and a jump to
+  the source row; *Home* returns to the project state.
+- **Requirements catalogue.** The top banner also opens every module's functional
+  requirements, business rules, flows, validations and edge cases, filtered by
+  module state and grouped by module or section, with a jump to the source.
 - **Light only.** One appearance, no theme switch (D-18).
 
 The Markdown files are the source of truth. The app derives an in-memory semantic

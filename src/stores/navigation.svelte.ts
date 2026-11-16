@@ -1,6 +1,7 @@
 import type { Project } from "../lib/model/types";
 
-export type ActiveView = "document" | "modules" | "module";
+export type ActiveView =
+  "document" | "modules" | "module" | "backlog" | "requirements" | "dashboard";
 
 class NavigationStore {
   activeView = $state<ActiveView>("document");
@@ -24,6 +25,21 @@ class NavigationStore {
   openModule(moduleNumber: number): void {
     this.activeView = "module";
     this.activeModuleNumber = moduleNumber;
+  }
+
+  openBacklog(): void {
+    this.activeView = "backlog";
+    this.activeModuleNumber = null;
+  }
+
+  openRequirements(): void {
+    this.activeView = "requirements";
+    this.activeModuleNumber = null;
+  }
+
+  openDashboard(): void {
+    this.activeView = "dashboard";
+    this.activeModuleNumber = null;
   }
 
   toggleModules(): void {

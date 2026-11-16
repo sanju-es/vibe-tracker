@@ -95,6 +95,10 @@ body {
     animation: pt-rotate 1s linear infinite;
   }
 
+  .pt-indeterminate {
+    animation: pt-indeterminate 1.2s ease-in-out infinite;
+  }
+
   .pt-panel {
     background: var(--pt-surface);
     border: 1px solid var(--pt-border);
@@ -536,6 +540,22 @@ body {
     background: var(--pt-surface-2);
   }
 
+  .pt-table--static tbody tr {
+    cursor: default;
+  }
+
+  .pt-table--static tbody tr:hover {
+    background: transparent;
+  }
+
+  .pt-table tbody tr.pt-group-row {
+    cursor: default;
+  }
+
+  .pt-table tbody tr.pt-group-row:hover {
+    background: var(--pt-surface-2);
+  }
+
   .pt-table tbody tr:last-child td {
     border-bottom: none;
   }
@@ -544,5 +564,14 @@ body {
 @keyframes pt-rotate {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pt-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
   }
 }

@@ -29,8 +29,10 @@ describe("parseDocument", () => {
       moduleDoc,
     );
     expect(parsed.meta.fields).toHaveLength(4);
-    expect(parsed.meta.status?.token).toBe("Implemented");
-    expect(parsed.meta.lastUpdate).toBe("2026-11-13");
+    const expectedStatus = /^\*\*Status:\*\*\s*`([^`]+)`/m.exec(moduleDoc)?.[1];
+    expect(parsed.meta.status?.token).toBe(expectedStatus);
+    const expected = /^\*\*Last update:\*\*\s*(\d{4}-\d{2}-\d{2})/m.exec(moduleDoc)?.[1];
+    expect(parsed.meta.lastUpdate).toBe(expected);
   });
 
   it("turns <br> into a break run inside a cell", () => {

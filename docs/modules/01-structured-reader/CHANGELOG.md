@@ -3,6 +3,38 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-16 — Additive support for module 3
+
+- `DataTable` accepts any `RefTarget` from `rowTarget` and an optional group order; the reader's default path is unchanged. Module 3 uses both for the requirements catalogue.
+- Verification: the full suite reports 125 tests across 13 suites; `check`, `lint`, `build` and `docs:check` green.
+
+## 2026-11-16 — State column width (01 B-05)
+
+- The module state column in the overview widens from `w-36` to `w-56`, so long states such as `Implementation proposal` render in full instead of being clipped. Closes `01 B-05`; no data or behaviour change. The owner's visual check remains the evidence for the new width.
+
+## 2026-11-16 — Additive support for module 2
+
+- The top banner gains *Home* and *Backlog* actions, and `DataTable` accepts an optional `groupBy` for the new full board. The reader's default table path and behaviour are unchanged; the module stays `Tested`.
+- Verification: the full suite reports 119 tests across 12 suites; `check`, `lint`, `build` and `docs:check` green.
+
+## 2026-11-16 — Closure as Tested
+
+- The owner accepted the reader and the module moves from `Implemented` to `Tested`; every acceptance row in `REQUIREMENTS.md` §9 is `verified (2026-11-16)`.
+- Delivered: folder selection and scope-aware scan, fixed sidebar and three-level navigation, semantic render, interactive one-line tables with row detail, identifier references with owner definitions, document/image modals, modules overview, module page, reload, opening/progress/error states and the English light interface.
+- Verification: `check`, `lint`, `test` (110 tests across 12 suites), `build` (single `index.html`) and `docs:check` green. No code changed in this entry.
+
+## 2026-11-16 — Folder-opening feedback (correction)
+
+- The reader shows an `opening` state with an indeterminate bar as soon as folder access is granted, before the adapter enumerates the tree, and then switches to `scanning` with one unit per Markdown file (01 FR-11).
+- The initial open reuses the listing returned by `pickFolder`; only reload asks the adapter to walk again. The previous flow enumerated the tree twice and kept the old screen visible during both walks.
+- Verification: `check`, `lint`, `test` (110 tests across 12 suites), `build` and `docs:check` green; the Edge check of the opening feedback remains for the owner's verification.
+
+## 2026-11-16 — Documentation scope and reference owners (correction)
+
+- The scan now reads Markdown only at the selected root and under `docs/**`; hidden, dependency, tooling and build folders are ignored in both folder adapters, so agent/skill documents, source READMEs and sibling projects no longer enter navigation (D-30).
+- The reference index now uses the owning file and slot of each namespace from the standard: `D-NN` in `DECISIONS` §1, `CORE-NN` and `CR-NN` in `00-core` §1 and §4, `FR-NN`, `BR-NN` and `VAL-NN` in `REQUIREMENTS` §2, §3 and §5, `MS-NN` in `TECHNICAL` §8 and `B-NN` in `BACKLOG` §1. Rule identifiers stay plain text, a module identifier resolves in its own module or through `NN`, and only the definition is excluded from self-linking.
+- Verification: `check`, `lint`, `test` (110 tests across 12 suites), `build` and `docs:check` green. The module stays `Implemented`: both changes correct documented behaviour and the owner's verification is still pending.
+
 ## 2026-11-13 — Requirements as headings (correction)
 
 - `REQUIREMENTS` §2 lists the 22 requirements as `### FR-NN — Title`, as §7.4 requires, and the index recognises a heading that starts with an identifier (D-29), so a mention of `FR-N` opens the requirement instead of its acceptance row. `FR-19` states the same preference for a heading or list-item definition. Closes `01 B-04`.

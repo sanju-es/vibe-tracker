@@ -32,6 +32,10 @@
     LoaderCircle: "◌",
     BookOpen: "▤",
     Filter: "⛃",
+    House: "⌂",
+    ListTodo: "☰",
+    ListChecks: "☑",
+    LayoutDashboard: "▦",
   };
 
   let {

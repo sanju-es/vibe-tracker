@@ -1,14 +1,15 @@
 <script lang="ts">
   import type {
     InlineRun,
+    RefTarget,
     Row,
-    RowTarget,
     StatusKey,
     Table,
   } from "../../lib/model/types";
   import {
     applyView,
     EMPTY_TABLE_VIEW,
+    groupRows,
     statusesExcluding,
     statusOptions,
     type TableView,
@@ -27,12 +28,14 @@
     documentTitle,
     excludeStatuses = [],
     rowTarget,
+    groupBy = null,
   }: {
     table: Table;
     documentId: string;
     documentTitle: string;
     excludeStatuses?: StatusKey[];
-    rowTarget?: (row: Row) => RowTarget | null;
+    rowTarget?: (row: Row) => RefTarget | null;
+    groupBy?: { column: number; label: string; order?: readonly string[] } | null;
   } = $props();
 
   const fallback = $derived<TableView>({
@@ -43,6 +46,9 @@
 
   const view = $derived<TableView>(tables.view(table.id, fallback));
   const rows = $derived(applyView(table, view));
+  const groups = $derived(
+    groupBy ? groupRows(table, view, groupBy.column, groupBy.order ?? []) : null,
+  );
   const options = $derived(statusOptions(table));
   const optionKeys = $derived(options.map((option) => option.key));
 
@@ -99,6 +105,76 @@
     }
   }
 </script>
+
+{#snippet dataRow(row: Row)}
+  <tr
+    data-row-id={row.id}
+    class="cursor-pointer"
+    class:pt-row--highlight={reader.highlightedRowId === row.id}
+    tabindex="0"
+    aria-label={`${m["table.openRow"]}: ${row.cells[0]?.text ?? ""}`}
+    onclick={(event) => onRowClick(event, row)}
+    onkeydown={(event) => onRowKeydown(event, row)}
+  >
+    {#each row.cells as cell (cell.column)}
+      <td>
+        {#if hasReference(cell.runs)}
+          <InlineRuns
+            runs={cell.runs}
+            onopenlink={(run) => {
+              if (run.linkKind === "document" && run.targetPath) {
+                reader.openDocument(run.targetPath);
+              }
+            }}
+            onopenimage={(run) => {
+              if (run.targetPath) reader.openImage(run.targetPath, run.text);
+            }}
+            onreference={(reference) =>
+              reader.openRow(reference.targets, reference.identifier)}
+          />
+        {:else if table.statusColumn === cell.column}
+          <StatusChip
+            status={mapStatus(cell.text)}
+            label={statusText(cell.column, cell.text)}
+          />
+        {:else if cell.ref}
+          <button
+            type="button"
+            class="pt-ref"
+            onclick={(event) => {
+              event.stopPropagation();
+              reader.openRow(cell.ref!.targets, cell.ref!.identifier);
+            }}
+          >
+            {cell.text}
+          </button>
+        {:else if cell.runs.length > 0}
+          <InlineRuns
+            runs={cell.runs}
+            onopenlink={(run) => {
+              if (run.linkKind === "document" && run.targetPath) {
+                reader.openDocument(run.targetPath);
+              }
+            }}
+            onopenimage={(run) => {
+              if (run.targetPath) reader.openImage(run.targetPath, run.text);
+            }}
+          />
+        {:else}
+          {cell.text}
+        {/if}
+      </td>
+    {/each}
+  </tr>
+{/snippet}
+
+{#snippet emptyRow()}
+  <tr>
+    <td colspan={Math.max(table.headers.length, 1)} class="text-[var(--pt-muted)]">
+      {m["table.empty"]}
+    </td>
+  </tr>
+{/snippet}
 
 <div class="my-4">
   <div class="mb-2 flex flex-wrap items-center gap-2">
@@ -178,76 +254,38 @@
         </tr>
       </thead>
       <tbody>
-        {#each rows as row (row.id)}
-          <tr
-            data-row-id={row.id}
-            class="cursor-pointer"
-            class:pt-row--highlight={reader.highlightedRowId === row.id}
-            tabindex="0"
-            aria-label={`${m["table.openRow"]}: ${row.cells[0]?.text ?? ""}`}
-            onclick={(event) => onRowClick(event, row)}
-            onkeydown={(event) => onRowKeydown(event, row)}
-          >
-            {#each row.cells as cell (cell.column)}
-              <td>
-                {#if hasReference(cell.runs)}
-                  <InlineRuns
-                    runs={cell.runs}
-                    onopenlink={(run) => {
-                      if (run.linkKind === "document" && run.targetPath) {
-                        reader.openDocument(run.targetPath);
-                      }
-                    }}
-                    onopenimage={(run) => {
-                      if (run.targetPath) reader.openImage(run.targetPath, run.text);
-                    }}
-                    onreference={(reference) =>
-                      reader.openRow(reference.targets, reference.identifier)}
-                  />
-                {:else if table.statusColumn === cell.column}
-                  <StatusChip
-                    status={mapStatus(cell.text)}
-                    label={statusText(cell.column, cell.text)}
-                  />
-                {:else if cell.ref}
-                  <button
-                    type="button"
-                    class="pt-ref"
-                    onclick={(event) => {
-                      event.stopPropagation();
-                      reader.openRow(cell.ref!.targets, cell.ref!.identifier);
-                    }}
+        {#if groups}
+          {#if groups.length === 0}
+            {@render emptyRow()}
+          {:else}
+            {#each groups as group, index (group.key || `group-${index}`)}
+              <tr class="pt-group-row bg-[var(--pt-surface-2)]">
+                <th
+                  scope="rowgroup"
+                  colspan={Math.max(table.headers.length, 1)}
+                  class="py-1.5 text-left text-[0.6875rem] font-semibold uppercase tracking-wider text-[var(--pt-muted)]"
+                >
+                  {groupBy?.label}:
+                  {groupBy && groupBy.column === table.statusColumn
+                    ? statusText(groupBy.column, group.key)
+                    : group.key || "—"}
+                  <span class="ml-1 font-normal normal-case tracking-normal"
+                    >({group.rows.length})</span
                   >
-                    {cell.text}
-                  </button>
-                {:else if cell.runs.length > 0}
-                  <InlineRuns
-                    runs={cell.runs}
-                    onopenlink={(run) => {
-                      if (run.linkKind === "document" && run.targetPath) {
-                        reader.openDocument(run.targetPath);
-                      }
-                    }}
-                    onopenimage={(run) => {
-                      if (run.targetPath) reader.openImage(run.targetPath, run.text);
-                    }}
-                  />
-                {:else}
-                  {cell.text}
-                {/if}
-              </td>
+                </th>
+              </tr>
+              {#each group.rows as row (row.id)}
+                {@render dataRow(row)}
+              {/each}
             {/each}
-          </tr>
+          {/if}
+        {:else if rows.length === 0}
+          {@render emptyRow()}
         {:else}
-          <tr>
-            <td
-              colspan={Math.max(table.headers.length, 1)}
-              class="text-[var(--pt-muted)]"
-            >
-              {m["table.empty"]}
-            </td>
-          </tr>
-        {/each}
+          {#each rows as row (row.id)}
+            {@render dataRow(row)}
+          {/each}
+        {/if}
       </tbody>
     </table>
   </div>

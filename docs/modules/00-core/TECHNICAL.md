@@ -6,7 +6,7 @@
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`) and decisions (`docs/DECISIONS.md`).
 
 **Status:** `Active (permanent)`
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 
@@ -199,7 +199,8 @@ The project builder lives in `src/lib/project/build.ts`:
 
 The mechanism was settled by D-15 after checking the platform: the directory
 picker is skipped on `file://` and used on served origins. Both adapters live in
-one module, `src/lib/fs/source.ts`, behind one interface:
+`src/lib/fs/source.ts` behind one interface, and both apply the documentation
+policy of `src/lib/fs/scope.ts`:
 
 ```ts
 interface FolderSource {
@@ -215,11 +216,18 @@ interface FolderSource {
 - `pickWithInput` — wraps `<input type="file" webkitdirectory>`; files arrive in
   memory with `webkitRelativePath` and the first path segment (the folder name) is
   stripped.
+- `pickFolder(onStart)` — calls `onStart` after access is granted and before the
+  first walk, so the caller can show the opening state; the listing it returns is
+  reused by the initial load and only reload walks again.
 
 Scan rules as implemented:
 
-- Recursive walk of the directory handles; `node_modules`, `.git` and `dist` are
-  skipped. The folder-input adapter does not filter folders.
+- Documentation policy: Markdown at the selected root and under `docs/**`; hidden
+  entries and the `node_modules`, `dist`, `build`, `coverage`, `out`, `tmp` and
+  `vendor` folders are ignored by both adapters. Markdown elsewhere —`.opencode`,
+  source READMEs, sibling projects— never enters the scan (D-30).
+- Images are indexed from any non-ignored folder, because a document may reference
+  an image outside `docs/`.
 - Case-insensitive `.md` detection; `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`,
   `.svg` and `.avif` are indexed as images.
 - No depth or entry-count limit: the walk is eager, which is acceptable for
@@ -319,30 +327,40 @@ Status vocabulary, mapped to stable keys:
   vocabulary order, numeric-looking cells numerically, the rest with
   `localeCompare` and `numeric: true`; empty cells always last; stable for equal
   values.
+- **Grouping:** `groupRows` filters first, groups by one column, follows an explicit
+  group order when supplied and otherwise orders by the status vocabulary or natural
+  order, and applies the selected sort inside each group. The source rows are never
+  mutated.
 
 ### 4.8 CORE-08 — Identifier index and references
 
-- Indexed identifiers: the **first cell** of a table row, the **leading code** of
-  a heading and the **leading code** of a list item, all matching
-  `^[A-Z]{1,5}-[0-9]{1,3}$` (`D-04`, `01 FR-3`, `CORE-08`, `CR-01`, `01 VAL-2`,
-  `01 BR-6`).
+- Indexed identifiers: only the definition that belongs to the owning file and
+  slot of each namespace in [the standard](../../DOC-STANDARD.md) §6.1. `D-NN`
+  comes from [DECISIONS](../../DECISIONS.md) §1; `CORE-NN` and `CR-NN` from
+  `00-core` `BACKLOG.md` §1 and `MODULE.md` §4; `FR-NN`, `BR-NN` and `VAL-NN` from
+  [REQUIREMENTS](../01-structured-reader/REQUIREMENTS.md) §2, §3 and §5; `MS-NN`
+  from `TECHNICAL.md` §8; and `B-NN` from a module `BACKLOG.md` §1. An acceptance
+  row, a decision index or a changelog bullet is a mention, not a definition.
 - The index maps identifier → defining items: table rows (headers and cells),
   headings and list items (text, document and section). Duplicates are kept as a
-  list and reported, never resolved silently.
-- A table cell is a reference when its trimmed text equals an indexed identifier
-  and it is not the identifier cell of its own row. Cells are also split into
-  reference runs, including code spans, so several identifiers in one cell are
-  independent targets.
+  list and reported only when the same owner defines the identifier twice.
+- The accepted shapes are `D-NN`, `CORE-NN`, `CR-NN` (two digits, never
+  qualified); `FR-N`, `BR-N`, `VAL-N` (their original numbering); and `MS-NN` and
+  `B-NN` (two digits). Rule identifiers of the standard, retired prefixes and
+  reserved namespaces stay plain text.
+- A table cell is a reference when its trimmed text equals an indexed identifier,
+  or a qualified `NN ID`, and it is not the cell that defines its own row. Cells
+  are also split into reference runs, including code spans, so several identifiers
+  in one cell are independent targets.
 - In running text, a pass splits text runs (headings, paragraphs, quotes and list
   items) and code spans, and turns every visible identifier into a `reference` run.
-  The code that defines a heading or a list item is skipped at offset zero; code
-  blocks are never scanned.
+  The definition is skipped at offset zero; code blocks are never scanned.
 - Resolution is scope-aware: global `D-`, `CORE-` and `CR-` identifiers resolve
-  anywhere; a module identifier resolves in its own module first and then at project
-  level; a project document only sees project definitions; an explicit `NN` prefix
-  narrows the search to that module (`01 B-01` is the module 1 backlog item). A
-  global identifier keeps the project definition, and a heading or list-item
-  definition wins over a secondary table row.
+  anywhere; a module identifier resolves inside the module that defines it and
+  requires the `NN` qualifier (`01 FR-3`) in any other document, so a project
+  document sees module identifiers only when they carry `NN`. An explicit `NN`
+  prefix narrows the search to that module (`01 B-01` is the module 1 backlog
+  item).
 - References are resolved after the whole project is parsed, so a reference may
   point forward to a document that appears later in the scan.
 - Emitting the modal payload is the reader's job: the core only guarantees that a
@@ -351,12 +369,13 @@ Status vocabulary, mapped to stable keys:
 ## 6. Tests and evidence
 
 - Commands: `npm run lint`, `npm run check`, `npm run test` and `npm run build`,
-  run on 2026-11-13; all green.
-- Suites: `tests/build.test.ts`, `tests/categories.test.ts`,
-  `tests/inventory.test.ts`, `tests/links.test.ts`, `tests/pipeline.test.ts`,
-  `tests/i18n.test.ts`, `tests/tables.test.ts`, `tests/status.test.ts`,
-  `tests/references.test.ts`, `tests/inline-references.test.ts` and
-  `tests/selectors.test.ts`.
+  run on 2026-11-16; all green.
+- Vitest, 125 tests across 13 suites: `tests/build.test.ts`,
+  `tests/categories.test.ts`, `tests/inventory.test.ts`, `tests/links.test.ts`,
+  `tests/pipeline.test.ts`, `tests/i18n.test.ts`, `tests/tables.test.ts`,
+  `tests/status.test.ts`, `tests/references.test.ts`,
+  `tests/inline-references.test.ts`, `tests/selectors.test.ts`,
+  `tests/scope.test.ts` and `tests/requirements.test.ts`.
 - The suites parse the real repository documents, so the pipeline faces the
   structures the project actually uses.
 - The browser check for the platform (icons, fonts, modal, statuses and
@@ -381,7 +400,7 @@ Status vocabulary, mapped to stable keys:
 |---|---|---|
 | CORE-01 | Skeleton and single-file build | `lint`, `test` and `build` green; `dist/index.html` is the only artifact and carries the CSP |
 | CORE-02 | Semantic model | `tests/build.test.ts`, `tests/categories.test.ts` |
-| CORE-03 | Folder gateway | `tests/links.test.ts` covers path resolution; real picker and folder-input permissions remain for the owner's verification |
+| CORE-03 | Folder gateway | `tests/scope.test.ts` covers the documentation policy and `tests/links.test.ts` path resolution; real picker and folder-input permissions remain for the owner's verification |
 | CORE-04 | Markdown pipeline | `tests/pipeline.test.ts` and `tests/links.test.ts`, parsing real documents |
 | CORE-05 | Message dictionary | `tests/i18n.test.ts`; no preference is stored |
 | CORE-06 | Tokens and primitives | `src/styles/theme.css` and `src/components/primitives`; icons and font loaded with SRI in the browser check |

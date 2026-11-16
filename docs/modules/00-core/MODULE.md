@@ -6,7 +6,7 @@
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`), work-item evidence (`TECHNICAL.md` §8) and work-item history (`CHANGELOG.md`).
 
 **Status:** `Active (permanent)`
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 

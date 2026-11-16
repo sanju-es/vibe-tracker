@@ -5,7 +5,7 @@
 > **Canonical for:** code organization, data flow, data model, conventions and environments.
 > **Do not duplicate:** decisions with alternatives (`docs/DECISIONS.md`) and module detail (`docs/modules/`).
 
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 
@@ -116,8 +116,11 @@ folder selection → lib/fs scan (text + images)
   the origin allows it, and a folder input when the page is opened from disk
   (D-15); the rest of the app sees one interface.
 - **Access:** read-only for text and for images, which are read as local blobs.
-- **Scope:** the scan descends recursively, detects `.md` files and indexes the
-  images referenced by documents. Other file types are not listed in navigation.
+- **Scope:** the scan reads Markdown at the selected root and under `docs/**`, and
+  indexes the images those documents reference from the rest of the tree. Hidden,
+  dependency, tooling and build folders are ignored in both adapters, so Markdown
+  outside that policy —a source README, `.opencode`, a sibling project— never enters
+  navigation. Other file types are not listed (D-30).
 - **Persistence:** none. The appearance is fixed and nothing is stored between
   sessions (D-18).
 - **No database and no migrations.** There is nothing to migrate and no data

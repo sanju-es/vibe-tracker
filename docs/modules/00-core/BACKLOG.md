@@ -5,7 +5,7 @@
 > **Canonical for:** the work items of module 0.
 > **Do not duplicate:** the invariants (`MODULE.md` §4) and the implementation detail (`TECHNICAL.md`).
 
-**Last update:** 2026-11-13
+**Last update:** 2026-11-16
 
 ---
 
