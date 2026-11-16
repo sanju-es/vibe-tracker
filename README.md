@@ -1,43 +1,44 @@
 # Project Tracking
 
-> A portable, install-free and offline reader for a project's Markdown documentation.
+> Un lector portátil de la documentación Markdown de un proyecto: sin instalación y sin conexión.
 
-![Project Tracking dashboard](docs/assets/project-tracking.png)
+![Panel de Project Tracking](docs/assets/project-tracking.png)
 
-Project Tracking turns the Markdown documentation of a project into a navigable,
-interactive reading experience: chapters, tables, statuses and cross-references.
-It is one self-contained HTML file, works offline and never writes to the
-documents it reads.
+Project Tracking convierte la documentación Markdown de un proyecto en una
+experiencia de lectura navegable e interactiva: capítulos, tablas, estados y
+referencias cruzadas. Es un único archivo HTML autocontenido, funciona sin conexión
+y nunca escribe en los documentos que lee.
 
-## What you can do
+## Qué puedes hacer
 
-- **Read** chapters and sections with a stable sidebar and anchored headings.
-- **Work with tables**: recognise statuses, filter, sort and open a full row in a
-  modal.
-- **Follow references** between documents and from any known identifier to the
-  item that defines it.
-- **See the project at a glance** through the modules dashboard, backlog board,
-  requirements catalogue and a filterable changelog timeline.
-- **Search everything** with `Ctrl+K` or the banner magnifier, with excerpts and
-  jumps to the source section.
-- **Read offline**; icons and the typeface are optional and fall back to glyphs
-  and the system font.
+- **Leer** capítulos y secciones con una barra lateral fija y encabezados anclados.
+- **Trabajar con tablas**: reconocer estados, filtrar, ordenar y abrir una fila
+  completa en un modal.
+- **Seguir referencias** entre documentos y desde cualquier identificador conocido
+  hasta el elemento que lo define.
+- **Ver el proyecto de un vistazo** con el panel de módulos, el tablero de backlog,
+  el catálogo de requisitos y una cronología filtrable de cambios.
+- **Buscar en todo** con `Ctrl+K` o la lupa del banner, con extractos y saltos a la
+  sección de origen.
+- **Leer sin conexión**; los iconos y la tipografía son opcionales y recurren a
+  glifos y a la fuente del sistema.
 
-## Start
+## Empezar
 
-Open `dist/index.html` in Chrome or Edge and choose the project folder. No server,
-installation or build step is needed to read a project.
+Abre `dist/index.html` en Chrome o Edge y elige la carpeta del proyecto. No hace
+falta servidor, instalación ni compilación para leer un proyecto.
 
-## Documentation
+## Documentación
 
-- [PROJECT_STATE.md](PROJECT_STATE.md) — project index, modules and next steps.
-- [docs/WORKFLOW.md](docs/WORKFLOW.md) — module cycle, states and definition of done.
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — code organisation and operations.
-- [docs/DECISIONS.md](docs/DECISIONS.md) — approved decisions and open questions.
-- [AGENTS.md](AGENTS.md) — onboarding rules for AI agents.
+- [PROJECT_STATE.md](PROJECT_STATE.md) — índice del proyecto, módulos y próximos pasos.
+- [docs/WORKFLOW.md](docs/WORKFLOW.md) — ciclo de módulos, estados y definición de terminado.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — organización del código y operaciones.
+- [docs/DECISIONS.md](docs/DECISIONS.md) — decisiones aprobadas y preguntas abiertas.
+- [AGENTS.md](AGENTS.md) — reglas de incorporación para agentes de IA.
 
-Architecture, operations and commands live in
-[`docs/ARCHITECTURE.md` §9](docs/ARCHITECTURE.md#9-environments-and-operations) and
+La arquitectura, las operaciones y los comandos están en
+[`docs/ARCHITECTURE.md` §9](docs/ARCHITECTURE.md#9-environments-and-operations) y
 [`PROJECT_STATE.md` §2](PROJECT_STATE.md#2-stack-and-environment).
 
-> The reader is English-only, light-only and read-only.
+> El lector solo está en inglés, solo tiene tema claro y es de solo lectura.
+> La documentación técnica del proyecto se mantiene en inglés.
