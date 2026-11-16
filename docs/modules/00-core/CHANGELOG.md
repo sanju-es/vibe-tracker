@@ -10,6 +10,7 @@
 - `scripts/docs-audit.mjs` reads the `Status` token before its date, so the acceptance table stays required once the module files carry the date (G-12).
 - `CORE-17` implemented: the four contracts of `.opencode` match the standard and the architecture —the two documented assets, `{@html}` without document content, the real fixtures, anchors checked, the five module files and module 0 without `REQUIREMENTS.md`— and each agent carries one H1 and a step budget that fits its review.
 - `CORE-18` implemented: the linter enforces E-21 to E-26 (status shape, silence tokens, one separator, internal `§` references, agent H1, ranges) and completes E-08 and E-09 (the ten registered tables; state, status, type and priority), each one checked with a mutation that makes it fail.
+- `CORE-19` implemented: the index also indexes a heading that starts with an identifier, and the defining heading is never linked to itself (D-29, `01 B-04`).
 
 ## 2026-11-13 — Documentation audit
 

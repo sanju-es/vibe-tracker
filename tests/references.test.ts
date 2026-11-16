@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { Cell, Document, Row, Table } from "../src/lib/model/types";
+import { parseDocument } from "../src/lib/markdown/pipeline";
 import {
   attachInlineReferences,
   attachReferences,
@@ -23,6 +25,7 @@ function document(
   title: string,
   table: Table,
   moduleNumber: number | null = null,
+  nodes: Document["nodes"] = [],
 ): Document {
   return {
     id,
@@ -33,11 +36,15 @@ function document(
     moduleNumber,
     moduleSlug: moduleNumber === null ? null : String(moduleNumber),
     category: "other",
-    nodes: [],
+    nodes,
     sections: [],
     tables: [table],
     meta: { fields: [], status: null, lastUpdate: null, history: null },
   };
+}
+
+function heading(text: string, anchor: string): Document["nodes"][number] {
+  return { type: "heading", level: 3, anchor, runs: [{ kind: "text", text }] };
 }
 
 const decisions = document("docs/DECISIONS.md", "Decisions", {
@@ -114,6 +121,89 @@ describe("reference index", () => {
     expect(duplicateIdentifiers(index)).toEqual(["D-04"]);
     const [withReferences] = attachReferences([requirements], index);
     expect(withReferences?.tables[0]?.rows[0]?.cells[1]?.ref?.targets).toHaveLength(2);
+  });
+});
+
+describe("heading definitions", () => {
+  const emptyTable = (id: string): Table => ({
+    id: `${id}#table-1`,
+    headers: ["ID", "Text"],
+    statusColumn: null,
+    rows: [],
+  });
+
+  const requirements = document(
+    "docs/modules/01/R.md",
+    "Requirements",
+    emptyTable("docs/modules/01/R.md"),
+    1,
+    [heading("FR-3 — Reload", "fr-3--reload"), heading("Notes", "notes")],
+  );
+
+  it("indexes a heading that starts with an identifier", () => {
+    const index = buildIndex([requirements]);
+    expect(index.get("FR-3")?.[0]).toMatchObject({
+      kind: "item",
+      documentId: "docs/modules/01/R.md",
+      anchor: "fr-3--reload",
+      text: "FR-3 — Reload",
+    });
+  });
+
+  it("does not link the identifier of the defining heading to itself", () => {
+    const [withReferences] = attachInlineReferences(
+      [requirements],
+      buildIndex([requirements]),
+    );
+    const first = withReferences?.nodes[0];
+    expect(first?.type).toBe("heading");
+    const runs = first && "runs" in first ? first.runs : [];
+    expect(runs.some((run) => run.kind === "reference")).toBe(false);
+  });
+
+  it("links a mention of a heading identifier from the same module", () => {
+    const technical = document(
+      "docs/modules/01/T.md",
+      "Technical",
+      emptyTable("docs/modules/01/T.md"),
+      1,
+      [{ type: "paragraph", runs: [{ kind: "text", text: "See FR-3." }] }],
+    );
+    const index = buildIndex([requirements, technical]);
+    const [withReferences] = attachInlineReferences([technical], index);
+    const first = withReferences?.nodes[0];
+    const runs = first && "runs" in first ? first.runs : [];
+    expect(
+      runs.some((run) => run.kind === "reference" && run.ref?.identifier === "FR-3"),
+    ).toBe(true);
+  });
+
+  it("resolves the requirements of module 1 from the real document", () => {
+    const path = "docs/modules/01-structured-reader/REQUIREMENTS.md";
+    const parsed = parseDocument(path, readFileSync(path, "utf8"));
+    const real: Document = {
+      id: path,
+      path,
+      fileName: "REQUIREMENTS.md",
+      title: "Module 1 — REQUIREMENTS",
+      scope: "module",
+      moduleNumber: 1,
+      moduleSlug: "01-structured-reader",
+      category: "requirements",
+      nodes: parsed.blocks,
+      sections: parsed.sections,
+      tables: parsed.tables,
+      meta: parsed.meta,
+    };
+    const index = buildIndex([real]);
+    const target = resolveTargets("FR-6", 1, index)[0];
+    const heading = parsed.sections.find((section) => section.text.startsWith("FR-6 "));
+    expect(target).toMatchObject({
+      kind: "item",
+      text: "FR-6 — Interactive tables",
+    });
+    const anchor = target && target.kind === "item" ? target.anchor : undefined;
+    expect(anchor).toBe(heading?.anchor);
   });
 });
 

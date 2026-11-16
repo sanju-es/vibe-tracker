@@ -18,100 +18,161 @@ and every known identifier one action away from its definition.
 
 ## 2. Functional requirements
 
-- **FR-1 — Select the project folder.** The user picks a folder; the app keeps it
-  for the session. The mechanism is fixed by D-15 and must work from the
-  distributed `index.html`.
-- **FR-2 — Scan and index.** The app walks the folder recursively, collects `.md`
-  documents and indexes the image files they reference.
-- **FR-3 — Navigate with a fixed sidebar.** Two collapsible blocks, *Project* and
-  *Modules*, in a sidebar that stays visible and does not move with the document;
-  it has its own scroll when the tree is taller than the window. Modules are read
-  from `PROJECT_STATE.md` and titled with their **folder names**
-  (`00-core`, `01-structured-reader`); each shows its state as an **icon and the
-  state in text**. Project documents are indented under *Project* like the
-  documents of a module. Unclassified documents appear under *Other documents*. The
-  menu has at most three levels: block, module and document.
-- **FR-4 — Structured render.** Documents render from a semantic node tree:
-  headings, paragraphs, lists, tables, code blocks, quotes, links and images. No
-  HTML from the document is injected into the page.
-- **FR-5 — Document identity in the menu.** A document is shown by its **file
-  name**; when the same name appears more than once in the same list, its folder is
-  added so the entries can be told apart. The full path is the accessible title.
-- **FR-6 — Interactive tables.** Each table renders **one line per row** with
-  truncated cells. A status column is recognised and painted with a colour and its
-  literal text. The user can filter by free text, filter by status value, and sort
-  by a column. Clicking anywhere in a row opens the **detail of that row** with
-  every column and the full text. Every identifier inside a cell is a reference on
-  its own: clicking it opens the item it defines, and a cell with several
-  identifiers offers one action per identifier.
-- **FR-7 — Reference modals.** A link to another `.md` document or to a local
-  image opens a modal with the target content and a *Go to document* action. An
-  anchor inside the current document scrolls without a modal.
-- **FR-8 — Reading area.** The document starts to the right of the sidebar and
-  uses the remaining width. The type scale is compact (14 px base) so more content
-  fits on screen; there is no outline column.
-- **FR-9 — Appearance.** The interface is **light only**; there is no theme switch.
-- **FR-10 — No stored preferences.** The app keeps nothing between sessions.
-- **FR-11 — Scan states.** Empty, loading (with progress and cancellation),
-  success and error states exist for folder selection and scanning.
-- **FR-12 — Reload.** A visible action in the top bar re-scans the current folder
-  without asking for it again. With the folder-input path the files are the
-  snapshot taken when the folder was chosen, so the reload rebuilds the model but
-  does not see later edits on disk.
-- **FR-13 — Keyboard and accessibility.** Complete keyboard path: sidebar entries,
-  tables and modals; visible focus; skip-to-content link; modal closes with `Esc`
-  and returns the focus to the element that opened it.
-- **FR-14 — Identifier references.** Any identifier that exists in the project
-  index (`D-04`, `CORE-08`, `CR-01`, `VAL-2`, …) is a reference wherever it appears
-  in running text or in a list item, not only in a table cell. Activating one opens
-  a modal with the defining item: its document, its section and its full text (or
-  the table row detail). The identifier that defines an item is not linked to
-  itself, unknown codes stay plain text, and identifiers inside code blocks are
-  never linked.
-- **FR-15 — Modules overview.** Selecting the *Modules* block opens a page with a
-  table of every module: its folder, its name and its state. Expanding or collapsing
-  the module tree is a separate control, and selecting a document returns to the
-  document view.
-- **FR-16 — Module backlog page.** Selecting a module opens its page: folder, name,
-  state and its backlog table, which can be searched, filtered by status and sorted
-  like any other table. A module without a backlog says so explicitly; the overview
-  rows open the same page.
-- **FR-17 — Document metadata.** A document that follows the universal skeleton
-  shows its front-block fields, its `Status` token and its `Last update` as a header
-  above the content. Those lines are removed from the body, so nothing is repeated.
-  A document without metadata renders without the header.
-- **FR-18 — Documentation standard and line breaks.** `DOC-STANDARD.md` appears
-  under *Project* as *Documentation standard*, not under *Other documents*. `<br>`
-  inside text or a table cell renders as a line break and is never shown literally.
-- **FR-19 — Reference scope.** A project document resolves only project-level
-  definitions. A module document resolves its own module first and falls back to
-  the project level when the module has no definition. Global namespaces (`D-`,
-  `CORE-`, `CR-`) resolve from any document. An explicit `NN` prefix narrows the
-  search to that module: `01 B-01` is the first backlog item of module 1 from any
-  document. Each reference resolves to one canonical item: a global identifier uses
-  the project definition, and a list-item definition wins over a secondary table row
-  such as an acceptance criterion.
-- **FR-20 — Module overview and backlog defaults.** The overview keeps the module
-  name column wide, shows one backlog count column per status found in any module
-  backlog —in the status vocabulary order, each in its own status colour, with a
-  leading **All** column in the text colour— and puts the state at the far right
-  with icon, colour and label, using the same treatment in the sidebar. A module
-  without entries of a status shows `0` in that column. A module backlog opens with
-  `implemented`, `discarded` and `deferred` filtered out. Status chips show
-  visibility: pressed means visible, struck means filtered out, and an empty
-  selection shows no rows. Reset clears the text, the status selection and the sort.
-  Modules start collapsed in the sidebar; only the chevron expands or collapses a
-  module, and selecting its name opens the module page. The *Project* block is fixed
-  and always shows the main project documents; *Other documents* starts collapsed.
-- **FR-21 — Module visibility.** The sidebar and the overview list only modules that
-  have a local folder with at least one Markdown document. A module named in
-  `PROJECT_STATE.md` without a folder is ignored; a folder with documents appears
-  even when the inventory omits it.
-- **FR-22 — Aggregated backlog summary.** The modules overview adds a filterable
-  table with the backlog items of every module whose status is `new` or
-  `in progress` (accepted). Columns are Module, ID, Date, Type, Description, Origin,
-  Priority and Status; opening a row shows the source item, and the table keeps the
-  usual text, status and sort controls.
+### FR-1 — Select the project folder
+
+The user picks a folder; the app keeps it for the session. The mechanism is
+fixed by D-15 and must work from the distributed `index.html`.
+
+### FR-2 — Scan and index
+
+The app walks the folder recursively, collects `.md` documents and indexes the
+image files they reference.
+
+### FR-3 — Navigate with a fixed sidebar
+
+Two collapsible blocks, *Project* and *Modules*, in a sidebar that stays visible
+and does not move with the document; it has its own scroll when the tree is
+taller than the window. Modules are read from `PROJECT_STATE.md` and titled with
+their **folder names** (`00-core`, `01-structured-reader`); each shows its state
+as an **icon and the state in text**. Project documents are indented under
+*Project* like the documents of a module. Unclassified documents appear under
+*Other documents*. The menu has at most three levels: block, module and
+document.
+
+### FR-4 — Structured render
+
+Documents render from a semantic node tree: headings, paragraphs, lists, tables,
+code blocks, quotes, links and images. No HTML from the document is injected
+into the page.
+
+### FR-5 — Document identity in the menu
+
+A document is shown by its **file name**; when the same name appears more than
+once in the same list, its folder is added so the entries can be told apart. The
+full path is the accessible title.
+
+### FR-6 — Interactive tables
+
+Each table renders **one line per row** with truncated cells. A status column is
+recognised and painted with a colour and its literal text. The user can filter
+by free text, filter by status value, and sort by a column. Clicking anywhere in
+a row opens the **detail of that row** with every column and the full text.
+Every identifier inside a cell is a reference on its own: clicking it opens the
+item it defines, and a cell with several identifiers offers one action per
+identifier.
+
+### FR-7 — Reference modals
+
+A link to another `.md` document or to a local image opens a modal with the
+target content and a *Go to document* action. An anchor inside the current
+document scrolls without a modal.
+
+### FR-8 — Reading area
+
+The document starts to the right of the sidebar and uses the remaining width.
+The type scale is compact (14 px base) so more content fits on screen; there is
+no outline column.
+
+### FR-9 — Appearance
+
+The interface is **light only**; there is no theme switch.
+
+### FR-10 — No stored preferences
+
+The app keeps nothing between sessions.
+
+### FR-11 — Scan states
+
+Empty, loading (with progress and cancellation), success and error states exist
+for folder selection and scanning.
+
+### FR-12 — Reload
+
+A visible action in the top bar re-scans the current folder without asking for
+it again. With the folder-input path the files are the snapshot taken when the
+folder was chosen, so the reload rebuilds the model but does not see later edits
+on disk.
+
+### FR-13 — Keyboard and accessibility
+
+Complete keyboard path: sidebar entries, tables and modals; visible focus;
+skip-to-content link; modal closes with `Esc` and returns the focus to the
+element that opened it.
+
+### FR-14 — Identifier references
+
+Any identifier that exists in the project index (`D-04`, `CORE-08`, `CR-01`,
+`VAL-2`, …) is a reference wherever it appears in running text or in a list
+item, not only in a table cell. Activating one opens a modal with the defining
+item: its document, its section and its full text (or the table row detail). The
+identifier that defines an item is not linked to itself, unknown codes stay
+plain text, and identifiers inside code blocks are never linked.
+
+### FR-15 — Modules overview
+
+Selecting the *Modules* block opens a page with a table of every module: its
+folder, its name and its state. Expanding or collapsing the module tree is a
+separate control, and selecting a document returns to the document view.
+
+### FR-16 — Module backlog page
+
+Selecting a module opens its page: folder, name, state and its backlog table,
+which can be searched, filtered by status and sorted like any other table. A
+module without a backlog says so explicitly; the overview rows open the same
+page.
+
+### FR-17 — Document metadata
+
+A document that follows the universal skeleton shows its front-block fields, its
+`Status` token and its `Last update` as a header above the content. Those lines
+are removed from the body, so nothing is repeated. A document without metadata
+renders without the header.
+
+### FR-18 — Documentation standard and line breaks
+
+`DOC-STANDARD.md` appears under *Project* as *Documentation standard*, not under
+*Other documents*. `<br>` inside text or a table cell renders as a line break
+and is never shown literally.
+
+### FR-19 — Reference scope
+
+A project document resolves only project-level definitions. A module document
+resolves its own module first and falls back to the project level when the
+module has no definition. Global namespaces (`D-`, `CORE-`, `CR-`) resolve from
+any document. An explicit `NN` prefix narrows the search to that module:
+`01 B-01` is the first backlog item of module 1 from any document. Each
+reference resolves to one canonical item: a global identifier uses the project
+definition, and a heading or list-item definition wins over a secondary table
+row such as an acceptance criterion.
+
+### FR-20 — Module overview and backlog defaults
+
+The overview keeps the module name column wide, shows one backlog count column
+per status found in any module backlog —in the status vocabulary order, each in
+its own status colour, with a leading **All** column in the text colour— and
+puts the state at the far right with icon, colour and label, using the same
+treatment in the sidebar. A module without entries of a status shows `0` in that
+column. A module backlog opens with `implemented`, `discarded` and `deferred`
+filtered out. Status chips show visibility: pressed means visible, struck means
+filtered out, and an empty selection shows no rows. Reset clears the text, the
+status selection and the sort. Modules start collapsed in the sidebar; only the
+chevron expands or collapses a module, and selecting its name opens the module
+page. The *Project* block is fixed and always shows the main project documents;
+*Other documents* starts collapsed.
+
+### FR-21 — Module visibility
+
+The sidebar and the overview list only modules that have a local folder with at
+least one Markdown document. A module named in `PROJECT_STATE.md` without a
+folder is ignored; a folder with documents appears even when the inventory omits
+it.
+
+### FR-22 — Aggregated backlog summary
+
+The modules overview adds a filterable table with the backlog items of every
+module whose status is `new` or `in progress` (accepted). Columns are Module,
+ID, Date, Type, Description, Origin, Priority and Status; opening a row shows
+the source item, and the table keeps the usual text, status and sort controls.
 
 ## 3. Business rules
 

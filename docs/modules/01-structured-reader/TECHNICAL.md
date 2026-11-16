@@ -194,21 +194,21 @@ view; the module page uses that to hide `implemented`, `discarded` and `deferred
 until the user enables their chips. Reset clears the text, the status selection and the sort,
 so every row becomes visible again.
 
-**Identifier references.** The index collects table rows (first column) and list
-items that start with an identifier. After parsing, a pass splits every text, code
-and table run in headings, paragraphs, quotes, list items and cells, turning each
-visible identifier into a `reference` run rendered as a code-style button. The
-identifier that defines a list item or a first-cell row is skipped at offset zero,
-and code blocks are never touched.
+**Identifier references.** The index collects table rows (first column), list
+items and headings that start with an identifier. After parsing, a pass splits
+every text, code and table run in headings, paragraphs, quotes, list items and
+cells, turning each visible identifier into a `reference` run rendered as a
+code-style button. The identifier that defines a heading, a list item or a
+first-cell row is skipped at offset zero, and code blocks are never touched.
 
 Resolution follows the document scope: a project document sees only project-level
 definitions; a module document sees its own module first and the project level as a
 fallback; `D-`, `CORE-` and `CR-` resolve from anywhere; an explicit `NN` prefix
 narrows the search to that module, so `01 B-01` resolves the first backlog item of
 module 1 from any document. Each reference keeps one canonical target: a global
-identifier resolves to the project definition, and a list-item definition wins over
-a secondary table row such as an acceptance criterion. Duplicates that remain
-inside that choice keep listing their candidates.
+identifier resolves to the project definition, and a heading or list-item
+definition wins over a secondary table row such as an acceptance criterion.
+Duplicates that remain inside that choice keep listing their candidates.
 
 **Modals.** Row detail, document preview and image preview; focus trapped, closed
 with `Esc` or the close action, focus returned to the opener. *Go to document*
@@ -219,11 +219,12 @@ filters and sortable headers, and the modal trap; visible focus throughout.
 
 ## 6. Tests and evidence
 
-- Vitest, 88 tests across 11 suites: category mapping and module folders, module
+- Vitest, 92 tests across 11 suites: category mapping and module folders, module
   inventory, module selectors and backlog lookup, status vocabulary and detection,
   table filtering and sorting, reference index, scope resolution and duplicates,
-  identifier references inside text and table cells, link resolution, i18n messages,
-  parser and project builder, front-block metadata and `<br>` handling.
+  heading definitions (including the real requirements document), identifier
+  references inside text and table cells, link resolution, i18n messages, parser and
+  project builder, front-block metadata and `<br>` handling.
 - Fixtures: the suites parse the real repository documents
   (`PROJECT_STATE.md`, `docs/DECISIONS.md`,
   `docs/modules/00-core/BACKLOG.md`), so the parser faces the real structure.

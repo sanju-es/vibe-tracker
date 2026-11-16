@@ -322,26 +322,27 @@ Status vocabulary, mapped to stable keys:
 
 ### 4.8 CORE-08 — Identifier index and references
 
-- Indexed identifiers: the **first cell** of a table row and the **leading code**
-  of a list item, both matching `^[A-Z]{1,5}-[0-9]{1,3}$` (`D-04`, `01 FR-3`,
-  `CORE-08`, `CR-01`, `01 VAL-2`, `01 BR-6`).
-- The index maps identifier → defining items: table rows (headers and cells) and
-  list items (text, document and section). Duplicates are kept as a list and
-  reported, never resolved silently.
+- Indexed identifiers: the **first cell** of a table row, the **leading code** of
+  a heading and the **leading code** of a list item, all matching
+  `^[A-Z]{1,5}-[0-9]{1,3}$` (`D-04`, `01 FR-3`, `CORE-08`, `CR-01`, `01 VAL-2`,
+  `01 BR-6`).
+- The index maps identifier → defining items: table rows (headers and cells),
+  headings and list items (text, document and section). Duplicates are kept as a
+  list and reported, never resolved silently.
 - A table cell is a reference when its trimmed text equals an indexed identifier
   and it is not the identifier cell of its own row. Cells are also split into
   reference runs, including code spans, so several identifiers in one cell are
   independent targets.
 - In running text, a pass splits text runs (headings, paragraphs, quotes and list
   items) and code spans, and turns every visible identifier into a `reference` run.
-  The code that defines a list item is skipped at offset zero; code blocks are never
-  scanned.
+  The code that defines a heading or a list item is skipped at offset zero; code
+  blocks are never scanned.
 - Resolution is scope-aware: global `D-`, `CORE-` and `CR-` identifiers resolve
   anywhere; a module identifier resolves in its own module first and then at project
   level; a project document only sees project definitions; an explicit `NN` prefix
   narrows the search to that module (`01 B-01` is the module 1 backlog item). A
-  global identifier keeps the project definition, and a list-item definition wins
-  over a secondary table row.
+  global identifier keeps the project definition, and a heading or list-item
+  definition wins over a secondary table row.
 - References are resolved after the whole project is parsed, so a reference may
   point forward to a document that appears later in the scan.
 - Emitting the modal payload is the reader's job: the core only guarantees that a

@@ -139,7 +139,7 @@ The model is plain TypeScript, defined by Core (D-10) and first used by module 1
 | `Row` / `Cell` | Row cells with their column, typed content and optional reference |
 | `Status` | Recognised vocabulary value or neutral literal |
 | `CellReference` | Exact identifier match with the items that define it (table row or list item) |
-| `RefTarget` | The defining item: a row (headers and cells) or a list item (text, document, section) |
+| `RefTarget` | The defining item: a row (headers and cells) or an item —a heading or a list item— (text, document, section) |
 | `Module` | Module number, slug, name and documented state |
 | `Scope` / `Category` | Navigation blocks and the file-name category map |
 | `ProjectError` | Translated error key plus the path involved, when any |

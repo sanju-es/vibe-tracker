@@ -49,8 +49,8 @@ function push(
 }
 
 /**
- * Identifier → items that define it. It indexes table rows (first column) and
- * list items whose text starts with an identifier. Duplicates are kept.
+ * Identifier → items that define it. It indexes table rows (first column), list
+ * items and headings whose text starts with an identifier. Duplicates are kept.
  */
 export function buildIndex(documents: readonly Document[]): Map<string, RefTarget[]> {
   const index = new Map<string, RefTarget[]>();
@@ -78,7 +78,21 @@ export function buildIndex(documents: readonly Document[]): Map<string, RefTarge
     let sectionAnchor: string | null = null;
     for (const node of document.nodes) {
       if (node.type === "heading") {
-        sectionTitle = runsText(node.runs);
+        const headingText = runsText(node.runs);
+        const identifier = LEADING_IDENTIFIER.exec(headingText.trim())?.[1] ?? "";
+        if (identifier !== "" && isIdentifier(identifier)) {
+          const target: ItemTarget = {
+            kind: "item",
+            documentId: document.id,
+            documentTitle: document.title,
+            moduleNumber: document.moduleNumber,
+            sectionTitle: headingText,
+            anchor: node.anchor,
+            text: headingText.trim(),
+          };
+          push(index, identifier, target);
+        }
+        sectionTitle = headingText;
         sectionAnchor = node.anchor;
         continue;
       }
@@ -328,9 +342,9 @@ function splitRuns(
 
 /**
  * Turns every visible identifier inside running text into a reference run. The
- * identifier that defines a list item or a first-cell row is not linked to
- * itself. Table cells get the same treatment, so several identifiers in one cell
- * are independent references.
+ * identifier that defines a heading, a list item or a first-cell row is not
+ * linked to itself. Table cells get the same treatment, so several identifiers
+ * in one cell are independent references.
  */
 export function attachInlineReferences(
   documents: readonly Document[],
@@ -361,8 +375,15 @@ export function attachInlineReferences(
       })),
       nodes: document.nodes.map((node) => {
         switch (node.type) {
-          case "heading":
-            return { ...node, runs: splitRuns(node.runs, 0, null, resolve).runs };
+          case "heading": {
+            const leading = LEADING_IDENTIFIER.exec(runsText(node.runs).trim());
+            const identifier = leading?.[1] ?? null;
+            const visible = identifier !== null && resolve(identifier, null).length > 0;
+            return {
+              ...node,
+              runs: splitRuns(node.runs, 0, visible ? 0 : null, resolve).runs,
+            };
+          }
           case "paragraph":
             return { ...node, runs: splitRuns(node.runs, 0, null, resolve).runs };
           case "quote":

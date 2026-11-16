@@ -6,7 +6,8 @@
 > **Do not duplicate:** architecture detail (`docs/ARCHITECTURE.md`), decisions (`docs/DECISIONS.md`) and module content (`docs/modules/`).
 
 **Last update:** 2026-11-13 — documentation standard adopted, migrated and amended
-(D-26 to D-28); module 1 awaits owner verification.
+(D-26 to D-28); the reader indexes heading definitions (D-29) and module 1 awaits
+owner verification.
 
 ---
 
@@ -85,7 +86,7 @@ Full rules: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 | # | Module | State | Open items | Documentation |
 |---|---|---|---|---|
 | 0 | Core | Active (permanent) | — | [`00-core`](docs/modules/00-core/MODULE.md) |
-| 1 | Structured Reader | Implemented | `01 B-01`, `01 B-04` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
+| 1 | Structured Reader | Implemented | `01 B-01` | [`01-structured-reader`](docs/modules/01-structured-reader/MODULE.md) |
 | 2 | Backlog Board | Pending | — | [`02-backlog-board`](docs/modules/02-backlog-board/MODULE.md) |
 | 3 | Requirements | Pending | — | [`03-requirements`](docs/modules/03-requirements/MODULE.md) |
 | 4 | Modules Dashboard | Pending | — | [`04-modules-dashboard`](docs/modules/04-modules-dashboard/MODULE.md) |

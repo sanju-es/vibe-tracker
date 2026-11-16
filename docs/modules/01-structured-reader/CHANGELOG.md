@@ -3,6 +3,11 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-13 — Requirements as headings (correction)
+
+- `REQUIREMENTS` §2 lists the 22 requirements as `### FR-NN — Title`, as §7.4 requires, and the index recognises a heading that starts with an identifier (D-29), so a mention of `FR-N` opens the requirement instead of its acceptance row. `FR-19` states the same preference for a heading or list-item definition. Closes `01 B-04`.
+- Verification: `check`, `lint`, `test` (92 tests) and `build` green; the audit stays clean. The module stays `Implemented`: the change corrects documented behaviour and the owner's verification is still pending.
+
 ## 2026-11-13 — Documentation audit
 
 - Milestones renamed from `M1`…`M6` to `01 MS-01`…`01 MS-06`: the numbering is the original one and only the prefix changed (standard v1.1).

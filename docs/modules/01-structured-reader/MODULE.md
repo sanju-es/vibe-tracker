@@ -89,7 +89,7 @@ The reader works on an in-memory model built from the selected folder:
   (D-12).
 - One-line tables with status chips, text and status filters, single-column sorting
   and row detail (D-17).
-- Identifier references in running text and list items (D-21).
+- Identifier references in running text, list items and headings (D-21, D-29).
 - Document metadata header from the universal skeleton: front block, status and
   last update, with the raw lines removed from the body (01 FR-17).
 - `DOC-STANDARD.md` under *Project* as *Documentation standard* and real line breaks
