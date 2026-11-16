@@ -71,8 +71,8 @@ row. Group header rows are not interactive.
 
 - `tests/selectors.test.ts`: `backlogBoard` includes every status and `00-core`; `backlogSummary` still filters `new`/`in progress`; synthetic row targets point at the source row.
 - `tests/tables.test.ts`: grouping by module and status, group order, filtering before grouping, sorting inside a group and no mutation of the source rows.
-- `npm run test` on 2026-11-16: 125 tests across 13 suites, all green.
-- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 203.05 kB.
+- `npm run test` on 2026-11-16: 132 tests across 14 suites, all green.
+- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 213.59 kB.
 - Owner verification (2026-11-16): the board was accepted and closed as `Tested`; every acceptance row in [`REQUIREMENTS.md`](REQUIREMENTS.md) §9 is `verified (2026-11-16)`. The browser check covered the banner actions, filters, grouping, row detail and _Go to document_.
 
 ## 7. Limits and known limitations

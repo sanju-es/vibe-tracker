@@ -51,6 +51,8 @@ It is not a Markdown viewer. It reads the documentation semantically:
 - **Requirements catalogue.** The top banner also opens every module's functional
   requirements, business rules, flows, validations and edge cases, filtered by
   module state and grouped by module or section, with a jump to the source.
+- **Dashboard.** A project-health view with documented module states, the `Tested`
+  progress bar, the active module and a filterable timeline of module changelogs.
 - **Light only.** One appearance, no theme switch (D-18).
 
 The Markdown files are the source of truth. The app derives an in-memory semantic

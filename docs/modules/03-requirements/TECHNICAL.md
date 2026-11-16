@@ -65,8 +65,8 @@ No endpoints: the project has no own API. The proposal adds:
 
 - `tests/requirements.test.ts`: FR headings with body text, BR/VAL list items, flows and edge cases without IDs, module state and folder, explicit no-requirements row, source targets and section order.
 - `tests/tables.test.ts`: explicit group order and no mutation of source rows.
-- `npm run test` on 2026-11-16: 125 tests across 13 suites, all green.
-- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 203.05 kB.
+- `npm run test` on 2026-11-16: 132 tests across 14 suites, all green.
+- `npm run check`, `npm run lint`, `npm run docs:check` and `npm run build` on 2026-11-16: all green; `dist/index.html` is 213.59 kB.
 - Owner verification (2026-11-16): the catalogue was accepted and closed as `Tested`; every acceptance row in [`REQUIREMENTS.md`](REQUIREMENTS.md) §9 is `verified (2026-11-16)`. The browser check covered the banner action, filters, grouping, row detail and source jump.
 
 ## 7. Limits and known limitations

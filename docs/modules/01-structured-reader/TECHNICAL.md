@@ -237,7 +237,7 @@ filters and sortable headers, and the modal trap; visible focus throughout.
 
 ## 6. Tests and evidence
 
-- Vitest, 125 tests across 13 suites: documentation scope and folder policy,
+- Vitest, 132 tests across 14 suites: documentation scope and folder policy,
   category mapping and module folders, module inventory, module selectors and
   backlog lookup, status vocabulary and detection, table filtering and sorting,
   reference index, scope resolution and duplicates, heading definitions (including

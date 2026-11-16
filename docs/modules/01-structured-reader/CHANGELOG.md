@@ -3,6 +3,11 @@
 > Dated history only. No state, pending work or duplicated implementation logs.
 **History:** append-only.
 
+## 2026-11-16 — Additive support for module 4
+
+- The top banner gains the *Dashboard* action and the workspace renders the module 4 dashboard; the reader's own views are unchanged.
+- Verification: the full suite reports 132 tests across 14 suites; `check`, `lint`, `build` and `docs:check` green.
+
 ## 2026-11-16 — Additive support for module 3
 
 - `DataTable` accepts any `RefTarget` from `rowTarget` and an optional group order; the reader's default path is unchanged. Module 3 uses both for the requirements catalogue.
