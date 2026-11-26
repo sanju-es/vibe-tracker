@@ -1,0 +1,3 @@
+# The artifact must stay byte-identical to the build output.
+dist/index.html -text
+* text=auto eol=lf

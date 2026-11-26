@@ -1,0 +1,8 @@
+# Dependencies and tooling artifacts
+node_modules/
+coverage/
+*.local
+
+# Build output is ignored so Tailwind does not scan the previous artifact;
+# dist/index.html is force-added because the build is published.
+dist/
