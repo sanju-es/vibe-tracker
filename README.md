@@ -52,4 +52,4 @@ El visor incluye software de terceros: Svelte, marked y Tailwind CSS bajo MIT;
 Lucide bajo ISC; y la fuente Inter bajo SIL OFL 1.1. Los avisos completos están en
 [`NOTICE`](NOTICE) y también dentro de `dist/index.html`.
 
-Versión publicada: 0.1.0
+Versión publicada: 0.1.1
